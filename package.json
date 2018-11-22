@@ -15,5 +15,11 @@
     "jsonwebtoken": "^8.4.0",
     "multer": "^1.4.1",
     "mysql2": "^1.6.4"
+  },
+  "devDependencies": {
+    "browser-sync": "^2.26.3",
+    "gulp": "^3.9.1",
+    "gulp-nodemon": "^2.4.1",
+    "gulp-sass": "^4.0.2"
   }
 }
