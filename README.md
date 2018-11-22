@@ -26,4 +26,4 @@ gulp
 
 4. By default, the Express server is hosted on port 3000 of your localhost, which is proxied to port 7000 of the web client.
 
-   You can now open [localhost:7000](localhost:7000) on browser to see the web. Thanks to the proxy mentioned above, you can also access the APIs via this url. For example: [localhost:7000/api/media](localhost:7000/api/media).
+   You can now open [localhost:7000](http://localhost:7000) on browser to see the web. Thanks to the proxy mentioned above, you can also access the APIs via this url. For example: [localhost:7000/api/media](http://localhost:7000/api/media).
