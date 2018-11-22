@@ -1,19 +1,18 @@
 const jwt = require('jsonwebtoken');
 
 const signToken = (userData, res) => {
-
 	//get first row from results and sign a token asynchronously
 	if(userData) {
 		jwt.sign({userData}, 'shhh', (error, token) => {
 			if(!error) {
 				res.send({
-					message: 'logged in successfully',
+					message: 'Logged in successfully',
 					token: token,
 					user: {
 						user_id: userData.user_id,
 						username: userData.username,
 						email:userData.email,
-						time_created:'2017-01-17T13:44:48.000Z'
+						time_created:userData.time_created
 					}
 				});
 			} else {
@@ -21,7 +20,7 @@ const signToken = (userData, res) => {
 			}
 		});
 	} else {
-		res.send({message: 'user or password is incorrect.'})
+		res.send({message: 'Username or password is incorrect.'})
 	}
 }
 

@@ -2,55 +2,39 @@ const jwt = require('../../modules/jwt');
 
 module.exports = (connection) => {
 	const module = {};
-	module.signUp = (req, res) => {
-		// this fields come as application/x-www-form-urlencoded
-		if(req.body) {
-			const body = req.body
-			const signUpFields = ['fullname', 'email', 'username','password'];
-			const allFieldsExist = signUpFields.every(k => (k in body));
-			if(allFieldsExist)  {
-				connection.execute('INSERT INTO user (fullname, email,username,password) VALUES(?,?,?,?)',
-					[body.fullname, body.email, body.username, body.password],
-					(error, results, fields) => {
-						error ? res.send({error}) : res.send(results);
-					})
-			} else {
-				res.send({message: 'require fileds not submitted.'})
-			}
+	module.signUp = async (req, res) => {
+		//check all required fileds exist
+		const allFieldsExist = ['fullname', 'email', 'username','password'].every(k => (k in req.body));
+		if(allFieldsExist) {
+			const query = 'INSERT INTO user (fullname, email,username,password) VALUES(?,?,?,?)';
+			const queryParams = [req.body.fullname, req.body.email, req.body.username, req.body.password];
+			const [rows, fields] = await connection.execute(query,queryParams).catch(error => res.send(error));
+			res.send(rows);
 		} else {
-			res.send({message: 'Empty form.'})
+			res.send({message: 'Require fileds not provided.'})
 		}
 	};
 
-	module.isLoggedIn = (req, res,cb) => {
+	module.isLoggedIn = (req, res,next) => {
 		//get token from header in field x-access-token
-		const token = req.headers['x-access-token']
-		
+		const token = req.headers['x-access-token'];
 		if(typeof token !== 'undefined') {
-			jwt.verifyToken(token, req, res)
+			jwt.verifyToken(token, req, res);
 		} else {
-			res.send(403).json('Unautheraized access.')
+			res.send(403).json('Unautherized. Authentication required.');
 		}
-		cb();
+		next();
 	};
 
-	module.logIn = (req, res) => {
-		// this fields come as application/x-www-form-urlencoded
-		if(req.body) {
-			const body = req.body;
-			const logInFields = ['username','password']
-			const allFieldsExist = logInFields.every(k => (k in body));
-			if(allFieldsExist) {
-				connection.execute('SELECT * FROM user WHERE username=? AND password=?',
-					[body.username, body.password],
-					(error, results, fields) => {
-						error ? res.send(error) : jwt.signToken(results[0], res);
-					})
-			} else {
-				res.send({message: 'required fields not provided.'})
-			}
+	module.logIn = async (req, res) => {
+		//check all required fileds exist
+		const allFieldsExist = ['username','password'].every(k => (k in req.body));
+		if(allFieldsExist) {
+			const query = 'SELECT * FROM user WHERE username=? AND password=?';
+			const [rows, fields] = await connection.execute(query,[req.body.username, req.body.password]).catch(error => res.send(error));
+			jwt.signToken(rows[0], res);
 		} else {
-			res.send({message: 'required fileds not provided.'})
+			res.send({message: 'Required fileds not provided.'});
 		}
 	}
 
