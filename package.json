@@ -17,9 +17,16 @@
     "mysql2": "^1.6.4"
   },
   "devDependencies": {
+    "@babel/core": "^7.1.6",
+    "@babel/preset-env": "^7.1.6",
+    "babel-polyfill": "^6.26.0",
     "browser-sync": "^2.26.3",
+    "eslint": "^5.9.0",
     "gulp": "^3.9.1",
+    "gulp-babel": "^8.0.0",
     "gulp-nodemon": "^2.4.1",
-    "gulp-sass": "^4.0.2"
+    "gulp-sass": "^4.0.2",
+    "vinyl-named": "^1.1.0",
+    "webpack-stream": "^5.1.1"
   }
 }

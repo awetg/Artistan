@@ -1,152 +1,100 @@
 @import './common.scss';
 
-body {
-  padding: 0;
-  margin: 0;
-  background: #C9C9C9;
-  color: #fff;
-  font-family: 'Ubuntu', sans-serif;
-}
-
-#wrapper {
-  width: 430px;
-  background: url(https://d2lm6fxwu08ot6.cloudfront.net/img-thumbs/960w/RGOP31CS3I.jpg);
-  margin: 25px auto;
-  padding: 64px;
+#login-container {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: url(https://images.unsplash.com/photo-1533568024501-de28de1280c6?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=5a75db13d7de4af6166c7f885998763b&auto=format&fit=crop&w=1986&q=80);
   background-size: cover;
-  position: relative;
-  z-index: 1;
-  box-shadow: 0px 15px 20px 0px rgba(128, 128, 128, 0.76);
-  &:before {
-    content: "";
+  background-position: center;
+  #login-wrapper {
+    width: 430px;
+    margin: 0 auto;
+    padding: 64px;
     position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.64);
-    z-index: -1;
-  }
-}
-
-#table {
-  margin-bottom: 6em;
-  a {
-    text-transform: uppercase;
-    margin-right: 40px;
-    padding: 11px 4px;
-    color: #bbb;
-    cursor: pointer;
-    &.active {
-      border-bottom: 1.5px solid #1061EE;
-      color: #fff;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1;
+    &:before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.75);
+      z-index: -1;
     }
   }
-}
 
-label {
-  display: block;
-}
+  #tabs {
+    margin-bottom: 6em;
+    a {
+      text-transform: uppercase;
+      margin-right: 40px;
+      padding: 11px 4px;
+      color: #bbb;
+      cursor: pointer;
+      &.active {
+        border-bottom: 1.5px solid #1061EE;
+        color: #fff;
+      }
+    }
+  }
 
-form {
-  margin-bottom: 3.3em;
-}
-
-.form-group {
-  position: relative;
-  margin-bottom: 16px;
   label {
     display: block;
-    margin-bottom: 6px;
-    font-size: 14px;
-    margin-left: 14px;
-    color: #bbb;
   }
-}
 
-input {
-  width: 100%;
-  background: rgba(0, 0, 0, 0.42);
-  outline: none;
-  padding: 10px 14px;
-  color: #fff;
-  border: none;
-  border-radius: 36px;
-  font-family: 'Ubuntu', sans-serif;
-  font-size: 16px;
-  transition: background 0.5s ease-in-out;
-}
-
-span#showpwd {
-  position: absolute;
-  top: 32px;
-  right: 16px;
-  cursor: pointer;
-}
-
-input {
-  &:focus {
-    background: rgba(0, 0, 0, 0.6);
+  form {
+    margin-bottom: 3.3em;
   }
-  &[type="submit"] {
-    background: #1061EE;
-    margin-top: 14px;
+
+  .form-group {
+    position: relative;
+    margin-bottom: 16px;
+    label {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 14px;
+      margin-left: 14px;
+      color: #bbb;
+    }
+  }
+
+  input {
+    width: 100%;
+    background: rgba(0, 0, 0, 0.52);
+    outline: none;
+    padding: 10px 14px;
+    color: #fff;
+    border: none;
+    border-radius: 36px;
+    font-family: 'Raleway', sans-serif;
+    font-size: 16px;
+    transition: background 0.5s ease-in-out;
+  }
+
+  span#showpwd {
+    position: absolute;
+    top: 32px;
+    right: 16px;
     cursor: pointer;
   }
-}
 
-#checkbox {
-  color: #fff;
-  cursor: pointer;
-  font-size: 16px;
   input {
-    + .text:before {
-      content: "\f096";
-      display: inline-block;
-      font: normal normal normal 14px/1 FontAwesome;
-      font-size: inherit;
-      text-rendering: auto;
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
-      margin-right: 6px;
-      width: 1em;
+    &:focus {
+      background: rgba(0, 0, 0, 0.6);
     }
-    &:checked + .text:before {
-      content: "\f14a";
-      color: #1061ee;
-      animation: scalecheck 0.1s;
+    &[type="submit"] {
+      background: #1061EE;
+      margin-top: 14px;
+      cursor: pointer;
     }
-    display: none;
   }
-}
-
-@keyframes scalecheck {
-  0% {
-    transform: scale(0);
-  }
-
-  90% {
-    transform: scale(1.4);
-  }
-
-  100% {
-    transform: scale(1);
-  }
-}
-
-
-.hr {
-  height: 1.4px;
-  background: rgba(128, 128, 128, 0.51);
-  border-radius: 17px;
-  margin-bottom: 33px;
-}
-
-#froget-pass {
-  text-align: center;
-  color: #bbb;
-  margin: 0;
-  display: block;
 }
 
 @media screen and (max-width: 490px) {

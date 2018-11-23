@@ -1,4 +1,4 @@
-'use strict';
+
 require('dotenv').config();
 
 //api routes
@@ -26,12 +26,16 @@ app.get('/login', (_, res) => {
 	res.sendFile('login.html', clientRoot);
 });
 
-//use this for any other undefined routes	
+app.get('/register', (_, res) => {
+	res.sendFile('register.html', clientRoot);
+});
+
+//use this for any other undefined routes
 app.use((req, res, cb) => {
 	const error = new Error('Not found');
 	error.status = 404;
 	cb(error);
-});	
+});
 
 //user this when any kind of error occurs
 app.use((error, req, res, cb) => {
@@ -39,8 +43,8 @@ app.use((error, req, res, cb) => {
 		.json({
 			error: {
 				message: error.message
-			}	
-		})	
-})		
+			}
+		});
+});
 
 app.listen(process.env.APP_PORT, () => console.log('Server running on localhost:3000.'));
