@@ -1,5 +1,5 @@
-import { API } from './utils/constants';
-import { makeRequest } from './utils/network';
+// import { API } from './utils/constants';
+// import { makeRequest } from './utils/network';
 
 document.addEventListener('DOMContentLoaded', () => {
 	const columnWidth = 400; // 400px width for each image
@@ -8,25 +8,18 @@ document.addEventListener('DOMContentLoaded', () => {
 		gallery.style.columnCount = Math.floor(document.documentElement.clientWidth / columnWidth);
 	};
 
-	const getUserInfo = () => {
-		let userInfo = JSON.parse(localStorage.getItem('artisan_user'));
-		makeRequest(API.users.getUserData.url(userInfo.user_id), API.users.getUserData.method)
-			.then(response => response.json())
-			.then(result => {
-				if (result.user_id) {
-					localStorage.setItem('artisan_user', JSON.stringify(result));
-				}
-				// get the latest user info
-				userInfo = JSON.parse(localStorage.getItem('artisan_user'));
-				const userInfoElement = `<div class="user-info">Hi ${userInfo.fullname}</div>`;
-				const appHeader = document.querySelector('#app-header');
-				appHeader.removeChild(document.querySelector('.login-link'));
-				appHeader.insertAdjacentHTML('afterbegin', userInfoElement);
-			});
+	const checkUserLoggedIn = () => {
+		const userInfo = JSON.parse(localStorage.getItem('artisan_user'));
+		if (userInfo.user_id) {
+			const newElements = '<div class="nav-links"><a class="" href="/upload">Upload</a><a class="" href="/profile">Profile</a><a class="" href="/logout">Log out</a></div>';
+			const appHeader = document.querySelector('#app-header');
+			appHeader.removeChild(document.querySelector('.login-link'));
+			appHeader.insertAdjacentHTML('afterbegin', newElements);
+		}
 	};
 
 	calculateGalleryCols();
-	getUserInfo();
+	checkUserLoggedIn();
 
 	document.addEventListener('scroll', () => {
 		const appHeader = document.querySelector('#app-header');
