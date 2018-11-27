@@ -3,7 +3,7 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Login Page</title>
+	<title>Join ARTisan</title>
 	<link rel="stylesheet" href="dist/css/app.css">
 </head>
 
@@ -11,27 +11,42 @@
 	<div id="login-container">
 		<div id="login-wrapper">
 			<div id="tabs">
-				<a href="/login">Sign in</a>
+				<a href="/login">Login</a>
 				<a class="active" href="/register">Register</a>
 			</div>
-			<div id="signin">
-				<form action="">
+			<div class="form-wrapper">
+				<form>
+					<div class="form-group">
+						<label for="email">Email</label>
+						<input type="text" name="email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" required autofocus>
+					</div>
+					<div class="form-group">
+						<label for="fullname">Full name</label>
+						<input type="text" name="fullname" required>
+					</div>
 					<div class="form-group">
 						<label for="username">Username</label>
-						<input type="text" id="username" autofocus>
+						<input type="text" name="username" required>
 					</div>
 					<div class="form-group">
-						<label for="pass">Password</label>
-						<input type="password" id="pass">
+						<label for="password">Password</label>
+						<input type="password" name="password" required>
 					</div>
 					<div class="form-group">
-						<input type="submit" value="Sign in">
+						<label for="re-password">Re-type password</label>
+						<input type="password" name="rePassword" required>
+					</div>
+					<div class="form-group error-box">
+						<label class="error-text"></label>
+					</div>
+					<div class="form-group">
+						<input type="submit" value="Submit">
 					</div>
 				</form>		
 			</div>
+		</div>
 	</div>
-	</div>
-	<script src="dist/js/login.js"></script>
+	<script src="dist/js/register.js"></script>
 </body>
 
 </html>

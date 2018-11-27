@@ -4,16 +4,15 @@ const router = require('express').Router();
 const multer = require('multer');
 const db = require('../database/db');
 
-
 //setting pemannet storage
 const storage = multer.diskStorage({
-	destination: function (req, file, cb) {
+	destination: (req, file, cb) => {
 		cb(null, 'uploads/');
 	},
-	filename: function (req, file, cb) {
-		cb(null,  Date.now() + '__' + file.originalname);
+	filename: (req, file, cb) => {
+		cb(null, Date.now() + '__' + file.originalname);
 	}
-})
+});
 
 const upload = multer({ storage: storage });
 
@@ -29,7 +28,7 @@ router.get('/user',db.User.isLoggedIn, db.Media.getMediaByUser);
 // get single file using id of file at GET:base_url/api/media/fileId without authentication
 router.get('/:fileId',db.Media.getFileById);
 
-router.patch('/:fileId', (req, res) => res.status(200).json({fileId: 'updated media ' + req.params.fileId}))
+router.patch('/:fileId', (req, res) => res.status(200).json({fileId: 'updated media ' + req.params.fileId}));
 
 //delete file with fileId and authentication token at DELETE:base_url/api/media/fileId
 router.delete('/:fileId',db.User.isLoggedIn, db.Media.deleteFileById);
