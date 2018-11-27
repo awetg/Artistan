@@ -14,7 +14,7 @@ router.post('/login',db.User.logIn);
 
 //request user information at GET:base_url/api/users/:user_id
 router.get('/:user_id', db.User.isLoggedIn, (req, res) => {
-	if (req.params.user_id === req.userData.user_id) {
+	if (req.params.user_id.toString() === req.userData.user_id.toString()) {
 		res.send(req.userData);
 	} else {
 		res.status(403).json({message: 'Unautheraized access. Incorrect user id.'});

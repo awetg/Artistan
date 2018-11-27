@@ -28,7 +28,7 @@ document.addEventListener('DOMContentLoaded', () => {
 			.then(resData => {
 				if (resData.token && resData.token.length) {
 					localStorage.setItem('artisan_jwt', resData.token);
-					localStorage.setItem('artisan_user', resData.token);
+					localStorage.setItem('artisan_user', JSON.stringify(resData.user));
 					window.location.href = '/';
 				} else {
 					handleServerError(resData.message);
