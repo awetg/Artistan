@@ -31,7 +31,7 @@ const verifyToken = (token , req, res) => {
 			res.send(403);
 		} else {
 			//create loggedIn and userData property on the request object and call the callback function
-			req.loggedIn = true;
+			req.userLoggedIn = true;
 			req.userData = userData.userData;
 			delete req.userData.password;
 		}
