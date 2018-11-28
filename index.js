@@ -30,6 +30,10 @@ app.get('/register', (_, res) => {
 	res.sendFile('register.html', clientRoot);
 });
 
+app.get('/upload', (_, res) => {
+	res.sendFile('upload.html', clientRoot);
+});
+
 //use this for any other undefined routes
 app.use((req, res, cb) => {
 	const error = new Error('Not found');
