@@ -53,7 +53,7 @@ CONSTRAINT `fk_follower_id` FOREIGN KEY (follower_id) REFERENCES user (user_id) 
 CONSTRAINT `fk_followed_id` FOREIGN KEY (followed_id) REFERENCES user (user_id) ON DELETE RESTRICT ON UPDATE CASCADE
 )
 
-CREATE TABLE user_intersts (
+CREATE TABLE user_interests (
 user_id SMALLINT UNSIGNED NOT NULL,
 category_id SMALLINT UNSIGNED NOT NULL,
 CONSTRAINT `fk_iuser_id` FOREIGN KEY (user_id) REFERENCES user (user_id) ON DELETE CASCADE ON UPDATE CASCADE,

@@ -1,8 +1,8 @@
 module.exports = (connection) => {
 	const module = {};
-	module.createPost = async (req, res) => {
+	module.createPost = async(req, res) => {
 		//check if media was uploaded to db successfully
-		if(!req.insertedFile.error) {
+		if (!req.insertedFile.error) {
 			const query = 'INSERT INTO post (title, media, owner) VALUES(?, ?, ?)';
 			const queryParams = [req.body.title, req.insertedFile.rows.insertId, req.userData.user_id];
 			const [rows, fields] = await connection.execute(query, queryParams).catch(error => res.status(401).json(error));
@@ -14,26 +14,16 @@ module.exports = (connection) => {
 		}
 	}
 
-	module.like = async (req, res) => {
-		if(req.userLoggedIn) {
+
+	module.like = async(req, res) => {
+		if (req.userLoggedIn) {
 			const query = 'INSERT INTO likes_post (user_id, post_id) VALUES(?, ?)';
 			const [rows,fields] = await connection.execute(query,[req.userData.user_id, req.params.post_id]).catch(error => res.status(401).json(error));
-			res.send({message:'Posted liked'});
+			res.send({message: 'Posted liked'});
 		}
 	}
 
 
-	// module.getAllPosts = async (req, res) => {
-	// 	const [rows,fields] = await connection.execute('SELECT * FROM post').catch(error => res.status(401).json(error));
-	// 	const mediaArr = rows.map(row => connection.query('SELECT * FROM media WHERE media_id=?', row.media).then(([results, fields]) => row.media = results[0]));
-	// 	const userArr = rows.map(row => connection.query('SELECT * FROM user WHERE user_id=?', row.owner).then(([results, fields]) => row.owner = results[0]));
-
-	// 	await Promise.all(mediaArr.concat(userArr))
-	// 		.then(() => res.send(rows))
-	// 		.catch(error => res.status(401).json(error));
-	// };
-
-	/* version two of getting all posts */
 	module.getAllPosts = async (req, res) => {
 		//get all posts
 		const [rows,fields] = await connection.execute('SELECT * FROM post').catch(error => res.status(401).json(error));
@@ -51,7 +41,7 @@ module.exports = (connection) => {
 		await Promise.all(users.concat(likes, comments, medias))
 			.then(() => res.send(rows))
 			.catch(error => res.status(401).json(error));
-	}
+	};
 
 	module.getAllByUser = async(req, res) => {
 		const [p_rows,p_fields] = await connection.execute('SELECT * FROM post WHERE owner=?', [req.params.user_id]).catch(error => res.status(401).json(error));
@@ -88,4 +78,4 @@ module.exports = (connection) => {
 	}
 
 	return module;
-}
+};
