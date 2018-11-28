@@ -3,7 +3,7 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Login Page</title>
+	<title>Welcome to ARTisan</title>
 	<link rel="stylesheet" href="dist/css/app.css">
 </head>
 
@@ -11,21 +11,24 @@
 	<div id="login-container">
 		<div id="login-wrapper">
 			<div id="tabs">
-				<a class="active" href="/login">Sign in</a>
+				<a class="active" href="/login">Login</a>
 				<a href="/register">Register</a>
 			</div>
-			<div id="signin">
-				<form action="">
+			<div class="form-wrapper">
+				<form>
 					<div class="form-group">
 						<label for="username">Username</label>
-						<input type="text" id="username" autofocus>
+						<input type="text" name="username" autofocus required>
 					</div>
 					<div class="form-group">
-						<label for="pass">Password</label>
-						<input type="password" id="pass">
+						<label for="password">Password</label>
+						<input type="password" name="password" required>
+					</div>
+					<div class="form-group error-box">
+						<label class="error-text"></label>
 					</div>
 					<div class="form-group">
-						<input type="submit" value="Sign in">
+						<input type="submit" value="Let me in!">
 					</div>
 				</form>		
 			</div>
