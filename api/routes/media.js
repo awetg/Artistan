@@ -2,13 +2,12 @@ const router = require('express').Router();
 const upload = require('../../modules/multer');
 const db = require('../database/db');
 
-
 // get list of all media files at GET:base_url/api/media
 router.get('/', db.Media.getAllFiles);
 
 //upload a file with authentication token at POST:base_url/api/media
 router.post('/', db.User.isLoggedIn, upload.single('my-media'), db.Media.uploadFile,(req, res) => {
-	req.insertedFile.error? res.status(401).json(req.insertedFile.message) : res.send(req.insertedFile.rows);
+	req.insertedFile.error ? res.status(401).json(req.insertedFile.message) : res.send(req.insertedFile.rows);
 });
 
 //get list of all files for a user at GET:base_url/api/media/user and must provide authentication token
