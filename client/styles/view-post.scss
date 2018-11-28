@@ -1,0 +1,100 @@
+.post-container {
+	width: 100%;
+
+	.light-box {
+		width: 100%;
+		height: calc(100vh - 160px);
+		background-color: #212121;
+		display: flex;
+		align-items: center;
+
+		.image-wrapper {
+			margin: auto;
+			max-width: 70%;
+			& > img {
+				width: 100%;
+				height: auto;
+			}
+		}
+
+		button.navigate {
+			background: transparent;
+			border: none;
+			text-align: center;
+
+			&:focus {
+				outline: none;
+			}
+
+			&:hover {
+				cursor: pointer;
+			}
+
+			i {
+				color: #ffffff;
+				font-size: 80px;
+			}
+		}
+	}
+
+	.information {
+		display: flex;
+		justify-content: space-between;
+		align-items: flex-start;
+		flex-wrap: wrap;
+		width: 80%;
+		margin: 24px auto;
+		
+		.left-side {
+			width: 40%;
+
+			.user-details {
+				.avatar {
+					width: 64px;
+					height: 64px;
+					border-radius: 50%;
+					background-color: #d8d8d8;
+					display: inline-block;
+					vertical-align: middle;
+					margin-right: 16px;
+				}
+
+				.name {
+					display: inline-block;
+					vertical-align: middle;
+					font-size: 20px;
+					font-family: 'Roboto';
+				}
+			}
+
+			.post-details {
+				table.stats {
+					table-layout: fixed;
+					margin: 16px auto;
+					td {
+						width: 150px;
+						text-align: center;
+					}
+				}
+
+				.categories {
+					& > label {
+						font-family: 'Roboto';
+						font-size: 16px;
+					}
+				}
+			}
+		}
+
+		.right-side {
+			width: 50%;
+
+			.comments-section {
+				& > h3 {
+					margin-top: 0;
+					font-family: 'Roboto';
+				}
+			}
+		}
+	}
+}
