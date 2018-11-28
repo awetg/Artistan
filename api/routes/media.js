@@ -1,27 +1,14 @@
 const router = require('express').Router();
-
-//using multer middleware for image upload
-const multer = require('multer');
+const upload = require('../../modules/multer');
 const db = require('../database/db');
-
-
-//setting pemannet storage
-const storage = multer.diskStorage({
-	destination: function (req, file, cb) {
-		cb(null, 'uploads/');
-	},
-	filename: function (req, file, cb) {
-		cb(null,  Date.now() + '__' + file.originalname);
-	}
-})
-
-const upload = multer({ storage: storage });
 
 // get list of all media files at GET:base_url/api/media
 router.get('/', db.Media.getAllFiles);
 
 //upload a file with authentication token at POST:base_url/api/media
-router.post('/', db.User.isLoggedIn, upload.single('my-media'), db.Media.uploadFile);
+router.post('/', db.User.isLoggedIn, upload.single('my-media'), db.Media.uploadFile,(req, res) => {
+	req.insertedFile.error? res.status(401).json(req.insertedFile.message) : res.send(req.insertedFile.rows);
+});
 
 //get list of all files for a user at GET:base_url/api/media/user and must provide authentication token
 router.get('/user',db.User.isLoggedIn, db.Media.getMediaByUser);

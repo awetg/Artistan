@@ -15,8 +15,10 @@ const pool =  mysql.createPool({
 //each module represent a table on database
 const User = require('./user')(pool);
 const Media = require('./media')(pool);
+const Post = require('./post')(pool);
 
 module.exports = {
 	User,
-	Media
+	Media,
+	Post
 }
