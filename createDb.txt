@@ -64,8 +64,8 @@ CONSTRAINT `fk_category_id` FOREIGN KEY (category_id) REFERENCES category (categ
 CREATE TABLE post_category (
 post_id SMALLINT UNSIGNED NOT NULL,
 category_id SMALLINT UNSIGNED NOT NULL,
-CONSTRAINT `fk_posT_id` FOREIGN KEY (post_id) REFERENCES post (post_id) ON DELETE NO ACTION ON UPDATE NO ACTION,
-CONSTRAINT `fk_pcategory_id` FOREIGN KEY (category_id) REFERENCES category (category_id) ON DELETE NO ACTION ON UPDATE CASCADE
+CONSTRAINT `fk_posT_id` FOREIGN KEY (post_id) REFERENCES post (post_id) ON DELETE CASCADE ON UPDATE CASCADE,
+CONSTRAINT `fk_pcategory_id` FOREIGN KEY (category_id) REFERENCES category (category_id) ON DELETE CASCADE ON UPDATE CASCADE
 )
 
 CREATE TABLE likes_post(
