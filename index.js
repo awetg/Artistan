@@ -5,6 +5,7 @@ require('dotenv').config();
 const mediaRoutes = require('./api/routes/media');	//all trafic at base_url/api/media will be routed to this
 const usersRoutes = require('./api/routes/users');	//all trafic at base_url/api/users will be routed to this
 const postRoutes = require('./api/routes/post');	//all trafic at base_url/api/post will be routed to this
+const commentRoutes = require('./api/routes/comment');	//all trafic at base_url/api/post will be routed to this
 
 const clientRoot = { root: 'client' };
 
@@ -17,7 +18,8 @@ app.use(express.static('client'))
 	.use(express.urlencoded({extended: false}))
 	.use('/api/media', mediaRoutes)
 	.use('/api/users', usersRoutes)
-	.use('/api/post', postRoutes);
+	.use('/api/post', postRoutes)
+	.use('/api/comment', commentRoutes);
 
 // client routing
 app.get('/', (_, res) => {
