@@ -1,43 +1,3 @@
-header {
-  width: 100%;
-  padding: 10px 0;
-  background: #0d47a1;
-	box-shadow: 0 2px 2px rgba(0,0,0,0.4);
-	color: #fff;
-  z-index: 9999;
-  top: 0;
-  position: fixed;
-  
-  &, img {
-    transition: all 0.4s ease-in-out;
-  }
-
-  img {
-		width: 160px;
-		margin-left: 24px;
-		display: inline-block;
-		vertical-align: middle;
-  }
-
-  &.shrink {
-    padding: 8px 0;
-    img {
-      width: 110px;
-    }
-  }
-
-  .nav-links {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-		right: 30px;
-		a {
-			color: #fff;
-			margin-left: 24px;
-		}
-  }
-}
-
 .gallery {
   column-gap: 20px;
   column-fill: balance;
@@ -47,16 +7,62 @@ header {
 		background-color: #f0f0f0;
 		margin: 8px 0;
     > img {
-      width: 100%;
+			width: 100%;
     }
     > *:first-child {
-      margin-top: 0;
+			margin-top: 0;
     }
     > *:last-child {
-      margin-bottom: 0;
+			margin-bottom: 0;
     }
-  }
+	}
+	
+	figure.item {
+		position: relative;
+		color: #fff;
+		background-color: rgba(#000, 0.8);
+		background-image: linear-gradient(rgba(#fff, 0.1), rgba(#000, 1));
+		overflow: hidden;
+		
+		figcaption.title {
+			position: absolute;
+			bottom: 0;
+			right: 0;
+			width: 100%;
+			height: 50%;
+			z-index: 1;
+			opacity: 0;
+			padding: 20px 30px;
+			box-sizing: border-box;
+			transition: all 0.2s linear;
+			display: flex;
+			flex-direction: column;
+			justify-content: flex-end;
+			font-size: 12px;
+		}
+
+		&:hover {
+			img {
+				opacity: 0.4;
+				-webkit-transform: scale(1.2);
+				transform: scale(1.2);
+				-webkit-transition: .3s ease-in-out;
+				transition: .3s ease-in-out;
+			}
+
+			figcaption.title {
+				opacity: 1;
+			}
+		}
+	}
+
   img {
-    float: left;
+		float: left;
+		box-sizing: border-box;
+		transition: all 0.2s linear;
+		-webkit-transform: scale(1);
+		transform: scale(1);
+		-webkit-transition: .3s ease-in-out;
+		transition: .3s ease-in-out;
   }
 } //change this according responsive.

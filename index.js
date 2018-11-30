@@ -38,6 +38,10 @@ app.get('/upload', (_, res) => {
 	res.sendFile('upload.html', clientRoot);
 });
 
+app.get('/post/:id', (_, res) => {
+	res.sendFile('view-post.html', clientRoot);
+});
+
 //use this for any other undefined routes
 app.use((req, res, next) => {
 	const error = new Error('Not found');
