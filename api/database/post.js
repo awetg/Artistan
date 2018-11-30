@@ -34,19 +34,9 @@ module.exports = (connection) => {
 	module.getAllPosts = async (req, res) => {
 		try {
 			//get all posts
-			const [rows,fields] = await connection.execute('SELECT * FROM post');
-			//get media for each post
-			const queryMedia = 	`SELECT * FROM media WHERE media_id IN ( ${rows.map(row => row.media).join(',')} )`;
-			const medias = connection.query(queryMedia).then(([results, fields]) => rows.forEach((r,i) => r.media = results[i]))
-			// const users = connection.query('SELECT * FROM user WHERE user_id IN ( ' + rows.map(row => row.owner).join(',') + ' )').then(([results, fields]) => rows.forEach((r,i) => r.owner = results[i]))
-			//get owner of each post
-			const users = rows.map(row => connection.query('SELECT * FROM user WHERE user_id=?', row.owner).then(([results, fields]) => row.owner = results[0]));
-			//count likes for each post
-			const likes = rows.map(row => connection.query('SELECT COUNT(1) FROM likes_post WHERE post_id=?', row.post_id).then(([results, fields]) => row.likes = results[0]['COUNT(1)']));
-			//count comments for each post
-			const comments = rows.map(row => connection.query('SELECT COUNT(1) FROM comment WHERE parent_post=?', row.post_id).then(([results, fields]) => row.comments = results[0]['COUNT(1)']));
-			//run all arrays of promises at once asynchrounously
-			await Promise.all(users.concat(likes, comments, medias)).then(() => res.send(rows))
+			const query = 'select * from post p , media, user where post_id=media_id and p.owner=user_id;'
+			const [rows,fields] = await connection.execute(query);
+			res.send(rows);
 		} catch (error) {
 			res.status(401).json(error);
 		}
@@ -54,16 +44,9 @@ module.exports = (connection) => {
 
 	module.getAllByUser = async(req, res) => {
 		try {
-			const [p_rows,p_fields] = await connection.execute('SELECT * FROM post WHERE owner=?', [req.params.user_id]);
-
-			const [u_rows, u_fields] = await connection.execute('SELECT * FROM user WHERE user_id=?', [req.params.user_id]);
-			/* assign all posts owner to this user */
-			p_rows.forEach(row => row.owner = u_rows);
-
-			const medias = connection.query('SELECT * FROM media WHERE media_id IN ( ' + p_rows.map(row => row.media).join(',') + ' )').then(([results, fields]) => p_rows.forEach((r,i) => r.media = results[i]))
-			const likes = p_rows.map(row => connection.query('SELECT COUNT(1) FROM likes_post WHERE post_id=?', row.post_id).then(([results, fields]) => row.likes = results[0]['COUNT(1)']));
-			const comments = p_rows.map(row => connection.query('SELECT COUNT(1) FROM comment WHERE parent_post=?', row.post_id).then(([results, fields]) => row.comments = results[0]['COUNT(1)']));
-			await Promise.all(likes.concat(comments, medias)).then(() => res.send(p_rows));
+			const query = 'SELECT * FROM post INNER JOIN media ON media.media_id=post.media INNER JOIN user ON user.user_id=post.owner WHERE post.owner=?;';
+			const [rows,fields] = await connection.execute(query, [req.params.user_id]);
+			res.send(rows);
 		} catch(error) {
 			res.status(401).json(error);
 		}
@@ -71,15 +54,10 @@ module.exports = (connection) => {
 
 	module.getAllByCategory = async(req, res) =>{
 		try {
+			const query = 'SELECT * FROM post INNER JOIN media ON media.media_id=post.media INNER JOIN user ON user.user_id=post.owner WHERE post.post_id IN ( ';
 			const [postIds,p_fields] = await connection.execute('SELECT post_id FROM post_category WHERE category_id=?', [req.params.category_id]);
-
-			const [rows,fields] = await connection.execute('SELECT * FROM post WHERE post_id IN ( ' + postIds.map(p => p.post_id) + ' )');
-
-			const medias = connection.query('SELECT * FROM media WHERE media_id IN ( ' + rows.map(row => row.media).join(',') + ' )').then(([results, fields]) => rows.forEach((r,i) => r.media = results[i]))
-			const users = connection.query('SELECT * FROM user WHERE user_id IN ( ' + rows.map(row => row.owner).join(',') + ' )').then(([results, fields]) => rows.forEach((r,i) => r.owner = results[i]))
-			const likes = rows.map(row => connection.query('SELECT COUNT(1) FROM likes_post WHERE post_id=?', row.post_id).then(([results, fields]) => row.likes = results[0]['COUNT(1)']));
-			const comments = rows.map(row => connection.query('SELECT COUNT(1) FROM comment WHERE parent_post=?', row.post_id).then(([results, fields]) => row.comments = results[0]['COUNT(1)']));
-			await Promise.all([medias,users].concat(likes, comments)).then(() => res.send(rows));	
+			const [rows,fields] = await connection.execute(query + postIds.map(p => p.post_id) + ' )');
+			res.send(rows);	
 		} catch(error) {
 			res.status(error).json(error);
 		}

@@ -17,7 +17,7 @@ module.exports = (connection) => {
 
 	module.getAllComments = async(req, res) => {
 		try {
-		const [rows, fields] = await connection.execute('SELECT * FROM comment WHERE parent_post=?',[req.params.post_id]);
+			const [rows, fields] = await connection.execute('SELECT * FROM comment WHERE parent_post=?',[req.params.post_id]);
 		res.send(rows);
 		} catch(error) {
 			res.status(401).json(error);
@@ -26,7 +26,7 @@ module.exports = (connection) => {
 
 	module.updateComment = async(req, res) => {
 		try {
-		const [rows, fields] = await connection.execute('UPDATE comment SET content=? WHERE comment_id=?',[req.body.content, req.params.comment_id]);
+			const [rows, fields] = await connection.execute('UPDATE comment SET content=? WHERE comment_id=?',[req.body.content, req.params.comment_id]);
 		res.send(rows);
 		} catch(error) {
 			res.status(401).json(error);
@@ -35,7 +35,7 @@ module.exports = (connection) => {
 
 	module.deleteComment = async(req, res) => {
 		try {
-		const [rows, fields] = await connection.execute('DELETE FROM comment WHERE comment_id=?',[req.params.comment_id]);
+			const [rows, fields] = await connection.execute('DELETE FROM comment WHERE comment_id=?',[req.params.comment_id]);
 		res.send(rows);
 		} catch(error) {
 			res.status(401).json(error);

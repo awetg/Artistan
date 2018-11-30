@@ -44,15 +44,15 @@ module.exports = (connection) => {
 	module.deleteFileById = async(req, res) => {
 		if (req.userLoggedIn) {
 			try {
-			if (req.params.fileId === 'undefined') {res.send({message: 'File id not provided.'});}
-			const query = 'SELECT filename FROM media WHERE media_id=? AND owner=?';
-			const [rows, fields] = await connection.query(query,[req.params.fileId, req.userData.user_id]);
-			const deleteQuery = 'DELETE FROM media WHERE media_id=?';
-			/*delete file from uploads and database at same time */
-			await Promise.all(
-				[deleteFile('uploads/' + rows[0].filename),
-				connection.query(deleteQuery, req.params.fileId)]
-				).then(res.send({message: 'Media deleted.'}));
+				if (req.params.fileId === 'undefined') {res.send({message: 'File id not provided.'});}
+				const query = 'SELECT filename FROM media WHERE media_id=? AND owner=?';
+				const [rows, fields] = await connection.query(query,[req.params.fileId, req.userData.user_id]);
+				const deleteQuery = 'DELETE FROM media WHERE media_id=?';
+				/*delete file from uploads and database at same time */
+				await Promise.all(
+					[deleteFile('uploads/' + rows[0].filename),
+					connection.query(deleteQuery, req.params.fileId)]
+					).then(res.send({message: 'Media deleted.'}));
 			} catch(error) {
 				res.status(401).json(error);
 			}
@@ -63,9 +63,9 @@ module.exports = (connection) => {
 
 	module.getFileById = async(req, res) => {
 		try {
-		const query = 'SELECT path FROM media WHERE media_id=?';
-		const [rows, fields] = await connection.query(query, req.params.fileId);
-		res.send(rows);
+			const query = 'SELECT path FROM media WHERE media_id=?';
+			const [rows, fields] = await connection.query(query, req.params.fileId);
+			res.send(rows);
 		} catch(error) {
 			res.status(401).json(error);
 		}
