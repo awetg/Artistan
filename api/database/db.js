@@ -17,10 +17,12 @@ const User = require('./user')(pool);
 const Media = require('./media')(pool);
 const Post = require('./post')(pool);
 const Comment = require('./comment')(pool);
+const Category = require('./category')(pool);
 
 module.exports = {
 	User,
 	Media,
 	Post,
-	Comment
+	Comment,
+	Category
 }

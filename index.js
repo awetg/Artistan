@@ -6,6 +6,7 @@ const mediaRoutes = require('./api/routes/media');	//all trafic at base_url/api/
 const usersRoutes = require('./api/routes/users');	//all trafic at base_url/api/users will be routed to this
 const postRoutes = require('./api/routes/post');	//all trafic at base_url/api/post will be routed to this
 const commentRoutes = require('./api/routes/comment');	//all trafic at base_url/api/post will be routed to this
+const categoryRoutes = require('./api/routes/category');	//all trafic at base_url/api/post will be routed to this
 
 const clientRoot = { root: 'client' };
 
@@ -19,7 +20,8 @@ app.use(express.static('client'))
 	.use('/api/media', mediaRoutes)
 	.use('/api/users', usersRoutes)
 	.use('/api/post', postRoutes)
-	.use('/api/comment', commentRoutes);
+	.use('/api/comment', commentRoutes)
+	.use('/api/category', categoryRoutes);
 
 // client routing
 app.get('/', (_, res) => {
