@@ -1,7 +1,7 @@
 export const checkUserLoggedIn = () => {
 	const userInfo = JSON.parse(localStorage.getItem('artisan_user'));
 	if (userInfo.user_id) {
-		const newElements = '<a class="" href="/upload">Upload</a><a class="" href="/profile">Profile</a><a class="" href="/logout">Log out</a>';
+		const newElements = '<a class="" href="/upload">Share your art</a><a class="" href="/profile">Profile</a><a class="" href="/logout">Log out</a>';
 		const navLinks = document.querySelector('.nav-links');
 		navLinks.removeChild(document.querySelector('.login-link'));
 		navLinks.insertAdjacentHTML('afterbegin', newElements);

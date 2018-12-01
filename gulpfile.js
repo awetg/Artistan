@@ -59,7 +59,8 @@ gulp.task('scripts', () =>
 			mode: 'development',
 			output: {
 				filename: '[name].js'
-			}
+			},
+			devtool: 'inline-source-map'
 		}, compiler))
 		.pipe(babel({
 			presets: ['@babel/env']
