@@ -1,15 +1,18 @@
 
 require('dotenv').config();
+const express = require('express');
 
-//api routes
+//api routes and local modules
 const mediaRoutes = require('./api/routes/media');	//all trafic at base_url/api/media will be routed to this
 const usersRoutes = require('./api/routes/users');	//all trafic at base_url/api/users will be routed to this
 const postRoutes = require('./api/routes/post');	//all trafic at base_url/api/post will be routed to this
 const commentRoutes = require('./api/routes/comment');	//all trafic at base_url/api/post will be routed to this
+const categoryRoutes = require('./api/routes/category');	//all trafic at base_url/api/post will be routed to this
+const authRoutes = require('./api/routes/auth');	//all trafic at base_url/api/post will be routed to this
+
+const passport = require('./modules/passport-config');
 
 const clientRoot = { root: 'client' };
-
-const express = require('express');
 
 const app = express();
 app.use(express.static('client'))
@@ -19,7 +22,9 @@ app.use(express.static('client'))
 	.use('/api/media', mediaRoutes)
 	.use('/api/users', usersRoutes)
 	.use('/api/post', postRoutes)
-	.use('/api/comment', commentRoutes);
+	.use('/api/comment', commentRoutes)
+	.use('/api/category', categoryRoutes)
+	.use('/api/auth', authRoutes);
 
 // client routing
 app.get('/', (_, res) => {

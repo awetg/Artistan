@@ -3,9 +3,10 @@ module.exports = (connection) => {
 	module.createPost = async(req, res) => {
 		//check if media was uploaded to db successfully
 		if (!req.insertedFile.error) {
+			if (!req.user) {res.send({message: 'Unautherized authentication required.'});}
 			try {
 				const query = 'INSERT INTO post (title, media, owner) VALUES(?, ?, ?)';
-				const queryParams = [req.body.title, req.insertedFile.rows.insertId, req.userData.user_id];
+				const queryParams = [req.body.title, req.insertedFile.rows.insertId, req.user.user_id];
 				const [rows, fields] = await connection.execute(query, queryParams);
 				await connection.execute('INSERT INTO post_category (post_id, category_id) VALUES(?, ?)', [rows.insertId, req.body.category]);
 				res.send(rows);
@@ -18,10 +19,10 @@ module.exports = (connection) => {
 	};
 
 	module.like = async(req, res) => {
-		if (req.userLoggedIn) {
+		if (req.user) {
 			try {
 				const query = 'INSERT INTO likes_post (user_id, post_id) VALUES(?, ?)';
-				const [rows,fields] = await connection.execute(query,[req.userData.user_id, req.params.post_id]);
+				const [rows,fields] = await connection.execute(query,[req.user.user_id, req.params.post_id]);
 				res.send({message: 'Posted liked'});
 			} catch (error) {
 				res.status(401).json(error);
@@ -32,7 +33,7 @@ module.exports = (connection) => {
 	module.getAllPosts = async(req, res) => {
 		try {
 			//get all posts
-			const query = 'select * from post p , media, user where post_id=media_id and p.owner=user_id;';
+			const query = 'SELECT * FROM post INNER JOIN media ON media.media_id=post.media INNER JOIN user ON user.user_id=post.owner';
 			const [rows,fields] = await connection.execute(query);
 			res.send(rows);
 		} catch (error) {
@@ -62,11 +63,15 @@ module.exports = (connection) => {
 	};
 
 	module.delete = async(req, res) => {
-		try {
-			const [rows,fields] = await connection.query('DELETE FROM post WHERE post_id=?', [req.params.post_id]);
-			res.send(rows);
-		} catch (error) {
-			res.status(401).json(error);
+		if (req.user) {
+			try {
+				const [rows,fields] = await connection.query('DELETE FROM post WHERE post_id=?', [req.params.post_id]);
+				res.send(rows);
+			} catch (error) {
+				res.status(401).json(error);
+			}
+		} else {
+			res.send({message: 'Unautherized authentication required.'});
 		}
 	};
 
