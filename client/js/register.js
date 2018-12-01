@@ -7,9 +7,16 @@ document.addEventListener('DOMContentLoaded', () => {
 	const registerSuccessElement = '<div class="register-success">Your registration is completed.\nWelcome to ARTisan!\nYou now can <a href="/login">Login</a>.</div>';
 	const errorMsg = document.querySelector('label.error-text');
 
-	const handleServerError = () => {
+	const handleServerError = (error) => {
 		errorMsg.innerText = 'Something went wrong. Please try again later';
-		document.querySelector('input[type="submit"]').removeAttribute('disabled');
+		if (error.message && error.message.indexOf('Duplicate') > -1) {
+			if (error.message.indexOf('unique_username') > -1) {
+				errorMsg.innerText = 'This username is already taken.';
+			} else if (error.message.indexOf('unique_email') > -1) {
+				errorMsg.innerText = 'This email is already taken.';
+			}
+		}
+		document.querySelector('button[type="submit"]').removeAttribute('disabled');
 	};
 
 	const register = (event) => {
@@ -59,7 +66,7 @@ document.addEventListener('DOMContentLoaded', () => {
 			return;
 		} else {
 			errorMsg.innerText = '';
-			document.querySelector('input[type="submit"]').setAttribute('disabled', 'true');
+			document.querySelector('button[type="submit"]').setAttribute('disabled', 'true');
 			const data = {
 				email,
 				fullname,
@@ -75,12 +82,12 @@ document.addEventListener('DOMContentLoaded', () => {
 						formWrapper.removeChild(form);
 						formWrapper.insertAdjacentHTML('afterbegin', registerSuccessElement);
 					} else {
-						handleServerError();
+						handleServerError(resData);
 					}
 				})
 				.catch((error) => {
 					console.log(error);
-					handleServerError();
+					handleServerError(error);
 				});
 		}
 	};
