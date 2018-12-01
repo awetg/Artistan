@@ -11,8 +11,14 @@ module.exports = (connection) => {
 
 	module.addCategory = async (req, res) => {
 		try {
-			const [rows, fields] = await connection.query('INSERT INTO category(name) VALUES(?)', [req.body.category_name]);
-			res.send({message:'Category inserted'});
+			const [r, f] = await connection.query('SELECT name FROM category WHERE name=?', [req.body.category_name]);
+			console.log(r);
+			if(r.length == 0) {
+				const [rows, fields] = await connection.query('INSERT INTO category(name) VALUES(?)', [req.body.category_name]);
+				res.send({message:'Category inserted'});
+			} else {
+				res.send({message: 'Category already exist'});
+			}
 		} catch(error) {
 			res.status(401).json(error);
 		}
