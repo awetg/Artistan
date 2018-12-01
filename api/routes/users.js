@@ -1,5 +1,6 @@
 const router = require('express').Router();
 const db = require('../database/db');
+const passport = require('../../modules/passport-config');
 
 //test route for GET:base_url/api/users may be used to get list of users if needed
 router.get('/', (req, res) => {

@@ -1,17 +1,17 @@
 module.exports = (connection) => {
 	const module = {};
 	module.createComment = async(req, res) => {
-		if(req.userLoggedIn) {
+		if(req.user) {
 			try {			
 				const query = 'INSERT INTO comment (content, owner, parent_post) VALUES(?, ?, ?)';
-				const queryParams = [req.body.content, req.userData.user_id, req.params.post_id];
+				const queryParams = [req.body.content, req.user.user_id, req.params.post_id];
 				const [rows, fields] = await connection.execute(query, queryParams);
 				res.send(rows);
 			} catch(error) {
 				res.status(401).json(error);
 			}
 		} else {
-			res.status(401).json(error);
+			res.status(401).json({message: 'Unautherziez. Only loggedin user can comment.'});
 		}
 	}
 

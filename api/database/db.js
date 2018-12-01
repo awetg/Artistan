@@ -12,17 +12,19 @@ const pool = mysql.createPool({
 	queueLimit: 0
 });
 
-//each module represent a table on database
+//each module represent a table on database(controllers for db IO)
 const User = require('./user')(pool);
 const Media = require('./media')(pool);
 const Post = require('./post')(pool);
 const Comment = require('./comment')(pool);
 const Category = require('./category')(pool);
+const Auth = require('./auth')(pool);
 
 module.exports = {
 	User,
 	Media,
 	Post,
 	Comment,
-	Category
+	Category,
+	Auth
 }

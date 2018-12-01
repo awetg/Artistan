@@ -3,7 +3,10 @@ const jwt = require('jsonwebtoken');
 const signToken = (userData, res) => {
 	//get first row from results and sign a token asynchronously
 	if (userData) {
-		jwt.sign({userData}, 'shhh', (error, token) => {
+		const payload = {
+			user_id: userData.user_id
+		}
+		jwt.sign(payload, process.env.JWT_SECRET_KEY, (error, token) => {
 			if (!error) {
 				res.send({
 					message: 'Logged in successfully',
@@ -26,7 +29,7 @@ const signToken = (userData, res) => {
 
 const verifyToken = (token , req, res) => {
 	//verify token with jwt
-	jwt.verify(token, 'shhh', (error, userData) => {
+	jwt.verify(token, process.env.JWT_SECRET_KEY, (error, userData) => {
 		if (error) {
 			res.send(403);
 		} else {
