@@ -74,9 +74,6 @@ document.addEventListener('DOMContentLoaded', () => {
 				password
 			};
 			makeRequest(API.users.register.url, API.users.register.method, data)
-				.then(response => {
-					return response.json();
-				})
 				.then(resData => {
 					if (resData.user_id) {
 						formWrapper.removeChild(form);

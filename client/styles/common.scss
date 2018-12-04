@@ -107,3 +107,44 @@ select {
 	font-size: 16px;
 	background: rgba(0, 0, 0, 0.52);
 }
+
+.multiple-select {
+	outline: none;
+  max-height: 200px;
+  overflow-y: auto;
+	padding: 8px;
+  border: none;
+	font-family: 'Montserrat', sans-serif;
+	font-size: 16px;
+	background: rgba(0, 0, 0, 0.52);
+	
+	input {
+		display: none;
+		& ~ span {
+			padding: 10px 14px;
+			border-radius: 36px;
+		}
+		&:hover {
+			& ~ span {
+				background: lighten(#1061EE, 20%);
+			}
+		}
+		&:checked:not(:hover) ~ span {
+			background: lighten(#1061EE, 5%);
+			color: white;
+		}
+	}
+	
+	label {
+		display: block;
+	
+		&:hover {
+			cursor: pointer;
+		}
+	}
+
+	span {
+		display: inline-block;
+		width: 100%;
+	}
+}

@@ -1,8 +1,9 @@
 // import { API } from './utils/constants';
 // import { makeRequest } from './utils/network';
-import { checkUserLoggedIn, calculateGalleryCols } from './utils/shared-functions';
+import { checkUserLoggedIn, calculateGalleryCols, initApp } from './utils/shared-functions';
 
 document.addEventListener('DOMContentLoaded', () => {
+	initApp();
 	calculateGalleryCols();
 	checkUserLoggedIn();
 
