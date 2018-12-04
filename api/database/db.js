@@ -20,11 +20,18 @@ const Comment = require('./comment')(pool);
 const Category = require('./category')(pool);
 const Auth = require('./auth')(pool);
 
+const Follower = require('./follower')(pool);
+//const User_Interested = require('./user_intersts')(pool);
+//const Search = require('./post')(pool);
+
 module.exports = {
 	User,
 	Media,
 	Post,
 	Comment,
 	Category,
-	Auth
+	Auth,
+	Follower,
+//	User_Interested,
+//	Search
 }
