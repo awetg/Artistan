@@ -5,10 +5,14 @@ module.exports = (connection) => {
 		if (!req.insertedFile.error) {
 			if (!req.user) {res.send({message: 'Unautherized authentication required.'});}
 			try {
+				console.log('createPost');
 				const query = 'INSERT INTO post (title, media, owner) VALUES(?, ?, ?)';
 				const queryParams = [req.body.title, req.insertedFile.rows.insertId, req.user.user_id];
 				const [rows, fields] = await connection.execute(query, queryParams);
-				await connection.execute('INSERT INTO post_category (post_id, category_id) VALUES(?, ?)', [rows.insertId, req.body.category]);
+				const categories = JSON.parse(req.body.category);
+				let q = 'INSERT INTO post_category (post_id, category_id) VALUES ?';
+				const qparams = categories.map(category => [rows.insertId, category]);
+				await connection.query(q, [qparams]);
 				res.send(rows);
 			} catch (error) {
 				res.status(401).json(error);
