@@ -64,3 +64,46 @@ a {
 		color: #1e88e5;
 	}
 }
+
+input {
+	outline: none;
+	padding: 10px 14px;
+	color: #fff;
+	border: none;
+	border-radius: 36px;
+	font-family: 'Montserrat', sans-serif;
+	font-size: 16px;
+	background: rgba(0, 0, 0, 0.52);
+}
+
+button {
+	outline: none;
+	padding: 10px 14px;
+	color: #fff;
+	border: none;
+	border-radius: 36px;
+	font-family: 'Montserrat', sans-serif;
+	font-size: 16px;
+	background: #1061EE;
+	cursor: pointer;
+	transition: background 0.5s ease-in-out;
+	&:disabled {
+		background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), #1061EE;
+		cursor: not-allowed;
+	}
+}
+
+label.error-text {
+	color: red !important;
+}
+
+select {
+	outline: none;
+	padding: 10px 14px;
+	color: #fff;
+	border: none;
+	border-radius: 36px;
+	font-family: 'Montserrat', sans-serif;
+	font-size: 16px;
+	background: rgba(0, 0, 0, 0.52);
+}

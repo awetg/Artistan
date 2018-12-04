@@ -9,7 +9,7 @@
 
 <body>
 	<header id='app-header'>
-		<img src="img/artisan-white.png"/>
+			<a href="/"><img src="/img/artisan-white.png"/></a>
 		<div class="nav-links">
 			<a class="login-link" href="/login">Login</a>
 		</div>
@@ -17,9 +17,30 @@
 	<section class="app">
 		<div id="upload-page" class="container">
 			<form>
-				<input type="file" id="upload-input" accept="image/*" name="my-media" />
-				<button>Select an image to upload
-				</button>
+				<div class="upload">
+					<input type="file" id="upload-input" accept="image/*" name="my-media" hidden/>
+					<button class="select-file" type="button">Select an image to upload</button>
+					<label class="error-text"></label>
+					<div class="image-preview"></div>
+				</div>
+				<div class="info">
+					<div class="form-group">
+						<label>Put a title for this art</label>
+						<input type="text" class="title-input" placeholder="E.g. Unsuspecting sunday afternoon" required />
+					</div>
+					<div class="form-group">
+						<label>Select a category</label>
+						<select required class="category-select">
+							<option value="" hidden>Click to see all categories</option>
+							<option value="1">Photography</option>
+							<option value="2">Sculpture</option>
+							<option value="3">Painting</option>
+							<option value="4">Craftmanship</option>
+							<option value="5">Street Art</option>
+						</select>
+					</div>
+					<button type="submit">Post this art</button>
+				</div>
 			</form>
 		</div>
 	</section>

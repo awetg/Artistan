@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 	const handleServerError = (message) => {
 		errorMsg.innerText = message || 'Something went wrong. Please try again later';
-		document.querySelector('input[type="submit"]').removeAttribute('disabled');
+		document.querySelector('button[type="submit"]').removeAttribute('disabled');
 	};
 
 	const login = (event) => {
@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
 		const username = form.username.value;
 		const password = form.password.value;
 		errorMsg.innerText = '';
-		document.querySelector('input[type="submit"]').setAttribute('disabled', 'true');
+		document.querySelector('button[type="submit"]').setAttribute('disabled', 'true');
 		const data = {
 			username,
 			password
