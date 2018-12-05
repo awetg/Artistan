@@ -1,45 +1,47 @@
 const jwt = require('jsonwebtoken');
 
-const signToken = (userData, res) => {
-	//get first row from results and sign a token asynchronously
-	if (userData) {
-		const payload = {
-			user_id: userData.user_id
-		}
-		jwt.sign(payload, process.env.JWT_SECRET_KEY, (error, token) => {
-			if (!error) {
-				res.send({
+const guid = () => 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c =>  {
+		const r = Math.random()*16|0;
+		v = c == 'x' ? r : (r&0x3|0x8);
+		return v.toString(16);
+	});
+
+
+const signToken = (user) => {
+	return new Promise((resolve, reject) => {
+		if (user) {
+			const payload = {
+				exp: Math.floor(Date.now() / 1000) + (60 * 60),	//sign token with 1 hour expiration (number of seconds are set)
+				user_id: user.user_id,
+				jti: guid(),	//token id used as key while blacklisting jwt
+			};
+			jwt.sign(payload, process.env.JWT_SECRET_KEY, (error, token) => {
+				if(error) reject(error);
+				resolve({
 					message: 'Logged in successfully',
 					token: token,
 					user: {
-						user_id: userData.user_id,
-						username: userData.username,
-						email: userData.email,
-						time_created: userData.time_created
+						user_id: user.user_id,
+						username: user.username,
+						email: user.email,
+						time_created: user.time_created
 					}
 				});
-			} else {
-				res.send({message: 'Something went wrong. JWT'});
-			}
-		});
-	} else {
-		res.send({message: 'Username or password is incorrect.'});
-	}
-};
-
-const verifyToken = (token , req, res) => {
-	//verify token with jwt
-	jwt.verify(token, process.env.JWT_SECRET_KEY, (error, userData) => {
-		if (error) {
-			res.send(403);
+			});
 		} else {
-			//create loggedIn and userData property on the request object and call the callback function
-			req.userLoggedIn = true;
-			req.userData = userData.userData;
-			delete req.userData.password;
+			reject({message: 'Username or password is incorrect.'});
 		}
 	});
 };
+
+const verifyToken = async (token) => {
+	return new Promise((resolve, reject) => {
+		jwt.verify(token, process.env.JWT_SECRET_KEY, (error, user) => {
+			error? reject({error: error, status: 403}) : resolve(user);
+		});
+	})
+};
+
 
 module.exports = {
 	signToken,
