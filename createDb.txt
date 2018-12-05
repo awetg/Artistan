@@ -10,6 +10,15 @@ CONSTRAINT `unique_username` UNIQUE (username)
 CONSTRAINT `unique_email` UNIQUE (email)
 );
 
+CREATE TABLE avatar (
+avatar_id SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+user_id SMALLINT UNSIGNED NOT NULL,
+path TEXT,
+mimetype VARCHAR(100),
+encoding VARCHAR(100),
+CONSTRAINT `fk_user_id_avatar` FOREIGN KEY (user_id) REFERENCES user (user_id) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
 CREATE TABLE media (
 media_id SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY, 
 filename TEXT,
@@ -23,7 +32,8 @@ CONSTRAINT `fk_user_id` FOREIGN KEY (owner) REFERENCES user (user_id) ON DELETE 
 
 CREATE TABLE category (
 category_id SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY, 
-name TEXT
+name TEXT,
+UNIQUE KEY `unique_category_name` (`name`)
 );
 
 CREATE TABLE comment (
