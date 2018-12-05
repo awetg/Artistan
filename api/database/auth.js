@@ -33,14 +33,12 @@ module.exports = (connection) => {
 		}
 	};
 
-	/* Replaced with passport-local strategy check modules/passport-config.js */
 	module.logIn = async(req, res) => {
 		//check all required fields exist
 		const allFieldsExist = ['username','password'].every(k => (k in req.body));
 		if (allFieldsExist) {
 			try {
 				const [rows, fields] = await connection.execute('SELECT * FROM user WHERE username=?',[req.body.username]);
-				console.log(rows[0]);
 				if(!rows[0])
 					return res.send({message: 'Username not found.'});
 				const match = await bcrypt.compare(req.body.password, rows[0].password);
@@ -55,8 +53,12 @@ module.exports = (connection) => {
 
 	module.logOut = async (req, res) => {
 		if(req.user) {
-			blackListStorage.set(req.user.jti, req.user.iat, req.user.exp)
-				.then(value => res.send({message: 'Logged out successfully.'}));
+			try {
+				await blackListStorage.set(req.user.jti, req.user.iat, req.user.exp).then(value => res.send({message: 'Logged out successfully.'}));
+			} catch (error) {
+				console.log(error);
+				res.send(error);
+			}
 		} else {
 			res.status(401).json('Unauterized.');
 		}
