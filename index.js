@@ -1,3 +1,4 @@
+'use strict';
 
 require('dotenv').config();
 const express = require('express');
@@ -57,4 +58,4 @@ app.use((error, req, res, next) => {
 	res.status(error.status || 500).json({error: {message: error.message}});
 });
 
-app.listen(process.env.APP_PORT, () => console.log('Server running on localhost:3000.'));
+app.listen(process.env.APP_PORT, () => console.log('Server running on localhost:' + process.env.APP_PORT));

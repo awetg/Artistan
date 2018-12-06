@@ -10,7 +10,7 @@ module.exports = (connection) => {
 				const queryParams = [req.body.title, req.insertedFile.rows.insertId, req.user.user_id];
 				const [rows, fields] = await connection.execute(query, queryParams);
 				const categories = JSON.parse(req.body.category);
-				let q = 'INSERT INTO post_category (post_id, category_id) VALUES ?';
+				const q = 'INSERT INTO post_category (post_id, category_id) VALUES ?';
 				const qparams = categories.map(category => [rows.insertId, category]);
 				await connection.query(q, [qparams]);
 				res.send({
