@@ -10,8 +10,6 @@ const commentRoutes = require('./api/routes/comment');	//all trafic at base_url/
 const categoryRoutes = require('./api/routes/category');	//all trafic at base_url/api/post will be routed to this
 const authRoutes = require('./api/routes/auth');	//all trafic at base_url/api/post will be routed to this
 
-const passport = require('./modules/passport-config');
-
 const clientRoot = { root: 'client' };
 
 const app = express();
