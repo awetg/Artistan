@@ -20,7 +20,7 @@ module.exports = (connection) => {
 		const allFieldsExist = ['fullname', 'email', 'username','password'].every(k => k in req.body);
 		if (allFieldsExist) {
 			try {
-				const hash = await bcrypt.hash(req.body.password, process.env.SALT_ROUNDS || 10);
+				const hash = await bcrypt.hash(req.body.password, parseInt(process.env.SALT_ROUNDS) || 10);
 				const query = 'INSERT INTO user (fullname, email,username,password) VALUES(?,?,?,?)';
 				const queryParams = [req.body.fullname, req.body.email, req.body.username, hash];
 				const [rows, fields] = await connection.execute(query,queryParams);
@@ -121,43 +121,14 @@ module.exports = (connection) => {
 		}
 	};
 
-	module.getAllUsers = async(req, res) => {
-		try {
-			const [rows, fields] = await connection.query('SELECT fullname, username, email, time_created FROM user');
-			res.send(rows);
-		} catch (error) {
-			res.status(401).json(error);
-		}
-	};
-
 	module.getUser = async(req, res) => {
 		try {
-			const [rows, fields] = await connection.execute('SELECT fullname, username, email, time_created FROM user WHERE user_id=?', [req.params.user_id]);
+			const [rows, fields] = await connection.execute('SELECT user_id, fullname, username, email, time_created FROM user WHERE user_id=?', [req.params.user_id]);
 			res.send(rows);
 		} catch (error) {
 			res.status(401).json(error);
 		}
 	};
-
-	/* below functions are not used as middleware, used only to get user info from other module
-	this is done to avoid the use of connection(db) variable outside db.js file and table modules(db IO controllers) */
-	module.findUserById = async(user_id) => {
-		try {
-			const [rows, fields] = await connection.execute('SELECT * FROM user WHERE user_id=?', [user_id]);
-			return rows[0];
-		} catch (error) {
-			return error;
-		}
-	};
-
-	module.findUserByUsername = async (username) => {
-		try {
-			const [rows, fields] = await connection.execute('SELECT * FROM user WHERE username =?', [username]);
-			return rows[0];
-		} catch(error) {
-			return error;
-		}
-	}
 
 	return module;
 };

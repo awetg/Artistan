@@ -1,12 +1,11 @@
+/* This routes handle sensitive account related data and authentication
+*All routes execpt creating account need authentication to access
+*/
 const router = require('express').Router();
 const upload = require('../../modules/multer');
 const db = require('../database/db');
 
-
-/* get all users with info at GET: base_url/api/auth/ */
-router.get('/', db.Auth.getAllUsers);	/* NOTE:  this will be re-implemented in profile.js route auth will be only for account related routes*/
-
-/* get single user account info at GET: base_url/api/auth/:user_id */
+/* get single user account info (all info except password) with authentication at GET: base_url/api/auth/:user_id */
 router.get('/:user_id',  db.Auth.authenticate, db.Auth.getUser);
 
 /* register a user  POST: base_url/api/auth/register  */

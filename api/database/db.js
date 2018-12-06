@@ -13,7 +13,7 @@ const pool = mysql.createPool({
 });
 
 //each module represent a table on database(controllers for db IO)
-const User = require('./user')(pool);
+const User = require('./users')(pool);
 const Media = require('./media')(pool);
 const Post = require('./post')(pool);
 const Comment = require('./comment')(pool);
