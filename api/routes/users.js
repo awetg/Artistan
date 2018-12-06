@@ -2,6 +2,7 @@
 
 const router = require('express').Router();
 const upload = require('../../modules/multer');
+const resize = require('../../modules/resize');
 const db = require('../database/db');
 
 /* get all users info without authentication (fullname,username,time_created )at GET: base_url/api/users/ */
@@ -11,7 +12,15 @@ router.get('/', db.User.getAllUsers);
 router.get('/:user_id', db.User.getUser);
 
 /* uploading user avatar. this is used for updating avatar as well, with authentication at POST: base_url/api/users/:user_id/avatar */
-router.post('/:user_id/avatar', db.Auth.authenticate, upload.single('my-media'), db.User.uploadAvatar);
+router.post(
+	'/:user_id/avatar',
+	db.Auth.authenticate,
+	upload.single('my-media'),
+	(req, res, next) => {
+		resize.doResize(req.file.path, 300, 'uploads/medium_' + req.file.filename, next);
+	},
+	db.User.uploadAvatar
+);
 
 /* get user avatar  at GET: base_url/api/users/:user_id/avatar */
 router.get('/:user_id/avatar',db.User.getUserAvatar);
