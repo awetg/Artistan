@@ -62,3 +62,5 @@ typings/
 
 # compiled files created by gulp tasks
 client/dist
+
+uploads/
