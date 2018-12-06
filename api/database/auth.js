@@ -11,7 +11,7 @@ const blackList = require('../../modules/blacklist');
 * 	server: {host:'localhost', port:11211 	}
 * }
 */
-const blackListStorage = blackList({type: 'memory'});
+const blackListStorage = blackList({type: process.env.CACHING_SERVER || 'memory'});
 
 module.exports = (connection) => {
 	const module = {};
@@ -78,6 +78,30 @@ module.exports = (connection) => {
 				} else {
 					req.user = user;
 					next();
+				}
+			} catch(error) {
+				res.status(401).json(error);
+			}
+		} else {
+			res.status(401).json('Unauterized.');
+		}
+	}
+
+		module.authenticateAdmin = async (req, res, next) => {
+		const token = req.headers['x-access-token'];
+		if(token) {
+			try{
+				const user = await jwt.verifyToken(token);
+				if(await blackListStorage.get(user.jti)) {
+					res.status(401).json('Unauterized.');
+				} else {
+					const userData = await connection.query('SELECT * FROM user WHERE user_id=?', [user.user_id]);
+					if(userData[0] && userData[0].admin == 1) {
+						user.admin_privileges = true;
+						return next();
+					} else {
+						return res.status(401).json('Unauterized');
+					}
 				}
 			} catch(error) {
 				res.status(401).json(error);
