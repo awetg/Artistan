@@ -2,13 +2,16 @@ const bcrypt = require('bcrypt');
 
 const jwt = require('../../modules/jwt');
 const blackList = require('../../modules/blacklist');
-/* if no options is passed blacklist will be saved in memory
+
+/* pass options to get blacklist storage
+* if no options is passed blacklist will be saved in memory
+* for production redis/memcached should be used (memcached not implemented currently)
 * example const options = {
-* 	type:memory||memcached||reds,
-* 	server: {vhost:'localhost', port:11211 	}
+* 	type:memory||reds,
+* 	server: {host:'localhost', port:11211 	}
 * }
 */
-const blackListStorage = blackList();
+const blackListStorage = blackList({type: 'memory'});
 
 module.exports = (connection) => {
 	const module = {};
@@ -54,7 +57,8 @@ module.exports = (connection) => {
 	module.logOut = async (req, res) => {
 		if(req.user) {
 			try {
-				await blackListStorage.set(req.user.jti, req.user.iat, req.user.exp).then(value => res.send({message: 'Logged out successfully.'}));
+				await blackListStorage.set(req.user.jti, req.user.iat, req.user.exp)
+					.then(value => res.send({message: 'Logged out successfully.'}));
 			} catch (error) {
 				console.log(error);
 				res.send(error);
