@@ -11,6 +11,8 @@ router.post('/', db.Auth.authenticate, upload.single('my-media'), db.Media.uploa
 /*like a post with authentication at POST: base_url/api/post/:post_id/like  */
 router.post('/:post_id/like', db.Auth.authenticate, db.Post.like);
 
+router.delete('/:post_id/like', db.Auth.authenticate, db.Post.deleteLike);
+
 /*get all posts by user at GET: base_url/api/post/:user_id */
 router.get('/:user_id/user', db.Post.getAllByUser);
 

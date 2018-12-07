@@ -31,7 +31,7 @@ CREATE TABLE `avatar` (
   PRIMARY KEY (`avatar_id`),
   KEY `fk_user_id_avatar` (`user_id`),
   CONSTRAINT `fk_user_id_avatar` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -67,7 +67,7 @@ CREATE TABLE `comment` (
   KEY `fk_parent_post_id` (`parent_post`),
   CONSTRAINT `fk_commenter_id` FOREIGN KEY (`owner`) REFERENCES `user` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `fk_parent_post_id` FOREIGN KEY (`parent_post`) REFERENCES `post` (`post_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -122,7 +122,7 @@ CREATE TABLE `media` (
   PRIMARY KEY (`media_id`),
   KEY `fk_user_id` (`owner`),
   CONSTRAINT `fk_user_id` FOREIGN KEY (`owner`) REFERENCES `user` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=56 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=63 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -137,12 +137,13 @@ CREATE TABLE `post` (
   `title` text DEFAULT NULL,
   `media` smallint(5) unsigned NOT NULL,
   `owner` smallint(5) unsigned NOT NULL,
+  `flag` smallint(5) unsigned NOT NULL DEFAULT 0,
   PRIMARY KEY (`post_id`),
   KEY `fk_file_id` (`media`),
   KEY `fk_poster_id` (`owner`),
   CONSTRAINT `fk_file_id` FOREIGN KEY (`media`) REFERENCES `media` (`media_id`) ON DELETE CASCADE,
   CONSTRAINT `fk_poster_id` FOREIGN KEY (`owner`) REFERENCES `user` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=37 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=42 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -180,7 +181,7 @@ CREATE TABLE `user` (
   PRIMARY KEY (`user_id`),
   UNIQUE KEY `unique_uername` (`username`),
   UNIQUE KEY `unique_email` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=34 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=38 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -193,6 +194,7 @@ DROP TABLE IF EXISTS `user_intersts`;
 CREATE TABLE `user_intersts` (
   `user_id` smallint(5) unsigned NOT NULL,
   `category_id` smallint(5) unsigned NOT NULL,
+  UNIQUE KEY `unique_user_id_and_category_id` (`user_id`,`category_id`),
   KEY `fk_iuser_id` (`user_id`),
   KEY `fk_category_id` (`category_id`),
   CONSTRAINT `fk_category_id` FOREIGN KEY (`category_id`) REFERENCES `category` (`category_id`) ON DELETE CASCADE ON UPDATE CASCADE,
@@ -209,4 +211,4 @@ CREATE TABLE `user_intersts` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-12-05  2:58:01
+-- Dump completed on 2018-12-08  0:10:04

@@ -53,6 +53,7 @@ post_id SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
 title TEXT,
 media SMALLINT UNSIGNED NOT NULL,
 owner SMALLINT UNSIGNED NOT NULL,
+flag SMALLINT UNSIGNED NOT NULL DEFAULT 0,
 CONSTRAINT `fk_file_id` FOREIGN KEY (media) REFERENCES media (media_id) ON DELETE CASCADE ON UPDATE RESTRICT,
 );
 
@@ -69,6 +70,7 @@ CONSTRAINT `fk_followed_id` FOREIGN KEY (followed_id) REFERENCES user (user_id) 
 CREATE TABLE user_interests (
 user_id SMALLINT UNSIGNED NOT NULL,
 category_id SMALLINT UNSIGNED NOT NULL,
+CONSTRAINT `unique_user_id_and_category_id` UNIQUE (user_id, category_id),
 CONSTRAINT `fk_iuser_id` FOREIGN KEY (user_id) REFERENCES user (user_id) ON DELETE CASCADE ON UPDATE CASCADE,
 CONSTRAINT `fk_category_id` FOREIGN KEY (category_id) REFERENCES category (category_id) ON DELETE CASCADE ON UPDATE CASCADE
 );
