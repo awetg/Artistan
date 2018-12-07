@@ -1,6 +1,6 @@
 'use strict';
 
-import { checkUserLoggedIn, initApp } from './utils/shared-functions';
+import { initApp } from './utils/shared-functions';
 import { API } from './utils/constants';
 import { makeRequest } from './utils/network';
 
@@ -8,7 +8,6 @@ document.addEventListener('DOMContentLoaded', () => {
 	initApp().then(() => {
 		renderCategoriesSelectBox();
 	});
-	checkUserLoggedIn();
 
 	const form = document.querySelector('form');
 	const uploadButton = document.querySelector('button.select-file');

@@ -1,7 +1,5 @@
 const router = require('express').Router();
-const upload = require('../../modules/multer');
 const db = require('../database/db');
-
 
 /* get all category at GET: base_url/api/user_interested */
 router.get('/', db.Auth.authenticate, db.User_Interested.getAllInterests);

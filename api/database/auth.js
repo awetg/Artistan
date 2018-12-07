@@ -45,12 +45,12 @@ module.exports = (connection) => {
 				if (!rows[0])
 				{return res.send({message: 'Username not found.'});}
 				const match = await bcrypt.compare(req.body.password, rows[0].password);
-				match ? res.send(await jwt.signToken(rows[0])) : res.send({message: 'Incorrect password'});
+				return match ? res.send(await jwt.signToken(rows[0])) : res.send({message: 'Incorrect password'});
 			} catch (error) {
-				res.status(401).json(error);
+				return res.status(401).json(error);
 			}
 		} else {
-			res.send({message: 'Required fields not provided.'});
+			return res.send({message: 'Required fields not provided.'});
 		}
 	};
 
@@ -86,16 +86,16 @@ module.exports = (connection) => {
 		}
 	};
 
-		module.authenticateAdmin = async (req, res, next) => {
+	module.authenticateAdmin = async(req, res, next) => {
 		const token = req.headers['x-access-token'];
-		if(token) {
-			try{
+		if (token) {
+			try {
 				const user = await jwt.verifyToken(token);
-				if(await blackListStorage.get(user.jti)) {
-					res.status(401).json('Unauterized.');
+				if (await blackListStorage.get(user.jti)) {
+					return res.status(401).json('Unauterized.');
 				} else {
 					const [userData, fields] = await connection.query('SELECT * FROM user WHERE user_id=?', [user.user_id]);
-					if(userData[0] && userData[0].admin == 1) {
+					if (userData[0] && userData[0].admin === 1) {
 						user.admin_privileges = true;
 						req.user = user;
 						return next();
@@ -103,13 +103,13 @@ module.exports = (connection) => {
 						return res.status(401).json('Unauterized');
 					}
 				}
-			} catch(error) {
-				res.status(401).json(error);
+			} catch (error) {
+				return res.status(401).json(error);
 			}
 		} else {
-			res.status(401).json('Unauterized.');
+			return res.status(401).json('Unauterized.');
 		}
-	}
+	};
 
 	module.updateUser = async(req, res) => {
 		//check all required fields exist
@@ -134,7 +134,7 @@ module.exports = (connection) => {
 		if (req.user) {
 			try {
 				const [rows, fields] = await connection.query('DELETE FROM user WHERE user_id=?', req.params.user_id);
-				if (rows.affectedRows == 1) {
+				if (rows.affectedRows === 1) {
 					res.send({message: 'User account deleted'});
 				} else {
 					res.send({message: 'Error occured while deleting account'});

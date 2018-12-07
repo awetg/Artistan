@@ -1,0 +1,13 @@
+#profile-page {
+	height: calc(100vh - 64px);
+	width: 100%;
+	.user-info {
+		width: 100%;
+		height: 500px;
+		.cover-photo {
+			width: 100%;
+			height: 100%;
+			background-size: cover;
+		}
+	}
+}
