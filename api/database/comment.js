@@ -18,7 +18,7 @@ module.exports = (connection) => {
 	module.getAllComments = async(req, res) => {
 		try {
 			const [rows, fields] = await connection.execute('SELECT * FROM comment WHERE parent_post=?',[req.params.post_id]);
-		res.send(rows);
+			res.send(rows);
 		} catch(error) {
 			res.status(401).json(error);
 		}
@@ -60,7 +60,7 @@ module.exports = (connection) => {
 				rows.affectedRows? res.send({message: 'Post delted.'}) : res.send({message: 'Post does not exist or you don not have permission to delete'});
 				res.status(401).json(error);
 			} catch(error) {
-				
+				res.send(error);
 			}
 		} else {
 			res.status(401).json('Unautherzied.');

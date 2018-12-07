@@ -45,7 +45,7 @@ module.exports = (connection) => {
 				const [rows, fields] = await connection.query('DELETE FROM likes_post WHERE post_id=?', [req.params.post_id]);
 				rows.affectedRows? res.send({message: 'Posted unliked.'}) : res.send({message: 'Post does not exist.'});
 			} catch(error) {
-				
+				res.send(error);
 			}
 		} else {
 			res.send({message: 'Unautherized'});
