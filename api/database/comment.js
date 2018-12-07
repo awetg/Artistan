@@ -25,20 +25,50 @@ module.exports = (connection) => {
 	}
 
 	module.updateComment = async(req, res) => {
-		try {
-			const [rows, fields] = await connection.execute('UPDATE comment SET content=? WHERE comment_id=?',[req.body.content, req.params.comment_id]);
-		res.send({message: 'Comment updated.'});
-		} catch(error) {
-			res.status(401).json(error);
+		if(req.user) {
+			try {
+				let query, queryParams, rows, fields;
+				if(req.user.admin_privileges) {
+					query = 'UPDATE comment SET content=? WHERE comment_id=?';
+					queryParams = [req.body.content, req.params.comment_id];
+				} else {
+					query = 'UPDATE comment SET content=? WHERE comment_id=? AND owner=?';
+					queryParams = [req.body.content, req.params.comment_id, req.user.user_id];
+				}
+				[rows, fields] = await connection.execute();
+				if(rows.affectedRows)
+					res.send({message: 'Comment delted.'});
+				else
+					res.send({message: 'Comment does not exist or you don not have permission to delete'});
+			} catch(error) {
+				res.status(401).json(error);
+			}
+		} else {
+			res.status(401).json('Unautherzied.');
 		}
 	}
 
 	module.deleteComment = async(req, res) => {
-		try {
-			const [rows, fields] = await connection.execute('DELETE FROM comment WHERE comment_id=?',[req.params.comment_id]);
-		res.send(rows);
-		} catch(error) {
-			res.status(401).json(error);
+		if(req.user) {
+			try {
+				let query, queryParams, rows, fields;
+				if(req.user.admin_privileges) {
+					query = 'DELETE FROM comment WHERE comment_id=?';
+					queryParams = [req.params.comment_id];
+				} else {
+					query = 'DELETE FROM comment WHERE comment_id=? AND owner=?';
+					queryParams = [req.params.comment_id, req.user.user_id];
+				}
+				[rows, fields] = await connection.execute();
+				if(rows.affectedRows)
+					res.send({message: 'Comment delted.'});
+				else
+					res.send({message: 'Comment does not exist or you don not have permission to delete'});
+			} catch(error) {
+				res.status(401).json(error);
+			}
+		} else {
+			res.status(401).json('Unautherzied.');
 		}
 	}
 

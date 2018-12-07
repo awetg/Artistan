@@ -9,7 +9,8 @@ const usersRoutes = require('./api/routes/users');	//all trafic at base_url/api/
 const postRoutes = require('./api/routes/post');	//all trafic at base_url/api/post will be routed to this
 const commentRoutes = require('./api/routes/comment');	//all trafic at base_url/api/post will be routed to this
 const categoryRoutes = require('./api/routes/category');	//all trafic at base_url/api/post will be routed to this
-const authRoutes = require('./api/routes/auth');	//all trafic at base_url/api/post will be routed to this
+const authRoutes = require('./api/routes/auth');	//all trafic at base_url/api/auth will be routed to this
+const adminRoutes = require('./api/routes/admin');	//all trafic at base_url/api/admin will be routed to this
 
 const clientRoot = { root: 'client' };
 
@@ -23,7 +24,8 @@ app.use(express.static('client'))
 	.use('/api/post', postRoutes)
 	.use('/api/comment', commentRoutes)
 	.use('/api/category', categoryRoutes)
-	.use('/api/auth', authRoutes);
+	.use('/api/auth', authRoutes)
+	.use('/api/admin', adminRoutes);
 
 // client routing
 app.get('/', (_, res) => {

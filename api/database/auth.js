@@ -94,9 +94,10 @@ module.exports = (connection) => {
 				if(await blackListStorage.get(user.jti)) {
 					res.status(401).json('Unauterized.');
 				} else {
-					const userData = await connection.query('SELECT * FROM user WHERE user_id=?', [user.user_id]);
+					const [userData, fields] = await connection.query('SELECT * FROM user WHERE user_id=?', [user.user_id]);
 					if(userData[0] && userData[0].admin == 1) {
 						user.admin_privileges = true;
+						req.user = user;
 						return next();
 					} else {
 						return res.status(401).json('Unauterized');
