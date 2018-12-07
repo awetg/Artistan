@@ -95,7 +95,7 @@
     "yoda": [2, "never"],
     "consistent-return": 2,
     "spaced-line-comment": 0,
-    "strict": [2, "global"],
+    "strict": [0, "global"],
     "eqeqeq": 2,
     "guard-for-in": 2,
     "no-alert": 2,

@@ -1,3 +1,5 @@
+'use strict';
+
 import { API } from './utils/constants';
 import { makeRequest } from './utils/network';
 
@@ -22,9 +24,6 @@ document.addEventListener('DOMContentLoaded', () => {
 			password
 		};
 		makeRequest(API.users.login.url, API.users.login.method, data)
-			.then(response => {
-				return response.json();
-			})
 			.then(resData => {
 				if (resData.token && resData.token.length) {
 					localStorage.setItem('artisan_jwt', resData.token);

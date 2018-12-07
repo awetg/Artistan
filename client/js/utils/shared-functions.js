@@ -1,3 +1,8 @@
+'use strict';
+
+import { makeRequest } from './network';
+import { API } from './constants';
+
 export const checkUserLoggedIn = () => {
 	const userInfo = JSON.parse(localStorage.getItem('artisan_user'));
 	if (userInfo.user_id) {
@@ -14,3 +19,12 @@ export const calculateGalleryCols = () => {
 	gallery.style.columnCount = Math.floor(document.documentElement.clientWidth / columnWidth);
 };
 
+export const initApp = async() => {
+	// get categories
+	return await makeRequest(API.category.getAllCategories.url, API.category.getAllCategories.method)
+		.then(resData => {
+			if (resData && resData.length) {
+				localStorage.setItem('categories', JSON.stringify(resData));
+			}
+		});
+};

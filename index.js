@@ -1,3 +1,4 @@
+'use strict';
 
 require('dotenv').config();
 const express = require('express');
@@ -14,7 +15,6 @@ const follower = require('./api/routes/follower');	//all trafic at base_url/api/
 const user_interested = require('./api/routes/user_intersts');	//all trafic at base_url/api/post will be routed to this
 const search = require('./api/routes/search');	//all trafic at base_url/api/post will be routed to this
 
-const passport = require('./modules/passport-config');
 
 const clientRoot = { root: 'client' };
 
@@ -67,4 +67,4 @@ app.use((error, req, res, next) => {
 	res.status(error.status || 500).json({error: {message: error.message}});
 });
 
-app.listen(process.env.APP_PORT, () => console.log('Server running on localhost:3000.'));
+app.listen(process.env.APP_PORT, () => console.log('Server running on localhost:' + process.env.APP_PORT));

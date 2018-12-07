@@ -1,28 +1,27 @@
+/* This routes handle sensitive account related data and authentication
+*All routes execpt creating account need authentication to access
+*/
 const router = require('express').Router();
 const upload = require('../../modules/multer');
 const db = require('../database/db');
-const passport = require('../../modules/passport-config');
 
-
-/* get all users with info at GET: base_url/api/auth/ */
-router.get('/', db.Auth.getAllUsers);
-
-/* get single user info at GET: base_url/api/auth/:user_id */
-router.get('/:user_id', db.Auth.getUser);
+/* get single user account info (all info except password) with authentication at GET: base_url/api/auth/:user_id */
+router.get('/:user_id',  db.Auth.authenticate, db.Auth.getUser);
 
 /* register a user  POST: base_url/api/auth/register  */
 router.post('/register', upload.single(), db.Auth.register);
 
 /* login a user  POST: base_url/api/auth/login  */
 router.post('/login', upload.single(), db.Auth.logIn);
+// router.post('/login', passportLogin, (req, res) =>  res.send(req.user));
 
 /* logout a user with authentication  POST: base_url/api/auth/logout  */
-// router.post('/logout', passport.authenticate('jwt', {session: false}), upload.single(), db.Auth.logOut);
+router.post('/logout', db.Auth.authenticate, db.Auth.logOut);
 
-/*update user ifno with authentication at PATCH: base_url/api/auth/:user_id  */
-router.patch('/:user_id', passport.authenticate('jwt', {session: false}), upload.single(), db.Auth.updateUser);
+/*update user account ifno with authentication at PATCH: base_url/api/auth/:user_id  */
+router.patch('/:user_id', db.Auth.authenticate, upload.single(), db.Auth.updateUser);
 
-/* delete a user with authentication  at DELETE: base_url/api/auth/:user_id */
-router.delete('/:user_id', passport.authenticate('jwt', {session: false}), db.Auth.deleteUser);
+/* delete a user account with authentication  at DELETE: base_url/api/auth/:user_id */
+router.delete('/:user_id',  db.Auth.authenticate, db.Auth.deleteUser);
 
 module.exports = router;
