@@ -1,3 +1,5 @@
+'use strict';
+
 export const BASE_API_URL = '/api';
 export const API = {
 	users: {

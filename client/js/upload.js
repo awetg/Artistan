@@ -1,4 +1,8 @@
+'use strict';
+
 import { checkUserLoggedIn, initApp } from './utils/shared-functions';
+import { API } from './utils/constants';
+import { makeRequest } from './utils/network';
 
 document.addEventListener('DOMContentLoaded', () => {
 	initApp().then(() => {
@@ -18,7 +22,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
 	const renderCategoriesSelectBox = () => {
 		const categories = JSON.parse(localStorage.getItem('categories'));
-		console.log(categories);
 		const content = categories.reduce((total, cate) => {
 			return `${ total }<label><input value="${ cate.category_id }" type="checkbox"><span>${ cate.name }</span></label>`;
 		}, '');
@@ -54,8 +57,37 @@ document.addEventListener('DOMContentLoaded', () => {
 	};
 
 	const createPost = () => {
-		let data = new FormData();
-		data.append('title', titleInput.value);
+		let data = new FormData(document.querySelector('form'));
+		let selectedCategories = [];
+
+		// collect categories
+		document.querySelectorAll('.multiple-select input').forEach(checkbox => {
+			if (checkbox.checked) {
+				selectedCategories.push(checkbox.value);
+			}
+		});
+
+		if (!selectedCategories.length) {
+			document.querySelector('.category.error-text').innerText = 'Please select at least 1 category.';
+		} else {
+		// prepare form data
+			// data.append('title', titleInput.value);
+			// data.append('my-media', fileInput.files[0]);
+			data.append('category', JSON.stringify(selectedCategories));
+
+			makeRequest(API.post.createPost.url, API.post.createPost.method, data, true)
+				.then(resData => {
+					if (resData.post_id) {
+						window.location.href = '/';
+					} else {
+						// handleServerError(resData.message);
+					}
+				})
+				.catch((error) => {
+					console.log(error);
+				// handleServerError(error.message);
+				});
+		}
 	};
 
 	uploadButton.addEventListener('click', () => {
@@ -64,5 +96,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
 	fileInput.addEventListener('change', getFile);
 
-	form.addEventListener('submit', (e) => {});
+	form.addEventListener('submit', (e) => {
+		e.preventDefault();
+		createPost();
+	});
 });

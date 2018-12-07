@@ -42,10 +42,10 @@ module.exports = (connection) => {
 		if (allFieldsExist) {
 			try {
 				const [rows, fields] = await connection.execute('SELECT * FROM user WHERE username=?',[req.body.username]);
-				if(!rows[0])
-					return res.send({message: 'Username not found.'});
+				if (!rows[0])
+				{return res.send({message: 'Username not found.'});}
 				const match = await bcrypt.compare(req.body.password, rows[0].password);
-				match? res.send(await jwt.signToken(rows[0])) : res.send({message: 'Incorrect password'});
+				match ? res.send(await jwt.signToken(rows[0])) : res.send({message: 'Incorrect password'});
 			} catch (error) {
 				res.status(401).json(error);
 			}
@@ -54,8 +54,8 @@ module.exports = (connection) => {
 		}
 	};
 
-	module.logOut = async (req, res) => {
-		if(req.user) {
+	module.logOut = async(req, res) => {
+		if (req.user) {
 			try {
 				await blackListStorage.set(req.user.jti, req.user.iat, req.user.exp)
 					.then(value => res.send({message: 'Logged out successfully.'}));
@@ -65,26 +65,26 @@ module.exports = (connection) => {
 		} else {
 			res.status(401).json('Unauterized.');
 		}
-	}
+	};
 
-	module.authenticate = async (req, res, next) => {
+	module.authenticate = async(req, res, next) => {
 		const token = req.headers['x-access-token'];
-		if(token) {
-			try{
+		if (token) {
+			try {
 				const user = await jwt.verifyToken(token);
-				if(await blackListStorage.get(user.jti)) {
+				if (await blackListStorage.get(user.jti)) {
 					res.status(401).json('Unauterized.');
 				} else {
 					req.user = user;
 					next();
 				}
-			} catch(error) {
+			} catch (error) {
 				res.status(401).json(error);
 			}
 		} else {
 			res.status(401).json('Unauterized.');
 		}
-	}
+	};
 
 		module.authenticateAdmin = async (req, res, next) => {
 		const token = req.headers['x-access-token'];

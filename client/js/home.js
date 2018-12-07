@@ -1,3 +1,5 @@
+'use strict';
+
 // import { API } from './utils/constants';
 // import { makeRequest } from './utils/network';
 import { checkUserLoggedIn, calculateGalleryCols, initApp } from './utils/shared-functions';

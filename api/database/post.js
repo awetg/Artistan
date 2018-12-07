@@ -13,7 +13,10 @@ module.exports = (connection) => {
 				const q = 'INSERT INTO post_category (post_id, category_id) VALUES ?';
 				const qparams = categories.map(category => [rows.insertId, category]);
 				await connection.query(q, [qparams]);
-				res.send(rows);
+				res.send({
+					post_id: rows.insertId,
+					message: 'New post created successfully!'
+				});
 			} catch (error) {
 				res.status(401).json(error);
 			}

@@ -1,3 +1,5 @@
+'use strict';
+
 import { makeRequest } from './network';
 import { API } from './constants';
 
