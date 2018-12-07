@@ -1,7 +1,6 @@
 const router = require('express').Router();
 const upload = require('../../modules/multer');
 const db = require('../database/db');
-const passport = require('../../modules/passport-config');
 
 
 
@@ -10,9 +9,9 @@ const passport = require('../../modules/passport-config');
 router.get('/:user_id', db.Follower.getAllFollowers);
 
 /*add follower: base_url/api/follower/  */
-router.post('/:to_user_id', passport.authenticate('jwt', {session: false}), db.Follower.addFollower);
+router.post('/:to_user_id', db.Auth.authenticate, db.Follower.addFollower);
 
 /* delete follower by follower id: base_url/api/follower/:follower_id */
-router.delete('/:to_user_id', passport.authenticate('jwt', {session: false}), db.Follower.deleteFollower);
+router.delete('/:to_user_id', db.Auth.authenticate, db.Follower.deleteFollower);
 
 module.exports = router;

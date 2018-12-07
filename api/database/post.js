@@ -30,12 +30,27 @@ module.exports = (connection) => {
 			try {
 				const query = 'INSERT INTO likes_post (user_id, post_id) VALUES(?, ?)';
 				const [rows,fields] = await connection.execute(query,[req.user.user_id, req.params.post_id]);
-				res.send({message: 'Posted liked'});
+				rows.affectedRows? res.send({message: 'Posted liked'}) : res.send({message: 'Post does not exist.'});
 			} catch (error) {
 				res.status(401).json(error);
 			}
+		} else {
+			res.send({message: 'Unautherized.'});
 		}
 	};
+
+	module.deleteLike = async (req, res) => {
+		if(req.user) {
+			try {
+				const [rows, fields] = await connection.query('DELETE FROM likes_post WHERE post_id=?', [req.params.post_id]);
+				rows.affectedRows? res.send({message: 'Posted unliked.'}) : res.send({message: 'Post does not exist.'});
+			} catch(error) {
+				
+			}
+		} else {
+			res.send({message: 'Unautherized'});
+		}
+	}
 
 	module.getAllPosts = async(req, res) => {
 		try {
@@ -69,7 +84,8 @@ module.exports = (connection) => {
 			if(postIds.length > 0) {
 			const query = `SELECT post.*, username, fullname, media.*, media.time_created as post_time, avatar.path as avata_path,
 				(select count(1) from likes_post where likes_post.post_id=post.post_id group by post_id) as likes FROM post 
-				LEFT JOIN avatar ON post.owner=avatar.user_id INNER JOIN media ON media.media_id=post.media INNER JOIN user ON user.user_id=post.owner WHERE post.post_id IN  ( `;
+				LEFT JOIN avatar ON post.owner=avatar.user_id INNER JOIN media ON media.media_id=post.media INNER JOIN user ON user.user_id=post.owner 
+				WHERE post.post_id IN  ( `;
 			const [rows,fields] = await connection.execute(query + postIds.map(p => p.post_id) + ' ) ');
 			res.send(rows);
 			} else {
@@ -92,10 +108,7 @@ module.exports = (connection) => {
 					queryParams = [req.params.post_id, req.user.user_id];
 				}
 				[rows,fields] = await connection.query(query, queryParams);
-				if(rows.affectedRows)
-					res.send({message: 'Post delted.'});
-				else
-					res.send({message: 'Post does not exist or you don not have permission to delete'});
+				rows.affectedRows? res.send({message: 'Post delted.'}) : res.send({message: 'Post does not exist or you don not have permission to delete'});
 			} catch (error) {
 				res.status(401).json(error);
 			}

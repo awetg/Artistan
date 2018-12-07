@@ -36,10 +36,7 @@ module.exports = (connection) => {
 					queryParams = [req.body.content, req.params.comment_id, req.user.user_id];
 				}
 				[rows, fields] = await connection.execute();
-				if(rows.affectedRows)
-					res.send({message: 'Comment delted.'});
-				else
-					res.send({message: 'Comment does not exist or you don not have permission to delete'});
+				rows.affectedRows? res.send({message: 'Post delted.'}) : res.send({message: 'Post does not exist or you don not have permission to delete'});
 			} catch(error) {
 				res.status(401).json(error);
 			}
@@ -60,12 +57,10 @@ module.exports = (connection) => {
 					queryParams = [req.params.comment_id, req.user.user_id];
 				}
 				[rows, fields] = await connection.execute();
-				if(rows.affectedRows)
-					res.send({message: 'Comment delted.'});
-				else
-					res.send({message: 'Comment does not exist or you don not have permission to delete'});
-			} catch(error) {
+				rows.affectedRows? res.send({message: 'Post delted.'}) : res.send({message: 'Post does not exist or you don not have permission to delete'});
 				res.status(401).json(error);
+			} catch(error) {
+				
 			}
 		} else {
 			res.status(401).json('Unautherzied.');
