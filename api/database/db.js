@@ -21,8 +21,8 @@ const Category = require('./category')(pool);
 const Auth = require('./auth')(pool);
 
 const Follower = require('./follower')(pool);
-//const User_Interested = require('./user_intersts')(pool);
-//const Search = require('./post')(pool);
+const User_Interested = require('./user_intersts')(pool);
+const Search = require('./search')(pool);
 
 module.exports = {
 	User,
@@ -32,6 +32,6 @@ module.exports = {
 	Category,
 	Auth,
 	Follower,
-//	User_Interested,
-//	Search
+	User_Interested,
+	Search
 }

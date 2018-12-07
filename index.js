@@ -11,8 +11,8 @@ const categoryRoutes = require('./api/routes/category');	//all trafic at base_ur
 const authRoutes = require('./api/routes/auth');	//all trafic at base_url/api/post will be routed to this
 
 const follower = require('./api/routes/follower');	//all trafic at base_url/api/post will be routed to this
-//const user_interested = require('./api/routes/user_interested');	//all trafic at base_url/api/post will be routed to this
-//const search = require('./api/routes/search');	//all trafic at base_url/api/post will be routed to this
+const user_interested = require('./api/routes/user_intersts');	//all trafic at base_url/api/post will be routed to this
+const search = require('./api/routes/search');	//all trafic at base_url/api/post will be routed to this
 
 const passport = require('./modules/passport-config');
 
@@ -30,8 +30,8 @@ app.use(express.static('client'))
 	.use('/api/category', categoryRoutes)
 	.use('/api/auth', authRoutes)
 	.use('/api/follower', follower)
-	//.use('/api/user_interested', user_interested)
-	//.use('/api/search', search)
+	.use('/api/user_interested', user_interested)
+	.use('/api/search', search)
 	;
 
 // client routing
