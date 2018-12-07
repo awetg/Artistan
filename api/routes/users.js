@@ -40,7 +40,7 @@ router.get('/avatar/:user_id',db.User.getUserAvatar);
 /* get all following a user by id at GET: base_url/api/users/:user_id/following */
 // router.get('/:user_id/following', db.User.getFollowing);
 
-/* get user interset at GET: base_url/users/:user_id/interset 
+/* get user interset at GET: base_url/users/:user_id/interset
 * interest/category id should be passed as api/users/:user_id/interset/1/2/3/
 * ids after interset/ will splited at '/'
 */

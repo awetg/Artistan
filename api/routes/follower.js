@@ -1,9 +1,5 @@
 const router = require('express').Router();
-const upload = require('../../modules/multer');
 const db = require('../database/db');
-
-
-
 
 /* get all follower at GET: base_url/api/follower/ */
 router.get('/:user_id', db.Follower.getAllFollowers);

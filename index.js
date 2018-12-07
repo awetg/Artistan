@@ -16,7 +16,6 @@ const follower = require('./api/routes/follower');	//all trafic at base_url/api/
 const user_interested = require('./api/routes/user_intersts');	//all trafic at base_url/api/user_interset
 const search = require('./api/routes/search');	//all trafic at base_url/api/search
 
-
 const clientRoot = { root: 'client' };
 
 const app = express();
@@ -54,6 +53,10 @@ app.get('/upload', (_, res) => {
 
 app.get('/post/:id', (_, res) => {
 	res.sendFile('view-post.html', clientRoot);
+});
+
+app.get('/profile', (_, res) => {
+	res.sendFile('profile.html', clientRoot);
 });
 
 //use this for any other undefined routes

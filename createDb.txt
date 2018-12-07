@@ -4,9 +4,9 @@ fullname VARCHAR(100),
 email VARCHAR(100), 
 username VARCHAR(100),
 password VARCHAR(255),
-admin  tinyint(1) NOT NULL DEFAULT 0
+admin  tinyint(1) NOT NULL DEFAULT 0,
 time_created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-CONSTRAINT `unique_username` UNIQUE (username)
+CONSTRAINT `unique_username` UNIQUE (username),
 CONSTRAINT `unique_email` UNIQUE (email)
 );
 
@@ -32,7 +32,7 @@ CONSTRAINT `fk_user_id` FOREIGN KEY (owner) REFERENCES user (user_id) ON DELETE 
 
 CREATE TABLE category (
 category_id SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY, 
-name TEXT,
+name VARCHAR(100),
 UNIQUE KEY `unique_category_name` (`name`)
 );
 
@@ -55,6 +55,7 @@ media SMALLINT UNSIGNED NOT NULL,
 owner SMALLINT UNSIGNED NOT NULL,
 flag SMALLINT UNSIGNED NOT NULL DEFAULT 0,
 CONSTRAINT `fk_file_id` FOREIGN KEY (media) REFERENCES media (media_id) ON DELETE CASCADE ON UPDATE RESTRICT,
+CONSTRAINT `fk_file_id` FOREIGN KEY (media) REFERENCES media (media_id) ON DELETE CASCADE ON UPDATE RESTRICT
 );
 
 
