@@ -5,11 +5,11 @@ module.exports = (connection) => {
 		if (!req.insertedFile.error) {
 			if (!req.user) {res.send({message: 'Unautherized authentication required.'});}
 			try {
-				console.log('createPost');
+				const categories = JSON.parse(req.body.category);
+				if(!Array.isArray(categories)) return res.send({error: 'categories format is incorrect.It should be in array format.'});
 				const query = 'INSERT INTO post (title, media, owner) VALUES(?, ?, ?)';
 				const queryParams = [req.body.title, req.insertedFile.rows.insertId, req.user.user_id];
 				const [rows, fields] = await connection.execute(query, queryParams);
-				const categories = JSON.parse(req.body.category);
 				const q = 'INSERT INTO post_category (post_id, category_id) VALUES ?';
 				const qparams = categories.map(category => [rows.insertId, category]);
 				await connection.query(q, [qparams]);
@@ -37,8 +37,13 @@ module.exports = (connection) => {
 	module.getAllPosts = async(req, res) => {
 		try {
 			//get all posts
-			const query = 'SELECT * FROM post INNER JOIN media ON media.media_id=post.media INNER JOIN user ON user.user_id=post.owner';
+			const query = `SELECT *,  (select count(1) from likes_post where likes_post.post_id=post.post_id group by post_id) as likes 
+				FROM post INNER JOIN media ON media.media_id=post.media INNER JOIN user ON user.user_id=post.owner`;
 			const [rows,fields] = await connection.execute(query);
+			rows.forEach(post => {
+				post.password = null;
+				post.email = null;
+			});
 			res.send(rows);
 		} catch (error) {
 			res.status(401).json(error);
@@ -47,8 +52,13 @@ module.exports = (connection) => {
 
 	module.getAllByUser = async(req, res) => {
 		try {
-			const query = 'SELECT * FROM post INNER JOIN media ON media.media_id=post.media INNER JOIN user ON user.user_id=post.owner WHERE post.owner=?;';
+			const query = `SELECT *, (select count(1) from likes_post where likes_post.post_id=post.post_id group by post_id) as likes FROM post 
+				INNER JOIN media ON media.media_id=post.media INNER JOIN user ON user.user_id=post.owner WHERE post.owner=?;`;
 			const [rows,fields] = await connection.execute(query, [req.params.user_id]);
+			rows.forEach(post => {
+				post.email = null;
+				post.password = null;
+			})
 			res.send(rows);
 		} catch (error) {
 			res.status(401).json(error);
@@ -57,10 +67,19 @@ module.exports = (connection) => {
 
 	module.getAllByCategory = async(req, res) => {
 		try {
-			const query = 'SELECT * FROM post INNER JOIN media ON media.media_id=post.media INNER JOIN user ON user.user_id=post.owner WHERE post.post_id IN ( ';
 			const [postIds,p_fields] = await connection.execute('SELECT post_id FROM post_category WHERE category_id=?', [req.params.category_id]);
+			if(postIds.length > 0) {
+			const query = `SELECT *, (select count(1) from likes_post where likes_post.post_id=post.post_id group by post_id) as likes FROM post 
+				INNER JOIN media ON media.media_id=post.media INNER JOIN user ON user.user_id=post.owner WHERE post.post_id IN ( `;
 			const [rows,fields] = await connection.execute(query + postIds.map(p => p.post_id) + ' )');
+			rows.forEach(post => {
+				post.email = null;
+				post.password = null;
+			})
 			res.send(rows);
+			} else {
+				res.send([]);
+			}
 		} catch (error) {
 			res.status(error).json(error);
 		}

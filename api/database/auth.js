@@ -60,7 +60,6 @@ module.exports = (connection) => {
 				await blackListStorage.set(req.user.jti, req.user.iat, req.user.exp)
 					.then(value => res.send({message: 'Logged out successfully.'}));
 			} catch (error) {
-				console.log(error);
 				res.send(error);
 			}
 		} else {
