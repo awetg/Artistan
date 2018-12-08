@@ -1,1 +1,0 @@
-const ERROR_CODES = {1062: 'Duplicate entry'};
