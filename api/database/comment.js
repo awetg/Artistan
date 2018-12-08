@@ -18,9 +18,10 @@ module.exports = (connection) => {
 		}
 	};
 
-	module.getAllComments = async(req, res) => {
+	module.getAllCommentsForPost = async(req, res) => {
 		try {
 			const [rows, _] = await connection.execute('SELECT * FROM comment WHERE parent_post=?',[req.params.post_id]);
+			await connection.execute('UPDATE post SET views=views+1 WHERE post_id=?',[req.params.post_id]);
 			res.send(rows);
 		} catch (error) {
 			res.status(401).json(error);
