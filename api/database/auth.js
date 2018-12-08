@@ -168,6 +168,7 @@ module.exports = (connection) => {
 		}
 	};
 
+	/* This function is not duplicate with user profile function, this function expose sensitive information e.g email for account editing*/
 	module.getUser = async(req, res) => {
 		try {
 			const [rows, _] = await connection.execute('SELECT user_id, fullname, username, email, time_created FROM user WHERE user_id=?', [req.params.user_id]);

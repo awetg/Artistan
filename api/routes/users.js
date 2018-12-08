@@ -1,4 +1,7 @@
-/* Most routes in api/users handle user's public profile data */
+/* This routes in api/users handle user's public profile data
+* All routes don't need authentication execpt POST, PATCH AND DELETE request
+* Rotues such as folloer, user_interests are related with user profile but implemented separeately for development ease
+*/
 
 const router = require('express').Router();
 const upload = require('../../modules/multer');
@@ -22,6 +25,7 @@ router.post(
 	db.User.uploadAvatar
 );
 
+/* Update user avatar with authentication at PATCH: base_url/users/avatar */
 router.patch(
 	'/avatar',
 	db.Auth.authenticate,

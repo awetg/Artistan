@@ -1,3 +1,6 @@
+/* This route handles category related data
+* All routes execpt getting list of category need authentication e.g add, update and delete category
+*/
 const router = require('express').Router();
 const upload = require('../../modules/multer');
 const db = require('../database/db');

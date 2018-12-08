@@ -1,3 +1,8 @@
+/* This route handles users follow functionality
+* No authentication need to get users followers or users followed by a user
+* Authentication is needed to follow/unfollow user
+*/
+
 const router = require('express').Router();
 const db = require('../database/db');
 

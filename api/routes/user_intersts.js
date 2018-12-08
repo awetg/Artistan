@@ -1,3 +1,6 @@
+/* This route handles user interset in different category
+* All routes need authentication to access as data is sensitive
+*/
 const router = require('express').Router();
 const db = require('../database/db');
 
