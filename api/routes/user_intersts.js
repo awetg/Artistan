@@ -1,5 +1,9 @@
 const router = require('express').Router();
 const db = require('../database/db');
+<<<<<<< HEAD
+
+=======
+>>>>>>> 0ecc982a3280add4af4edd62a60ff5855eeea8e9
 
 /* get all category at GET: base_url/api/user_interested */
 router.get('/', db.Auth.authenticate, db.User_Interested.getAllInterests);

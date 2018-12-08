@@ -1,8 +1,17 @@
 module.exports = (connection) => {
 	const module = {};
-	module.getAllFollowers = async (req, res) => {
+	module.getAllFollowing = async (req, res) => {
 		try {
 			const [rows, fields] = await connection.execute('SELECT * FROM follower WHERE followed_id=?',[req.params.user_id]);
+			res.send(rows);
+		} catch(error) {
+			res.status(401).json(error);
+		}
+	}
+
+	module.getAllFollowed = async (req, res) => {
+		try {
+			const [rows, fields] = await connection.execute('SELECT * FROM follower WHERE follower_id=?',[req.params.user_id]);
 			res.send(rows);
 		} catch(error) {
 			res.status(401).json(error);

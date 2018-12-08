@@ -1,8 +1,17 @@
 const router = require('express').Router();
 const db = require('../database/db');
+<<<<<<< HEAD
 
-/* get all follower at GET: base_url/api/follower/ */
-router.get('/:user_id', db.Follower.getAllFollowers);
+
+
+=======
+>>>>>>> 0ecc982a3280add4af4edd62a60ff5855eeea8e9
+
+/* get all people whom this user is Following to */
+router.get('/:user_id/following', db.Follower.getAllFollowing);
+
+/* get all people who follow this user */
+router.get('/:user_id/followed', db.Follower.getAllFollowed);
 
 /*add follower: base_url/api/follower/  */
 router.post('/:to_user_id', db.Auth.authenticate, db.Follower.addFollower);

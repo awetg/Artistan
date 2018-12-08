@@ -1,13 +1,60 @@
 #profile-page {
-	height: calc(100vh - 64px);
 	width: 100%;
-	.user-info {
+	margin-top: 64px;
+	.my-info {
 		width: 100%;
-		height: 500px;
+		height: 300px;
+		position: relative;
 		.cover-photo {
 			width: 100%;
 			height: 100%;
+			background-color: #d8d8d8;
 			background-size: cover;
+			background-position: center;
 		}
+		.center {
+			margin: 0 auto;
+			position: absolute;
+			top: 0;
+			right: 20%;
+			left: 20%;
+			bottom: 0;
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			align-items: center;
+
+			.avatar {
+				background-image: url('/img/avatar_placeholder.png');
+				background-size: contain;
+				border: 2px solid #ffffff;
+				border-radius: 50%;
+				width: 120px;
+				height: 120px;
+				&:hover {
+					cursor: pointer;
+				}
+			}
+
+			.fullname {
+				margin-top: 16px;
+			}
+
+			.numbers {
+				margin-top: 16px;
+				display: flex;
+				justify-content: space-between;
+				width: 100%;
+				span {
+					& + span {
+						margin-left: 16px;
+					}
+				}
+			}
+		}
+	}
+
+	.my-posts {
+		width: 80%;
 	}
 }
