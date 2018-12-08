@@ -23,7 +23,7 @@ module.exports = (connection) => {
 				const hash = await bcrypt.hash(req.body.password, parseInt(process.env.SALT_ROUNDS) || 10);
 				const query = 'INSERT INTO user (fullname, email,username,password) VALUES(?,?,?,?)';
 				const queryParams = [req.body.fullname, req.body.email, req.body.username, hash];
-				const [rows, fields] = await connection.execute(query,queryParams);
+				const [rows, _] = await connection.execute(query,queryParams);
 				res.send({
 					user_id: rows.insertId,
 					message: 'Account created successfully.'
@@ -41,7 +41,7 @@ module.exports = (connection) => {
 		const allFieldsExist = ['username','password'].every(k => (k in req.body));
 		if (allFieldsExist) {
 			try {
-				const [rows, fields] = await connection.execute('SELECT * FROM user WHERE username=?',[req.body.username]);
+				const [rows, _] = await connection.execute('SELECT * FROM user WHERE username=?',[req.body.username]);
 				if (!rows[0])
 				{return res.send({message: 'Username not found.'});}
 				const match = await bcrypt.compare(req.body.password, rows[0].password);
@@ -94,7 +94,7 @@ module.exports = (connection) => {
 				if (await blackListStorage.get(user.jti)) {
 					return res.status(401).json('Unauterized.');
 				} else {
-					const [userData, fields] = await connection.query('SELECT * FROM user WHERE user_id=?', [user.user_id]);
+					const [userData, _] = await connection.query('SELECT * FROM user WHERE user_id=?', [user.user_id]);
 					if (userData[0] && userData[0].admin === 1) {
 						user.admin_privileges = true;
 						req.user = user;
@@ -120,7 +120,7 @@ module.exports = (connection) => {
 				const hash = await bcrypt.hash(req.body.password, saltRounds);
 				const query = 'UPDATE user SET fullname=?, email=?, username=?, password=? WHERE user_id=?';
 				const queryParams = [req.body.fullname, req.body.email, req.body.username, hash, req.params.user_id];
-				const [rows, fields] = await connection.execute(query,queryParams).catch(error => res.send(error));
+				const [rows, _] = await connection.execute(query,queryParams).catch(error => res.send(error));
 				res.send({message: 'User data updated'});
 			} catch (error) {
 				res.status(401).json(error);
@@ -133,7 +133,7 @@ module.exports = (connection) => {
 	module.deleteUser = async(req, res) => {
 		if (req.user) {
 			try {
-				const [rows, fields] = await connection.query('DELETE FROM user WHERE user_id=?', req.params.user_id);
+				const [rows, _] = await connection.query('DELETE FROM user WHERE user_id=?', req.params.user_id);
 				if (rows.affectedRows === 1) {
 					res.send({message: 'User account deleted'});
 				} else {
@@ -147,7 +147,7 @@ module.exports = (connection) => {
 
 	module.getUser = async(req, res) => {
 		try {
-			const [rows, fields] = await connection.execute('SELECT user_id, fullname, username, email, time_created FROM user WHERE user_id=?', [req.params.user_id]);
+			const [rows, _] = await connection.execute('SELECT user_id, fullname, username, email, time_created FROM user WHERE user_id=?', [req.params.user_id]);
 			res.send(rows);
 		} catch (error) {
 			res.status(401).json(error);

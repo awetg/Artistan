@@ -6,7 +6,7 @@ module.exports = (connection) => {
 			if (!req.user) {res.send({message: 'Unautherized authentication required.'});}
 			try {
 				const categories = JSON.parse(req.body.category);
-				if (!Array.isArray(categories)) {return res.send({error: 'categories format is incorrect.It should be in array format.'});}
+				if (!Array.isArray(categories)) {return res.send({error: 'categories format is incorrect.It must be in array format.'});}
 				const query = 'INSERT INTO post (title, media, owner) VALUES(?, ?, ?)';
 				const queryParams = [req.body.title, req.insertedFile.rows.insertId, req.user.user_id];
 				const [rows, _] = await connection.execute(query, queryParams);
@@ -57,9 +57,10 @@ module.exports = (connection) => {
 	module.getAllPosts = async(req, res) => {
 		try {
 			//get all posts
-			const query = `SELECT post.*, username, fullname, media.path, media.mimetype, media.time_created as post_time, avatar.path as avata_path,
+			const query = `SELECT post.*, username, fullname, media.path, media.mimetype, media.time_created AS post_time, avatar.path AS avata_path,
 				(SELECT COUNT(1) FROM likes_post WHERE likes_post.post_id=post.post_id) AS likes,
-				(SELECT COUNT(1) FROM comment WHERE parent_post=post.post_id) as comments
+				(SELECT COUNT(1) FROM comment WHERE parent_post=post.post_id) AS comments,
+				(SELECT GROUP_CONCAT(name) FROM post_category JOIN category ON post_category.category_id=category.category_id WHERE post_category.post_id=post.post_id) AS post_category
 				FROM post INNER JOIN media ON media.media_id=post.media INNER JOIN user ON user.user_id=post.owner 
 				LEFT JOIN avatar ON user.user_id=avatar.user_id`;
 			const [rows,_] = await connection.execute(query);
@@ -71,9 +72,10 @@ module.exports = (connection) => {
 
 	module.getAllByUser = async(req, res) => {
 		try {
-			const query = `SELECT post.*, username, fullname, media.*, media.time_created as post_time, avatar.path as avata_path,
+			const query = `SELECT post.*, username, fullname, media.path, media.mimetype, media.time_created AS post_time, avatar.path AS avata_path,
 				(SELECT COUNT(1) FROM likes_post WHERE likes_post.post_id=post.post_id) AS likes.
-				(SELECT COUNT(1) FROM comment WHERE parent_post=post.post_id) as comments
+				(SELECT COUNT(1) FROM comment WHERE parent_post=post.post_id) AS comments,
+				(SELECT GROUP_CONCAT(name) FROM post_category JOIN category ON post_category.category_id=category.category_id WHERE post_category.post_id=post.post_id) AS post_category
 				FROM post LEFT JOIN avatar ON post.owner=avatar.user_id INNER JOIN media ON media.media_id=post.media 
 				INNER JOIN user ON user.user_id=post.owner WHERE post.owner=? ;`;
 			const [rows, _] = await connection.execute(query, [req.params.user_id]);
@@ -87,9 +89,10 @@ module.exports = (connection) => {
 		try {
 			const [postIds, __] = await connection.execute('SELECT post_id FROM post_category WHERE category_id=?', [req.params.category_id]);
 			if (postIds.length > 0) {
-				const query = `SELECT post.*, username, fullname, media.*, media.time_created as post_time, avatar.path as avata_path,
+				const query = `SELECT post.*, username, fullname, media.path, media.mimetype, media.time_created AS post_time, avatar.path AS avata_path,
 				(SELECT COUNT(1) FROM likes_post WHERE likes_post.post_id=post.post_id) AS likes
-				(SELECT COUNT(1) FROM comment WHERE parent_post=post.post_id) as comments
+				(SELECT COUNT(1) FROM comment WHERE parent_post=post.post_id) AS comments,
+				(SELECT GROUP_CONCAT(name) FROM post_category JOIN category ON post_category.category_id=category.category_id WHERE post_category.post_id=post.post_id) AS post_category
 				FROM post LEFT JOIN avatar ON post.owner=avatar.user_id INNER JOIN media ON media.media_id=post.media INNER JOIN user ON user.user_id=post.owner WHERE post.post_id IN  ( `;
 				const [rows, _] = await connection.execute(query + postIds.map(p => p.post_id) + ' ) ');
 				res.send(rows);
@@ -125,8 +128,10 @@ module.exports = (connection) => {
 	module.getFlaggedPosts = async(req, res) => {
 		if (req.user.admin_privileges) {
 			try {
-				const query = `SELECT post.*, username, fullname, media.*, media.time_created as post_time, avatar.path as avata_path,
-					(SELECT COUNT(1) FROM likes_post WHERE likes_post.post_id=post.post_id) as likes 
+				const query = `SELECT post.*, username, fullname, media.path, media.mimetype, media.time_created AS post_time, avatar.path AS avata_path,
+					(SELECT COUNT(1) FROM likes_post WHERE likes_post.post_id=post.post_id) AS likes,
+					(SELECT COUNT(1) FROM comment WHERE parent_post=post.post_id) AS comments,
+					(SELECT GROUP_CONCAT(name) FROM post_category JOIN category ON post_category.category_id=category.category_id WHERE post_category.post_id=post.post_id) AS post_category
 					FROM post INNER JOIN media ON media.media_id=post.media INNER JOIN user ON user.user_id=post.owner 
 					LEFT JOIN avatar ON user.user_id=avatar.user_id WHERE flag > 0 ORDER BY flag DESC`;
 				const [rows, _] = await connection.execute(query);
