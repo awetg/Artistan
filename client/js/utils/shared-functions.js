@@ -52,7 +52,7 @@ export const fetchAvatar = async(user_id) => {
 export const renderPostsFeed = (posts) => {
 	const template = posts.reduce((result, post) => {
 		return result + `<figure class="item" data-id="${ post.post_id }">
-		<img src="/uploads/${ post.filename }" />
+		<img src="${ post.path.replace(/\\/g, '/') }" />
 		<figcaption class="title">
 			<div>${ post.title }</div>
 			<div><small>by</small> <b>${ post.fullname }</b></div>

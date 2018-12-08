@@ -36,7 +36,7 @@ router.patch(
 	db.User.updateAvatar);
 
 /* get user avatar  at GET: base_url/api/users/:user_id/avatar */
-router.get('/avatar/:user_id',db.User.getUserAvatar);
+router.get('/:user_id/avatar',db.User.getUserAvatar);
 
 /* Below routes will bring follower routes and user_interset routes to this route (implemnted separately for development ease)*/
 

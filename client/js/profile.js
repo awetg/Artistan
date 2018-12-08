@@ -10,6 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
 	const changeAvatarButton = document.querySelector('button.change-avatar');
 	const changeCoverButton = document.querySelector('button.change-cover');
 	const userId = JSON.parse(localStorage.getItem('artisan_user')).user_id;
+	const collectionID = '540518';
 
 	const fetchMyPosts = () => {
 		makeRequest(API.post.getPostByUser.url(userId), API.post.getPostByUser.method)
@@ -43,6 +44,12 @@ document.addEventListener('DOMContentLoaded', () => {
 		.then(resData => {
 			const filePath = resData[0].path.replace(/\\/g, '/');
 			document.querySelector('#profile-page .my-info .avatar').style.backgroundImage = `url(${ filePath })`;
+		});
+
+	// get random photo as cover photo
+	fetch(`https://source.unsplash.com/collection/${collectionID}/1920x1080/`)
+		.then(response => {
+			document.querySelector('#profile-page .my-info .cover-photo').style.backgroundImage = `url(${ response.url })`;
 		});
 
 	fetchMyPosts();
