@@ -14,7 +14,9 @@ router.get('/', db.User.getAllUsers);
 /* get single user info without authentication (fullname,username,time_created )at GET: base_url/api/users/:user_id */
 router.get('/:user_id', db.User.getUser);
 
-/* uploading user avatar with authentication at POST: base_url/api/users/:user_id/avatar */
+/* uploading user avatar with authentication at POST: base_url/api/users/avatar
+* NOTE: updting user avatar is also done through this route
+*/
 router.post(
 	'/avatar',
 	db.Auth.authenticate,
@@ -25,7 +27,9 @@ router.post(
 	db.User.uploadAvatar
 );
 
-/* Update user avatar with authentication at PATCH: base_url/users/avatar */
+/* Update user avatar with authentication at PATCH: base_url/users/avatar
+* NOTE: Route is depracted, use POST request to upload and update user avatar
+*/
 router.patch(
 	'/avatar',
 	db.Auth.authenticate,
