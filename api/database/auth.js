@@ -86,7 +86,7 @@ module.exports = (connection) => {
 			try {
 				const user = await jwt.verifyToken(token);
 				if (await blackListStorage.get(user.jti)) {
-					res.status(401).json('Unauterized.');
+					res.status(401).json('Unauthorized');
 				} else {
 					req.user = user;
 					next();
@@ -95,7 +95,7 @@ module.exports = (connection) => {
 				(error.name === 'TokenExpiredError') ? res.send({error, detailts: 'Token expired. Please login again.'}) : res.status(401).json('Unauterized.');
 			}
 		} else {
-			res.status(401).json('Unauterized.');
+			res.status(401).json('Unauthorized');
 		}
 	};
 

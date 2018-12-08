@@ -1,10 +1,11 @@
 'use strict';
 
-import { initApp } from './utils/shared-functions';
+import { initApp, checkUserLoggedIn } from './utils/shared-functions';
 import { API } from './utils/constants';
 import { makeRequest } from './utils/network';
 
 document.addEventListener('DOMContentLoaded', () => {
+	checkUserLoggedIn(true);
 	initApp().then(() => {
 		renderCategoriesSelectBox();
 	});
@@ -45,7 +46,7 @@ document.addEventListener('DOMContentLoaded', () => {
 	};
 
 	const checkType = (file) => {
-		let imageType = /image.*/;
+		const imageType = /image.*/;
 		if (!file.type.match(imageType)) {
 			showError('Please select an image.');
 		} else if (!file) {
@@ -69,9 +70,7 @@ document.addEventListener('DOMContentLoaded', () => {
 		if (!selectedCategories.length) {
 			document.querySelector('.category.error-text').innerText = 'Please select at least 1 category.';
 		} else {
-		// prepare form data
-			// data.append('title', titleInput.value);
-			// data.append('my-media', fileInput.files[0]);
+			// prepare form data
 			data.append('category', JSON.stringify(selectedCategories));
 
 			makeRequest(API.post.createPost.url, API.post.createPost.method, data, true)

@@ -11,7 +11,7 @@ export const API = {
 			url: BASE_API_URL + '/auth/login',
 			method: 'POST'
 		},
-		getUserData: {
+		checkAuth: {
 			url: user_id => BASE_API_URL + `/auth/${user_id}`,
 			method: 'GET'
 		},
@@ -22,6 +22,18 @@ export const API = {
 		deleteUser: {
 			url: user_id => BASE_API_URL + `/auth/${user_id}`,
 			method: 'DELETE'
+		},
+		uploadAvatar: {
+			url: user_id => BASE_API_URL + `/users/${ user_id }/avatar`,
+			method: 'POST'
+		},
+		getAvatar: {
+			url: user_id => BASE_API_URL + `/users/${ user_id }/avatar`,
+			method: 'GET'
+		},
+		getUserById: {
+			url: user_id => BASE_API_URL + `/users/${ user_id }`,
+			method: 'GET'
 		}
 	},
 	media: {
