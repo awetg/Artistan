@@ -119,10 +119,11 @@ CREATE TABLE `media` (
   `encoding` varchar(100) DEFAULT NULL,
   `time_created` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   `owner` smallint(5) unsigned NOT NULL,
+  `image_ratio` varchar(100) NOT NULL,
   PRIMARY KEY (`media_id`),
   KEY `fk_user_id` (`owner`),
   CONSTRAINT `fk_user_id` FOREIGN KEY (`owner`) REFERENCES `user` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=63 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=68 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -143,7 +144,7 @@ CREATE TABLE `post` (
   KEY `fk_poster_id` (`owner`),
   CONSTRAINT `fk_file_id` FOREIGN KEY (`media`) REFERENCES `media` (`media_id`) ON DELETE CASCADE,
   CONSTRAINT `fk_poster_id` FOREIGN KEY (`owner`) REFERENCES `user` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=42 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=47 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -211,4 +212,4 @@ CREATE TABLE `user_intersts` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-12-08  0:10:04
+-- Dump completed on 2018-12-08 17:38:10
