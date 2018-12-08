@@ -29,7 +29,7 @@ module.exports = (connection) => {
 					message: 'Account created successfully.'
 				});
 			} catch (error) {
-				res.status(401).json(error);
+				(error.errno === 1062) ? res.send({error: {message: 'Username or email already exist.'}}) : res.status(401).json(error);
 			}
 		} else {
 			res.send({message: 'Require fields not provided.'});
@@ -43,9 +43,9 @@ module.exports = (connection) => {
 			try {
 				const [rows, _] = await connection.execute('SELECT * FROM user WHERE username=?',[req.body.username]);
 				if (!rows[0])
-				{return res.send({message: 'Username not found.'});}
+				{return res.send({error: {message: 'Username not found.'}});}
 				const match = await bcrypt.compare(req.body.password, rows[0].password);
-				return match ? res.send(await jwt.signToken(rows[0])) : res.send({message: 'Incorrect password'});
+				return match ? res.send(await jwt.signToken(rows[0])) : res.send({error: {message: 'Incorrect password'}});
 			} catch (error) {
 				return res.status(401).json(error);
 			}
@@ -79,7 +79,7 @@ module.exports = (connection) => {
 					next();
 				}
 			} catch (error) {
-				res.status(401).json(error);
+				(error.name === 'TokenExpiredError') ? res.send({error, detailts: 'Token expired. Please login again.'}) : res.status(401).json('Unauterized.');
 			}
 		} else {
 			res.status(401).json('Unauterized.');
@@ -104,10 +104,33 @@ module.exports = (connection) => {
 					}
 				}
 			} catch (error) {
-				return res.status(401).json(error);
+				return (error.name === 'TokenExpiredError') ? res.send({error, detailts: 'Token expired. Please login again.'}) : res.status(401).json('Unauterized.');
 			}
 		} else {
 			return res.status(401).json('Unauterized.');
+		}
+	};
+
+	module.registerAdmin = async(req, res) => {
+		if (req.user.admin_privileges) {
+			//check all required fields exist
+			const allFieldsExist = ['fullname', 'email', 'username','password'].every(k => k in req.body);
+			if (allFieldsExist) {
+				try {
+					const hash = await bcrypt.hash(req.body.password, parseInt(process.env.SALT_ROUNDS) || 10);
+					const query = 'INSERT INTO user (fullname, email,username,password, admin) VALUES(?,?,?,?, ?)';
+					const queryParams = [req.body.fullname, req.body.email, req.body.username, hash, 1];
+					const [rows, _] = await connection.execute(query,queryParams);
+					res.send({
+						user_id: rows.insertId,
+						message: 'Admin account created successfully.'
+					});
+				} catch (error) {
+					res.status(401).json(error);
+				}
+			} else {
+				res.send({message: 'Require fields not provided.'});
+			}
 		}
 	};
 
