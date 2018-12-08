@@ -1,3 +1,6 @@
+/* This is controller module for category data
+* This module performs CRUDE operation to database on category table only
+*/
 module.exports = (connection) => {
 	const module = {};
 	module.getAllCategory = async(req, res) => {

@@ -1,8 +1,13 @@
-
+/* This is controller module for user profile data
+* This module performs CRUDE operation to database on different tables to get user info or updated user info
+*/
 module.exports = (connection) => {
 	const module = {};
 	module.getAllUsers = async(req, res) => {
 		try {
+			/* Get all user insensitive information like username joined date, number of post and total likes
+			* This profile information is public and  provide without authentication
+			*/
 			const query = `SELECT user.user_id, username, time_created, path as avatar_path,
 				(SELECT COUNT(1) FROM post WHERE owner=user.user_id) AS total_posts,
 				(SELECT COUNT(1) FROM follower WHERE followed_id=user.user_id) AS followers,
@@ -17,6 +22,9 @@ module.exports = (connection) => {
 
 	module.getUser = async(req, res) => {
 		try {
+			/* Get single user insensitive information like username joined date, number of post and total likes
+			* This profile information is public and  provide without authentication
+			*/
 			const query = `SELECT user.user_id, fullname, username, time_created, path AS avatar_path,
 				(SELECT COUNT(1) FROM post WHERE owner=user.user_id) AS total_posts,
 				(SELECT COUNT(1) FROM follower WHERE followed_id=user.user_id) AS followers,
@@ -34,7 +42,7 @@ module.exports = (connection) => {
 			const query = 'INSERT INTO avatar (user_id, path, mimetype, encoding) VALUES(?, ?, ?, ?)';
 			const queryParams = [req.user.user_id, req.file.path, req.file.mimetype, req.file.encoding];
 			await connection.execute(query, queryParams);
-			res.send({message: 'Avatar uploaded successfully', path: req.file.path});
+			res.send({message: 'Avatar uploaded successfully', avatar_path: req.file.path});
 
 		} catch (error) {
 			res.status(401).json(error);
@@ -45,7 +53,7 @@ module.exports = (connection) => {
 		try {
 			const query = 'UPDATE avatar SET path=?, mimetype=?, encoding=? WHERE user_id=?';
 			const [rows, _] = await connection.query(query,[req.file.path, req.file.mimetype, req.file.encoding, req.user.user_id]);
-			rows.affectedRows ? res.send({message: 'Avatar updated.'}) : res.send({message: 'Avatar does not exist.'});
+			rows.affectedRows ? res.send({message: 'Avatar updated.', avatar_path: req.file.path}) : res.send({message: 'Avatar does not exist.'});
 		} catch (error) {
 			res.status(401).json(error);
 		}

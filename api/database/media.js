@@ -1,3 +1,10 @@
+/* This is controller module for media data
+* This module performs CRUDE operation to database on media table only
+* media deleted from database are deleted from disk too if delete request comes from media routes
+* deleteing a post from post table also cascades to media table but files are not deleted from disk if delete is performed from post route
+* Since only post routes are used in the application media are not delted after post deletion (skipped to avoid latency)
+* but the deletion from disk is implemeted here for presentation and if media route is used file is also deleted from disk
+*/
 const fs = require('fs');
 const imageSize = require('image-size');
 const util = require('util');
@@ -8,6 +15,7 @@ module.exports = (connection) => {
 	module.uploadFile = async(req, res,next) => {
 		if (req.user && req.file) {
 			try {
+				/* Get image dimension because width/height ratio is used in frontend */
 				const dimension = imageSize(req.file.path);
 				const imageRatio = +(dimension.width / dimension.height).toFixed(2);
 				const query = 'INSERT INTO media (filename, path, mimetype, encoding, owner, image_ratio) VALUES(?, ?, ?, ?, ?, ?)';

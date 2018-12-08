@@ -1,5 +1,9 @@
+/* This is controller module for authentication related operations
+* This module performs CRUD operation to database on user table only
+*/
 const bcrypt = require('bcrypt');
 
+//local modulse
 const jwt = require('../../modules/jwt');
 const blackList = require('../../modules/blacklist');
 
@@ -36,6 +40,7 @@ module.exports = (connection) => {
 		}
 	};
 
+	/* Login a user and return an authentication token signed with one hour expiration time */
 	module.logIn = async(req, res) => {
 		//check all required fields exist
 		const allFieldsExist = ['username','password'].every(k => (k in req.body));
@@ -54,6 +59,9 @@ module.exports = (connection) => {
 		}
 	};
 
+	/* Logged out users authentication token are saved on memory or Redis until their expiration time
+	* Token are signed with one hour expiration time at login time
+	*/
 	module.logOut = async(req, res) => {
 		if (req.user) {
 			try {
@@ -67,6 +75,11 @@ module.exports = (connection) => {
 		}
 	};
 
+	/* None admin accounts are authenticated here
+	* Authentication is done by verifying that the token was signed by this server and
+	* no trip is done to database to check if user exits as long as user have valid and not expired token
+	* tokens are checked if blacklisted already
+	*/
 	module.authenticate = async(req, res, next) => {
 		const token = req.headers['x-access-token'];
 		if (token) {
@@ -86,6 +99,9 @@ module.exports = (connection) => {
 		}
 	};
 
+	/* Admin authentication is done here, admin accounts need to provide valid tokens
+	* Every time admin routes are accessed a trip to database is done to check if the user have admin privileges
+	*/
 	module.authenticateAdmin = async(req, res, next) => {
 		const token = req.headers['x-access-token'];
 		if (token) {
@@ -111,6 +127,7 @@ module.exports = (connection) => {
 		}
 	};
 
+	/* Admin accounts can be registered using another admin accounts */
 	module.registerAdmin = async(req, res) => {
 		if (req.user.admin_privileges) {
 			//check all required fields exist
@@ -168,7 +185,7 @@ module.exports = (connection) => {
 		}
 	};
 
-	/* This function is not duplicate with user profile function, this function expose sensitive information e.g email for account editing*/
+	/* This function is not duplicate with user profile function, this function exposes sensitive information e.g email for account editing*/
 	module.getUser = async(req, res) => {
 		try {
 			const [rows, _] = await connection.execute('SELECT user_id, fullname, username, email, time_created FROM user WHERE user_id=?', [req.params.user_id]);

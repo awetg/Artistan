@@ -1,12 +1,19 @@
+/* This is controller module for post related data
+* This module performs CRUDE operation to database on different tables
+*/
 module.exports = (connection) => {
 	const module = {};
 	module.createPost = async(req, res) => {
-		//check if media was uploaded to db successfully
+		//check if media was uploaded to db successfully, comming from upload media middleware
 		if (!req.insertedFile.error) {
 			if (!req.user) {res.send({message: 'Unautherized authentication required.'});}
 			try {
+				/* Categories are provide as array since a post can belong in multiple categories */
 				const categories = JSON.parse(req.body.category);
-				if (!Array.isArray(categories)) {return res.send({error: 'categories format is incorrect.It must be in array format.'});}
+				if (!Array.isArray(categories)) {
+					return res.send({error: 'categories format is incorrect.It must be in array format.'});
+				}
+				/* A sequential database insertion is performed because data from first insert is used for the second one*/
 				const query = 'INSERT INTO post (title, media, owner) VALUES(?, ?, ?)';
 				const queryParams = [req.body.title, req.insertedFile.rows.insertId, req.user.user_id];
 				const [rows, _] = await connection.execute(query, queryParams);
@@ -15,6 +22,7 @@ module.exports = (connection) => {
 				await connection.query(q, [qparams]);
 				return res.send({
 					post_id: rows.insertId,
+					post_path: req.file.path,
 					message: 'New post created successfully!'
 				});
 			} catch (error) {
@@ -42,10 +50,10 @@ module.exports = (connection) => {
 	module.deleteLike = async(req, res) => {
 		if (req.user) {
 			try {
-				// const [rows, fields] = await connection.query('DELETE FROM likes_post WHERE post_id=? and user_id=?', [req.params.post_id, req.user.user_id]);
-				// rows.affectedRows? res.send({message: 'Posted unliked.'}) : res.send({message: 'Post does not exist or you do not have permission to do the operation.'});
-				const [rows, _] = await connection.query('DELETE FROM likes_post WHERE post_id=?', [req.params.post_id]);
-				rows.affectedRows ? res.send({message: 'Posted unliked.'}) : res.send({message: 'Post does not exist.'});
+				const [rows, _] = await connection.query('DELETE FROM likes_post WHERE post_id=? and user_id=?', [req.params.post_id, req.user.user_id]);
+				rows.affectedRows ? res.send({message: 'Posted unliked.'}) : res.send({message: 'Post does not exist or you do not have permission to do the operation.'});
+				// const [rows, _] = await connection.query('DELETE FROM likes_post WHERE post_id=?', [req.params.post_id]);
+				// rows.affectedRows ? res.send({message: 'Posted unliked.'}) : res.send({message: 'Post does not exist.'});
 			} catch (error) {
 				res.send(error);
 			}
@@ -87,14 +95,14 @@ module.exports = (connection) => {
 
 	module.getAllByCategory = async(req, res) => {
 		try {
-			const [postIds, __] = await connection.execute('SELECT post_id FROM post_category WHERE category_id=?', [req.params.category_id]);
+			const [postIds, _] = await connection.execute('SELECT post_id FROM post_category WHERE category_id=?', [req.params.category_id]);
 			if (postIds.length > 0) {
 				const query = `SELECT post.*, username, fullname, media.path, media.mimetype, media.time_created AS post_time, avatar.path AS avata_path,
 				(SELECT COUNT(1) FROM likes_post WHERE likes_post.post_id=post.post_id) AS likes
 				(SELECT COUNT(1) FROM comment WHERE parent_post=post.post_id) AS comments,
 				(SELECT GROUP_CONCAT(name) FROM post_category JOIN category ON post_category.category_id=category.category_id WHERE post_category.post_id=post.post_id) AS post_category
 				FROM post LEFT JOIN avatar ON post.owner=avatar.user_id INNER JOIN media ON media.media_id=post.media INNER JOIN user ON user.user_id=post.owner WHERE post.post_id IN  ( `;
-				const [rows, _] = await connection.execute(query + postIds.map(p => p.post_id) + ' ) ');
+				const [rows, unused] = await connection.execute(query + postIds.map(p => p.post_id) + ' ) ');
 				res.send(rows);
 			} else {
 				res.send([]);
@@ -107,14 +115,8 @@ module.exports = (connection) => {
 	module.delete = async(req, res) => {
 		if (req.user) {
 			try {
-				let query, queryParams, rows;
-				if (req.user.admin_privileges) {
-					query = 'DELETE FROM post WHERE post_id=?';
-					queryParams = [req.params.post_id];
-				} else {
-					query = 'DELETE FROM post WHERE post_id=? AND owner=?';
-					queryParams = [req.params.post_id, req.user.user_id];
-				}
+				const query = req.user.admin_privileges ? 'DELETE FROM post WHERE post_id=?' : 'DELETE FROM post WHERE post_id=? AND owner=?';
+				const queryParams = req.user.admin_privileges ? [req.params.post_id] : [req.params.post_id, req.user.user_id];
 				[rows, _] = await connection.query(query, queryParams);
 				rows.affectedRows ? res.send({message: 'Post delted.'}) : res.send({message: 'Post does not exist or you don not have permission to delete'});
 			} catch (error) {
