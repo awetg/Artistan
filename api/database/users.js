@@ -3,7 +3,11 @@ module.exports = (connection) => {
 	const module = {};
 	module.getAllUsers = async(req, res) => {
 		try {
-			const query = 'SELECT user.user_id, username, time_created, path as avatar_path  FROM user LEFT JOIN avatar ON user.user_id=avatar.user_id';
+			const query = `SELECT user.user_id, username, time_created, path as avatar_path,
+				(SELECT COUNT(1) FROM post WHERE owner=user.user_id) AS total_posts,
+				(SELECT COUNT(1) FROM follower WHERE followed_id=user.user_id) AS followers,
+				(SELECT COUNT(1) FROM likes_post WHERE post_id IN (SELECT post_id FROM post WHERE owner=user.user_id)) AS likes
+				FROM user LEFT JOIN avatar ON user.user_id=avatar.user_id`;
 			const [rows, _] = await connection.query(query);
 			res.send(rows);
 		} catch (error) {
@@ -13,7 +17,12 @@ module.exports = (connection) => {
 
 	module.getUser = async(req, res) => {
 		try {
-			const [rows, _] = await connection.execute('SELECT user.user_id, fullname, username, time_created, path as avatar_path FROM user LEFT JOIN avatar ON user.user_id=avatar.user_id WHERE user.user_id=?', [req.params.user_id]);
+			const query = `SELECT user.user_id, fullname, username, time_created, path AS avatar_path,
+				(SELECT COUNT(1) FROM post WHERE owner=user.user_id) AS total_posts,
+				(SELECT COUNT(1) FROM follower WHERE followed_id=user.user_id) AS followers,
+				(SELECT COUNT(1) FROM likes_post WHERE post_id IN (SELECT post_id FROM post WHERE owner=user.user_id)) AS likes
+				FROM user LEFT JOIN avatar ON user.user_id=avatar.user_id WHERE user.user_id=?`;
+			const [rows, _] = await connection.execute(query, [req.params.user_id]);
 			res.send(rows);
 		} catch (error) {
 			res.status(401).json(error);

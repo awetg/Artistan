@@ -1,4 +1,4 @@
-/* Most routes in api/user handle user's public data */
+/* Most routes in api/users handle user's public profile data */
 
 const router = require('express').Router();
 const upload = require('../../modules/multer');
@@ -34,7 +34,7 @@ router.patch(
 /* get user avatar  at GET: base_url/api/users/:user_id/avatar */
 router.get('/avatar/:user_id',db.User.getUserAvatar);
 
-
+/* Below routes will bring following routes and user_interset routes to this route (implemnted separately for development ease)*/
 
 /* get all followers of a user by id at GET: base_url/api/users/:user_id/followers */
 router.get('/:user_id/followed', db.Follower.getAllFollowed);

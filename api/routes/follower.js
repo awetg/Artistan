@@ -1,7 +1,6 @@
 const router = require('express').Router();
 const db = require('../database/db');
 
-
 /* get all people whom this user is Following to */
 router.get('/:user_id/following', db.Follower.getAllFollowing);
 
