@@ -9,8 +9,7 @@ module.exports = (connection) => {
 		if (req.user && req.file) {
 			try {
 				const dimension = imageSize(req.file.path);
-				const imageRatio = +(dimension.width/dimension.height).toFixed(2);
-				console.log(imageRatio);
+				const imageRatio = +(dimension.width / dimension.height).toFixed(2);
 				const query = 'INSERT INTO media (filename, path, mimetype, encoding, owner, image_ratio) VALUES(?, ?, ?, ?, ?, ?)';
 				const queryParams = [req.file.filename, req.file.path, req.file.mimetype, req.file.encoding, req.user.user_id, imageRatio];
 				const [rows, _] = await connection.execute(query,queryParams);

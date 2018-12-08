@@ -15,8 +15,10 @@ const signToken = (user) => {
 				jti: guid()	//token id used as key while blacklisting jwt
 			};
 			jwt.sign(payload, process.env.JWT_SECRET_KEY, (error, token) => {
-				if (error) reject(error);
-				resolve({
+				if (error) {
+					return reject(error);
+				}
+				return resolve({
 					message: 'Logged in successfully',
 					token: token,
 					user: {

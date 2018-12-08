@@ -3,12 +3,8 @@ const multer = require('multer');
 
 //setting pemannet storage
 const storage = multer.diskStorage({
-	destination: function (req, file, cb) {
-		cb(null, 'uploads/');
-	},
-	filename: function (req, file, cb) {
-		cb(null,  Date.now() + '__' + file.originalname);
-	}
+	destination: (req, file, cb) => cb(null, 'uploads/'),
+	filename: (req, file, cb) => cb(null, Date.now() + '__' + file.originalname)
 });
 
 const upload = multer({ storage: storage });
