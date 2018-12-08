@@ -22,6 +22,9 @@ router.get('/:category_id/category', db.Post.getAllByCategory);
 /* delete post by post id at DELETE: base_url/api/post/:post_id */
 router.delete('/:post_id', db.Auth.authenticate, db.Post.delete);
 
+/* NOTE: commenting on a post is done through comment routes
+* comment routes will be merged to post routes in the future
+*/
 /*comment on post with authentication at POST: base_url/api/post/:post_id/comment  */
 // router.post('/:post_id/comment',  db.User.isLoggedIn,db.Post.comment);
 

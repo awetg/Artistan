@@ -1,4 +1,7 @@
-/* Most routes in api/user handle user's public data */
+/* This routes in api/users handle user's public profile data
+* All routes don't need authentication execpt POST, PATCH AND DELETE request
+* Rotues such as folloer, user_interests are related with user profile but implemented separeately for development ease
+*/
 
 const router = require('express').Router();
 const upload = require('../../modules/multer');
@@ -17,22 +20,25 @@ router.post(
 	db.Auth.authenticate,
 	upload.single('my-media'),
 	(req, res, next) => {
-		resize.doResize(req.file.path, 300, 'uploads/medium_' + req.file.filename, next);
+		resize(req.file.path, 300, 'uploads/medium_' + req.file.filename, next);
 	},
 	db.User.uploadAvatar
 );
 
+/* Update user avatar with authentication at PATCH: base_url/users/avatar */
 router.patch(
 	'/:user_id/avatar',
 	db.Auth.authenticate,
 	upload.single('my-media'),
 	(req, res, next) => {
-		resize.doResize(req.file.path, 300, 'uploads/medium_' + req.file.file, next);
+		resize(req.file.path, 300, 'uploads/medium_' + req.file.file, next);
 	},
 	db.User.updateAvatar);
 
 /* get user avatar  at GET: base_url/api/users/:user_id/avatar */
-router.get('/:user_id/avatar',db.User.getUserAvatar);
+router.get('/avatar/:user_id',db.User.getUserAvatar);
+
+/* Below routes will bring follower routes and user_interset routes to this route (implemnted separately for development ease)*/
 
 /* get all followers of a user by id at GET: base_url/api/users/:user_id/followers */
 router.get('/:user_id/followed', db.Follower.getAllFollowed);
@@ -50,7 +56,7 @@ router.post('/:user_id/follow', db.Auth.authenticate, db.Follower.addFollower);
 router.get('/:user_id/interset/',db.Auth.authenticate, db.User_Interested.getAllInterests);
 
 // interest/category id should be passed as api/users/:user_id/interset/1/2/i3/
-// ids after interset/ will splited at
+// ids after interset/ will splited at ' /'
 /* add user interset with authentication at POST: base_url/users/:user_id/interset */
 router.post('/:user_id/interset/*', db.Auth.authenticate, db.User_Interested.addInterest);
 

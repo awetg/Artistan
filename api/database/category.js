@@ -1,46 +1,43 @@
+/* This is controller module for category data
+* This module performs CRUDE operation to database on category table only
+*/
 module.exports = (connection) => {
 	const module = {};
-	module.getAllCategory = async (req, res) => {
+	module.getAllCategory = async(req, res) => {
 		try {
-			const [rows, fields] = await connection.execute('SELECT * FROM category');
+			const [rows, _] = await connection.execute('SELECT * FROM category');
 			res.send(rows);
-		} catch(error) {
+		} catch (error) {
 			res.status(401).json(error);
 		}
-	}
+	};
 
-	module.addCategory = async (req, res) => {
+	module.addCategory = async(req, res) => {
 		try {
-			const [r, f] = await connection.query('SELECT name FROM category WHERE name=?', [req.body.category_name]);
-			console.log(r);
-			if(r.length == 0) {
-				const [rows, fields] = await connection.query('INSERT INTO category(name) VALUES(?)', [req.body.category_name]);
-				res.send({message:'Category inserted'});
-			} else {
-				res.send({message: 'Category already exist'});
-			}
-		} catch(error) {
+			await connection.query('INSERT INTO category(name) VALUES(?)', [req.body.category_name]);
+			res.send({message:'Category inserted'});
+		} catch (error) {
 			res.status(401).json(error);
 		}
-	}
+	};
 
-	module.updateCategory = async (req, res) => {
+	module.updateCategory = async(req, res) => {
 		try {
-			const [rows, fields] = await connection.execute('UPDATE category SET name=? WHERE category_id=?', [req.body.category_name, req.params.category_id]);
-			res.send({message: 'Category updated'});
-		} catch(error) {
+			const [rows, _] = await connection.execute('UPDATE category SET name=? WHERE category_id=?', [req.body.category_name, req.params.category_id]);
+			rows.affectedRows ? res.send({message: 'Category updated.'}) : res.send({message: 'Category does not exist.'});
+		} catch (error) {
 			res.status(401).json(error);
 		}
-	}
+	};
 
-	module.deleteCategory = async (req, res) => {
+	module.deleteCategory = async(req, res) => {
 		try {
-			const [rows, fields] = await connection.query('DELETE FROM category WHERE category_id=?', [req.params.category_id]);
-			res.send({message: 'Category deleted'});
-		} catch(error) {
+			const [rows, _] = await connection.query('DELETE FROM category WHERE category_id=?', [req.params.category_id]);
+			rows.affectedRows ? res.send({message: 'Category delted.'}) : res.send({message: 'Category does not exist.'});
+		} catch (error) {
 			res.status(401).json(error);
 		}
-	}
+	};
 
 	return module;
-}
+};

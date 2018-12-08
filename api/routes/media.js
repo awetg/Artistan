@@ -1,3 +1,7 @@
+/* This route will not be used with Atrisan application
+* since uploading media is done through create post routes
+* implemented for test at early development
+*/
 const router = require('express').Router();
 const upload = require('../../modules/multer');
 const db = require('../database/db');
@@ -16,7 +20,8 @@ router.get('/user', db.Auth.authenticate, db.Media.getMediaByUser);
 // get single file using id of file at GET:base_url/api/media/fileId without authentication
 router.get('/:fileId',db.Media.getFileById);
 
-router.patch('/:fileId', (req, res) => res.status(200).json({fileId: 'updated media ' + req.params.fileId}));
+/* updating media not implemented because uploading media is primarly done through creating posts*/
+// router.patch('/:fileId', (req, res) => res.status(200).json({fileId: 'updated media ' + req.params.fileId}));
 
 //delete file with fileId and authentication token at DELETE:base_url/api/media/fileId
 router.delete('/:fileId', db.Auth.authenticate, db.Media.deleteFileById);

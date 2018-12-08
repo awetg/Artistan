@@ -13,7 +13,6 @@ router.post('/register', upload.single(), db.Auth.register);
 
 /* login a user  POST: base_url/api/auth/login  */
 router.post('/login', upload.single(), db.Auth.logIn);
-// router.post('/login', passportLogin, (req, res) =>  res.send(req.user));
 
 /* logout a user with authentication  POST: base_url/api/auth/logout  */
 router.post('/logout', db.Auth.authenticate, db.Auth.logOut);
