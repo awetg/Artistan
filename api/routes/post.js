@@ -5,6 +5,9 @@ const db = require('../database/db');
 /* get all posts at GET: base_url/api/post */
 router.get('/', db.Post.getAllPosts);
 
+/* get single posts by id at GET: base_url/api/post */
+router.get('/:post_id', db.Post.getPostById);
+
 /*create post with authentication at POST: base_url/api/post  */
 router.post('/', db.Auth.authenticate, upload.single('my-media'), db.Media.uploadFile, db.Post.createPost);
 
