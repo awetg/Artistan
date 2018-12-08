@@ -17,9 +17,14 @@
 	<section class="app">
 		<div id="profile-page" class="container">
 			<div class="my-info">
-				<div class="cover-photo"></div>
+				<div class="cover-photo">
+					<div class="layer"></div>
+					<button type="button" class="change-cover">Change cover photo</button>
+				</div>
 				<div class="center">
-					<div class="avatar"></div>
+					<div class="avatar">
+						<button type="button" class="change-avatar">Change</button>
+					</div>
 					<div class="fullname">Tran Quang Khoi Nguyen</div>
 					<div class="numbers">
 						<div class="left">
@@ -31,12 +36,18 @@
 						</div>
 					</div>
 				</div>
+				<form hidden>
+					<input id="file-input" type="file" name="my-media" hidden />
+				</form>
 			</div>
-			<div class="my-posts"></div>
+			<div class="my-posts">
+				<div class="gallery">
+				</div>
+			</div>
 		</div>
 	</section>
 	<script src="/dist/js/polyfill.js"></script>
-	<!-- <script src="/dist/js/upload.js"></script> -->
+	<script src="/dist/js/profile.js"></script>
 </body>
 
 </html>

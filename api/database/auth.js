@@ -73,7 +73,7 @@ module.exports = (connection) => {
 			try {
 				const user = await jwt.verifyToken(token);
 				if (await blackListStorage.get(user.jti)) {
-					res.status(401).json('Unauterized.');
+					res.status(401).json('Unauthorized');
 				} else {
 					req.user = user;
 					next();
@@ -82,7 +82,7 @@ module.exports = (connection) => {
 				res.status(401).json(error);
 			}
 		} else {
-			res.status(401).json('Unauterized.');
+			res.status(401).json('Unauthorized');
 		}
 	};
 

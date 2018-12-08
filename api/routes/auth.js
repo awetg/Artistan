@@ -6,7 +6,7 @@ const upload = require('../../modules/multer');
 const db = require('../database/db');
 
 /* get single user account info (all info except password) with authentication at GET: base_url/api/auth/:user_id */
-router.get('/:user_id',  db.Auth.authenticate, db.Auth.getUser);
+router.get('/:user_id', db.Auth.authenticate, db.Auth.getUser);
 
 /* register a user  POST: base_url/api/auth/register  */
 router.post('/register', upload.single(), db.Auth.register);
@@ -22,6 +22,6 @@ router.post('/logout', db.Auth.authenticate, db.Auth.logOut);
 router.patch('/:user_id', db.Auth.authenticate, upload.single(), db.Auth.updateUser);
 
 /* delete a user account with authentication  at DELETE: base_url/api/auth/:user_id */
-router.delete('/:user_id',  db.Auth.authenticate, db.Auth.deleteUser);
+router.delete('/:user_id', db.Auth.authenticate, db.Auth.deleteUser);
 
 module.exports = router;
