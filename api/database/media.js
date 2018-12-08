@@ -1,4 +1,5 @@
 const fs = require('fs');
+const imageSize = require('image-size');
 const util = require('util');
 const deleteFile = util.promisify(fs.unlink);
 
@@ -7,8 +8,11 @@ module.exports = (connection) => {
 	module.uploadFile = async(req, res,next) => {
 		if (req.user && req.file) {
 			try {
-				const query = 'INSERT INTO media (filename, path, mimetype, encoding, owner) VALUES(?, ?, ?, ?, ?)';
-				const queryParams = [req.file.filename, req.file.path, req.file.mimetype, req.file.encoding, req.user.user_id];
+				const dimension = imageSize(req.file.path);
+				const imageRatio = +(dimension.width/dimension.height).toFixed(2);
+				console.log(imageRatio);
+				const query = 'INSERT INTO media (filename, path, mimetype, encoding, owner, image_ratio) VALUES(?, ?, ?, ?, ?, ?)';
+				const queryParams = [req.file.filename, req.file.path, req.file.mimetype, req.file.encoding, req.user.user_id, imageRatio];
 				const [rows, fileds] = await connection.execute(query,queryParams).catch(error => {req.insertedFile.error = error;});
 				req.insertedFile = {'rows': rows, error: false};
 				next();
