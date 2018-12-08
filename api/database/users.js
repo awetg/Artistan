@@ -38,17 +38,26 @@ module.exports = (connection) => {
 	};
 
 	module.uploadAvatar = async(req, res) => {
-		try {
-			const query = 'INSERT INTO avatar (user_id, path, mimetype, encoding) VALUES(?, ?, ?, ?)';
-			const queryParams = [req.user.user_id, req.file.path, req.file.mimetype, req.file.encoding];
-			await connection.execute(query, queryParams);
-			res.send({message: 'Avatar uploaded successfully', avatar_path: req.file.path});
+		if (req.user) {
+			try {
+				const [rows,, _] = await connection.execute('SELECT * FROM avatar WHERE user_id=?', [req.user.user_id]);
+				if (rows.length > 0) {
+					const query = 'UPDATE avatar SET path=?, mimetype=?, encoding=? WHERE user_id=?';
+					await connection.query(query,[req.file.path, req.file.mimetype, req.file.encoding, req.user.user_id]);
+					res.send({message: 'Avatar updated successfully', avatar_path: req.file.path});
+				} else {
+					const query = 'INSERT INTO avatar (user_id, path, mimetype, encoding) VALUES(?, ?, ?, ?)';
+					const queryParams = [req.user.user_id, req.file.path, req.file.mimetype, req.file.encoding];
+					await connection.execute(query, queryParams);
+					res.send({message: 'Avatar uploaded successfully', avatar_path: req.file.path});
+				}
 
-		} catch (error) {
-			res.status(401).json(error);
+			} catch (error) {
+				res.status(401).json(error);
+			}
 		}
 	};
-
+	/* NOTE: this function is not used anymore inserting and updating user avatar is done with uploadAvatar function from same route with POST */
 	module.updateAvatar = async(req, res) => {
 		try {
 			const query = 'UPDATE avatar SET path=?, mimetype=?, encoding=? WHERE user_id=?';
