@@ -11,9 +11,9 @@ router.get('/', db.User.getAllUsers);
 /* get single user info without authentication (fullname,username,time_created )at GET: base_url/api/users/:user_id */
 router.get('/:user_id', db.User.getUser);
 
-/* uploading user avatar. this is used for updating avatar as well, with authentication at POST: base_url/api/users/:user_id/avatar */
+/* uploading user avatar with authentication at POST: base_url/api/users/:user_id/avatar */
 router.post(
-	'/:user_id/avatar',
+	'/avatar',
 	db.Auth.authenticate,
 	upload.single('my-media'),
 	(req, res, next) => {
@@ -22,8 +22,17 @@ router.post(
 	db.User.uploadAvatar
 );
 
+router.patch(
+	'/avatar',
+	db.Auth.authenticate,
+	upload.single('my-media'),
+	(req, res, next) => {
+		resize.doResize(req.file.path, 300, 'uploads/medium_' + req.file.file, next);
+	},
+	db.User.updateAvatar);
+
 /* get user avatar  at GET: base_url/api/users/:user_id/avatar */
-router.get('/:user_id/avatar',db.User.getUserAvatar);
+router.get('/avatar/:user_id',db.User.getUserAvatar);
 
 
 
@@ -40,8 +49,14 @@ router.get('/:user_id/following', db.Follower.getAllFollowing);
 /* to follow someone*/
 router.post('/:user_id/follow', db.Auth.authenticate, db.Follower.addFollower)
 
+<<<<<<< HEAD
 /* get user interset at GET: base_url/users/:user_id/interset 
 
+=======
+/* get user interset at GET: base_url/users/:user_id/interset
+* interest/category id should be passed as api/users/:user_id/interset/1/2/3/
+* ids after interset/ will splited at '/'
+>>>>>>> 0ecc982a3280add4af4edd62a60ff5855eeea8e9
 */
 router.get('/:user_id/interset/',db.Auth.authenticate, db.User_Interested.getAllInterests);
 

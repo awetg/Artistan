@@ -1,9 +1,11 @@
 const router = require('express').Router();
-const upload = require('../../modules/multer');
 const db = require('../database/db');
+<<<<<<< HEAD
 
 
 
+=======
+>>>>>>> 0ecc982a3280add4af4edd62a60ff5855eeea8e9
 
 /* get all people whom this user is Following to */
 router.get('/:user_id/following', db.Follower.getAllFollowing);

@@ -4,17 +4,17 @@ require('dotenv').config();
 const express = require('express');
 
 //api routes and local modules
-const mediaRoutes = require('./api/routes/media');	//all trafic at base_url/api/media will be routed to this
-const usersRoutes = require('./api/routes/users');	//all trafic at base_url/api/users will be routed to this
-const postRoutes = require('./api/routes/post');	//all trafic at base_url/api/post will be routed to this
-const commentRoutes = require('./api/routes/comment');	//all trafic at base_url/api/post will be routed to this
-const categoryRoutes = require('./api/routes/category');	//all trafic at base_url/api/post will be routed to this
-const authRoutes = require('./api/routes/auth');	//all trafic at base_url/api/post will be routed to this
+const mediaRoutes = require('./api/routes/media');	//all trafic at base_url/api/media
+const usersRoutes = require('./api/routes/users');	//all trafic at base_url/api/users
+const postRoutes = require('./api/routes/post');	//all trafic at base_url/api/post
+const commentRoutes = require('./api/routes/comment');	//all trafic at base_url/api/comment
+const categoryRoutes = require('./api/routes/category');	//all trafic at base_url/api/category
+const authRoutes = require('./api/routes/auth');	//all trafic at base_url/api/auth
+const adminRoutes = require('./api/routes/admin');	//all trafic at base_url/api/admin
 
-const follower = require('./api/routes/follower');	//all trafic at base_url/api/post will be routed to this
-const user_interested = require('./api/routes/user_intersts');	//all trafic at base_url/api/post will be routed to this
-const search = require('./api/routes/search');	//all trafic at base_url/api/post will be routed to this
-
+const follower = require('./api/routes/follower');	//all trafic at base_url/api/followe
+const user_interested = require('./api/routes/user_intersts');	//all trafic at base_url/api/user_interset
+const search = require('./api/routes/search');	//all trafic at base_url/api/search
 
 const clientRoot = { root: 'client' };
 
@@ -29,10 +29,10 @@ app.use(express.static('client'))
 	.use('/api/comment', commentRoutes)
 	.use('/api/category', categoryRoutes)
 	.use('/api/auth', authRoutes)
+	.use('/api/admin', adminRoutes)
 	.use('/api/follower', follower)
 	.use('/api/user_interested', user_interested)
-	.use('/api/search', search)
-	;
+	.use('/api/search', search);
 
 // client routing
 app.get('/', (_, res) => {
@@ -53,6 +53,10 @@ app.get('/upload', (_, res) => {
 
 app.get('/post/:id', (_, res) => {
 	res.sendFile('view-post.html', clientRoot);
+});
+
+app.get('/profile', (_, res) => {
+	res.sendFile('profile.html', clientRoot);
 });
 
 //use this for any other undefined routes
