@@ -55,6 +55,38 @@
 				font-size: 80px;
 			}
 		}
+
+		.actions {
+			text-align: center;
+			position: absolute;
+			bottom: 0;
+			right: 0;
+			left: 0;
+			padding: 16px;
+			& > div {
+				color: #ffffff;
+				display: inline-block;
+				&:first-child {
+					margin-right: 32px;
+				}
+				&:hover {
+					cursor: pointer;
+					&.like {
+						i {
+							color: #d32f2f;
+						}
+					}
+					&.flag {
+						i {
+							color: #9c27b0;
+						}
+					}
+				}
+				i {
+					font-size: 32px;
+				}
+			}
+		}
 	}
 
 	.information {

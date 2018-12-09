@@ -15,13 +15,23 @@ export const checkUserLoggedIn = (isPrivatePage) => {
 					localStorage.removeItem('artisan_jwt');
 					window.location.href = '/login';
 				} else if (response[0].user_id) {
-					const newElements = '<a class="" href="/upload">Share your art</a><a class="" href="/profile">Profile</a><a class="" href="/logout">Log out</a>';
+					const newElements = '<a class="" href="/upload">Share your art</a><a class="" href="/profile">Profile</a><a class="logout" href="">Log out</a>';
 					const navLinks = document.querySelector('.nav-links');
 					const loginLink = document.querySelector('.login-link');
 					if (loginLink) {
 						navLinks.removeChild(loginLink);
 						navLinks.insertAdjacentHTML('afterbegin', newElements);
 					}
+					// prepare for user logout
+					document.querySelector('#app-header a.logout').addEventListener('click', e => {
+						e.preventDefault();
+						makeRequest(API.users.logout.url, API.users.logout.method, {})
+							.then(resData => {
+								if (resData && resData.message === 'Logged out successfully.') {
+									window.location.href = '/login';
+								}
+							});
+					});
 				}
 			});
 	} else {
@@ -53,8 +63,12 @@ export const fetchAvatar = async(user_id) => {
 
 export const renderPostsFeed = (posts) => {
 	const ratios = posts.map(post => parseFloat(post.image_ratio));
+	const gallery = document.querySelector('.gallery');
+	while (gallery.lastChild) {
+		gallery.removeChild(gallery.lastChild);
+	}
 	const layout = justifiedLayout(ratios, {
-		containerWidth: document.querySelector('.gallery').clientWidth,
+		containerWidth: gallery.clientWidth,
 		boxSpacing: 10
 	});
 	const template = posts.reduce((result, post, index) => {

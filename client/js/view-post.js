@@ -66,7 +66,7 @@ document.addEventListener('DOMContentLoaded', () => {
 	};
 
 	initApp();
-	checkUserLoggedIn(true);
+	checkUserLoggedIn();
 	getPostDetails();
 	getComments();
 
