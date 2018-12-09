@@ -9,13 +9,16 @@ const guid = () => 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => 
 
 const signToken = (user) => {
 	return new Promise((resolve, reject) => {
+
 		if (user) {
+
 			const payload = {
 				exp: Math.floor(Date.now() / 1000) + (60 * 60),	//sign token with 1 hour expiration (number of seconds are set)
 				user_id: user.user_id,
 				jti: guid()	//token id used as key while blacklisting jwt
 			};
 			jwt.sign(payload, process.env.JWT_SECRET_KEY, (error, token) => {
+
 				if (error) {
 					return reject(error);
 				}

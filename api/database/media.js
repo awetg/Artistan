@@ -5,15 +5,20 @@
 * Since only post routes are used in the application media are not delted after post deletion (skipped to avoid latency)
 * but the deletion from disk is implemeted here for presentation and if media route is used file is also deleted from disk
 */
+
 const fs = require('fs');
 const imageSize = require('image-size');
 const util = require('util');
 const deleteFile = util.promisify(fs.unlink);
 
 module.exports = (connection) => {
+
 	const module = {};
+
 	module.uploadFile = async(req, res,next) => {
+
 		if (req.user && req.file) {
+
 			try {
 				/* Get image dimension because width/height ratio is used in frontend */
 				const dimension = imageSize(req.file.path);
@@ -34,7 +39,9 @@ module.exports = (connection) => {
 	};
 
 	module.getMediaByUser = async(req, res) => {
+
 		if (req.user) {
+
 			try {
 				const query = 'SELECT media_id,filename,path FROM media WHERE owner=?';
 				const [rows, _] = await connection.execute(query,[req.user.user_id]);
@@ -48,6 +55,7 @@ module.exports = (connection) => {
 	};
 
 	module.getAllFiles = async(req, res) => {
+
 		try {
 			const [rows, _] = await connection.execute('SELECT path FROM media');
 			res.send(rows);
@@ -57,7 +65,9 @@ module.exports = (connection) => {
 	};
 
 	module.deleteFileById = async(req, res) => {
+
 		if (req.user) {
+
 			try {
 				if (req.params.fileId === 'undefined') {res.send({message: 'File id not provided.'});}
 				const query = 'SELECT filename FROM media WHERE media_id=? AND owner=?';

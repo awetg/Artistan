@@ -1,10 +1,15 @@
 /* This is controller module for comment data
 * This module performs CRUDE operation to database on comment table only
 */
+
 module.exports = (connection) => {
+
 	const module = {};
+
 	module.createComment = async(req, res) => {
+
 		if (req.user) {
+
 			try {
 				const query = 'INSERT INTO comment (content, owner, parent_post) VALUES(?, ?, ?)';
 				const queryParams = [req.body.content, req.user.user_id, req.params.post_id];
@@ -19,6 +24,7 @@ module.exports = (connection) => {
 	};
 
 	module.getAllCommentsForPost = async(req, res) => {
+
 		try {
 			const [rows, _] = connection.execute('SELECT * FROM comment WHERE parent_post=?',[req.params.post_id]).then(([rows, _]) => rows);
 			await connection.execute('UPDATE post SET views=views+1 WHERE post_id=?',[req.params.post_id]);
@@ -29,7 +35,9 @@ module.exports = (connection) => {
 	};
 
 	module.updateComment = async(req, res) => {
+
 		if (req.user) {
+
 			try {
 				const query = req.user.admin_privileges ? 'UPDATE comment SET content=? WHERE comment_id=?' : 'UPDATE comment SET content=? WHERE comment_id=? AND owner=?';
 				const queryParams = req.user.admin_privileges ? [req.body.content, req.params.comment_id] : [req.body.content, req.params.comment_id, req.user.user_id];
@@ -48,6 +56,7 @@ module.exports = (connection) => {
 	};
 
 	module.deleteComment = async(req, res) => {
+
 		if (req.user) {
 			try {
 				const query = req.user.admin_privileges ? 'DELETE FROM comment WHERE comment_id=?' : 'DELETE FROM comment WHERE comment_id=? AND owner=?';

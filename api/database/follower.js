@@ -1,9 +1,13 @@
 /* This is controller module for followers/following data
 * This module performs CRUDE operation to database on follower table only
 */
+
 module.exports = (connection) => {
+
 	const module = {};
+
 	module.getAllFollowing = async(req, res) => {
+
 		try {
 			const [rows, _] = await connection.execute('SELECT * FROM follower WHERE followed_id=?',[req.params.user_id]);
 			res.send(rows);
@@ -13,6 +17,7 @@ module.exports = (connection) => {
 	};
 
 	module.getAllFollowed = async(req, res) => {
+
 		try {
 			const [rows, _] = await connection.execute('SELECT * FROM follower WHERE follower_id=?',[req.params.user_id]);
 			res.send(rows);
@@ -22,6 +27,7 @@ module.exports = (connection) => {
 	};
 
 	module.addFollower = async(req, res) => {
+
 		try {
 			const [r, _] = await connection.query('SELECT * FROM follower WHERE follower_id=? AND followed_id=?', [req.user.user_id, req.params.to_user_id]);
 			console.log(r);

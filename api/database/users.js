@@ -1,9 +1,13 @@
 /* This is controller module for user profile data
 * This module performs CRUDE operation to database on different tables to get user info or updated user info
 */
+
 module.exports = (connection) => {
+
 	const module = {};
+
 	module.getAllUsers = async(req, res) => {
+
 		try {
 			/* Get all user insensitive information like username joined date, number of post and total likes
 			* This profile information is public and  provide without authentication
@@ -21,6 +25,7 @@ module.exports = (connection) => {
 	};
 
 	module.getUser = async(req, res) => {
+
 		try {
 			/* Get single user insensitive information like username joined date, number of post and total likes
 			* This profile information is public and  provide without authentication
@@ -38,7 +43,9 @@ module.exports = (connection) => {
 	};
 
 	module.uploadAvatar = async(req, res) => {
+
 		if (req.user) {
+
 			try {
 				const [rows,, _] = await connection.execute('SELECT * FROM avatar WHERE user_id=?', [req.user.user_id]);
 				if (rows.length > 0) {
@@ -57,8 +64,10 @@ module.exports = (connection) => {
 			}
 		}
 	};
+
 	/* NOTE: this function is not used anymore inserting and updating user avatar is done with uploadAvatar function from same route with POST */
 	module.updateAvatar = async(req, res) => {
+
 		try {
 			const query = 'UPDATE avatar SET path=?, mimetype=?, encoding=? WHERE user_id=?';
 			const [rows, _] = await connection.query(query,[req.file.path, req.file.mimetype, req.file.encoding, req.user.user_id]);
