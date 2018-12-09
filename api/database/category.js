@@ -15,9 +15,9 @@ module.exports = (connection) => {
 	module.addCategory = async(req, res) => {
 		try {
 			await connection.query('INSERT INTO category(name) VALUES(?)', [req.body.category_name]);
-			res.send({message:'Category inserted'});
+			res.send({message: 'Category inserted'});
 		} catch (error) {
-			res.status(401).json(error);
+			(error.errno === 1062) ? res.send({error: {message: 'Category alread exist.'}}) : res.status(401).json(error);
 		}
 	};
 
@@ -26,7 +26,7 @@ module.exports = (connection) => {
 			const [rows, _] = await connection.execute('UPDATE category SET name=? WHERE category_id=?', [req.body.category_name, req.params.category_id]);
 			rows.affectedRows ? res.send({message: 'Category updated.'}) : res.send({message: 'Category does not exist.'});
 		} catch (error) {
-			res.status(401).json(error);
+			(error.errno === 1062) ? res.send({error: {message: 'Category alread exist.'}}) : res.status(401).json(error);
 		}
 	};
 

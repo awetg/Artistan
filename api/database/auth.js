@@ -152,21 +152,49 @@ module.exports = (connection) => {
 	};
 
 	module.updateUser = async(req, res) => {
-		//check all required fields exist
-		const allFieldsExist = ['fullname', 'email', 'username','password'].every(k => k in req.body);
+		/* check all fields provided if none are provide there is no update
+		* NOTE: username is not updated in this function, username is updated in different route with changeUsername function
+		*/
+		const providedFileds = ['fullname', 'email','password'].filter(k => req.body[k]);
 
-		if (allFieldsExist && req.user) {
+		if (providedFileds.length > 0 && req.user) {
 			try {
-				const hash = await bcrypt.hash(req.body.password, saltRounds);
-				const query = 'UPDATE user SET fullname=?, email=?, username=?, password=? WHERE user_id=?';
-				const queryParams = [req.body.fullname, req.body.email, req.body.username, hash, req.params.user_id];
-				const [rows, _] = await connection.execute(query,queryParams).catch(error => res.send(error));
+				let hash = null;
+				if (req.body.password) {
+					hash = await bcrypt.hash(req.body.password, parseInt(process.env.SALT_ROUNDS) || 10);
+				}
+				let query = 'UPDATE user SET';
+				providedFileds.forEach(field => {
+					query += ' ' + field + '=?,';
+				});
+				if (hash) {
+					query += ' password=?,';
+				}
+				query = query.slice(0, -1);
+				query += ' WHERE user_id=?';
+				const queryParams = providedFileds.map(field => req.body[field]);
+				queryParams.push(req.user.user_id);
+				await connection.execute(query,queryParams).catch(error => res.send(error));
 				res.send({message: 'User data updated'});
 			} catch (error) {
+				console.log(error);
 				res.status(401).json(error);
 			}
 		} else {
-			res.send({message: 'Require fields not provided.'});
+			res.send({message: 'No fields are provided for update.'});
+		}
+	};
+
+	module.changeUsername = async(req, res) => {
+		if (req.user) {
+			try {
+				await connection.execute('UPDATE user SET username=? WHERE user_id=?', [req.body.username, req.user.user_id]);
+				res.send({message: 'Username updated successfully.', username: req.body.username});
+			} catch (error) {
+				(error.errno === 1062) ? res.send({error: {message: 'Username not available.'}}) : res.status(401).json(error);
+			}
+		} else {
+			res.status(401).json('Unauterized.');
 		}
 	};
 
