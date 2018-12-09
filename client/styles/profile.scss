@@ -95,4 +95,18 @@
 		width: 80%;
 		margin: 24px auto;
 	}
+
+	@media screen and (max-width: 580px) {
+		.my-info {
+			.center {
+				.numbers {
+					flex-direction: column;
+					align-items: center;
+					.left {
+						margin-bottom: 16px;
+					}
+				}
+			}
+		}
+	}
 }

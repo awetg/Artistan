@@ -27,6 +27,9 @@
       bottom: 0;
       background: rgba(0, 0, 0, 0.75);
       z-index: -1;
+      @media screen and (max-width: 580px) {
+        background: rgba(0, 0, 0, 0.35);
+      }
     }
 
     #tabs {

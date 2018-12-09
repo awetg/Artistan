@@ -42,7 +42,7 @@ document.addEventListener('DOMContentLoaded', () => {
 						return result + `<div class="comment">
 						<div class="avatar" ${ item.avatar_path ? 'style="background-image: url(' + normalizeFilePath(item.avatar_path) + ')"' : '' }></div>
 						<div class="right-side">
-							<div class="name"><a href="">${ item.fullname }</a></div>
+							<div class="name"><span>${ item.fullname }</span></div>
 							<div class="text">${ item.content }</div>
 						</div>
 						<div class="time">${ moment(item.time_creatd).fromNow() }</div>

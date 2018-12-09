@@ -291,4 +291,10 @@
 			}
 		}
 	}
+
+	@media screen and (max-width: 580px) {
+		.light-box {
+			height: 50vh;
+		}
+	}
 }
