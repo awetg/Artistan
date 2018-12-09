@@ -17,10 +17,15 @@ router.post('/login', upload.single(), db.Auth.logIn);
 /* logout a user with authentication  POST: base_url/api/auth/logout  */
 router.post('/logout', db.Auth.authenticate, db.Auth.logOut);
 
-/*update user account ifno with authentication at PATCH: base_url/api/auth/:user_id  */
+/* update user account ifno with authentication at PATCH: base_url/api/auth/:user_id
+* This route will update user account info like fullname, email or password whatever is provide or uploaded
+*/
 router.patch('/:user_id', db.Auth.authenticate, upload.single(), db.Auth.updateUser);
 
 /* delete a user account with authentication  at DELETE: base_url/api/auth/:user_id */
 router.delete('/:user_id', db.Auth.authenticate, db.Auth.deleteUser);
+
+/* Change username if availabe at PATCH: base_url/api/auth/:user_id */
+router.patch('/:user_id/username', db.Auth.authenticate, upload.single(), db.Auth.changeUsername);
 
 module.exports = router;

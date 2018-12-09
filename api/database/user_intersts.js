@@ -1,9 +1,13 @@
 /* This is controller module for user interset data
 * This module performs CRUDE operation to database on user_intersets table only
 */
+
 module.exports = (connection) => {
+
 	const module = {};
+
 	module.getAllInterests = async(req, res) => {
+
 		try {
 			const [rows, _] = await connection.execute('SELECT * FROM user_intersts WHERE user_id=?',[req.user.user_id]);
 			res.send(rows);
@@ -13,6 +17,7 @@ module.exports = (connection) => {
 	};
 
 	module.addInterest = async(req, res) => {
+
 		try {
 			const query = 'insert into user_intersts(user_id, category_id) VALUES ?';
 			const queryParams = req.params[0].split('/').map(category_id => [req.user.user_id, category_id]);

@@ -1,9 +1,10 @@
 /* This is controller module for authentication related operations
 * This module performs CRUD operation to database on user table only
 */
+
 const bcrypt = require('bcrypt');
 
-//local modulse
+//local modules
 const jwt = require('../../modules/jwt');
 const blackList = require('../../modules/blacklist');
 
@@ -15,14 +16,27 @@ const blackList = require('../../modules/blacklist');
 * 	server: {host:'localhost', port:11211 	}
 * }
 */
-const blackListStorage = blackList({type: process.env.CACHING_SERVER || 'memory'});
+const opitions = {
+	type: process.env.CACHING_SERVER || 'memory',
+	server: {
+		port: process.env.REDIS_PORT || 11211,
+		host: process.env.REDIS_HOST || 'localhost'
+	}
+};
+
+const blackListStorage = blackList(opitions);
 
 module.exports = (connection) => {
+
 	const module = {};
+
 	module.register = async(req, res) => {
+
 		//check all required fields exist
 		const allFieldsExist = ['fullname', 'email', 'username','password'].every(k => k in req.body);
+
 		if (allFieldsExist) {
+
 			try {
 				const hash = await bcrypt.hash(req.body.password, parseInt(process.env.SALT_ROUNDS) || 10);
 				const query = 'INSERT INTO user (fullname, email,username,password) VALUES(?,?,?,?)';
@@ -42,13 +56,18 @@ module.exports = (connection) => {
 
 	/* Login a user and return an authentication token signed with one hour expiration time */
 	module.logIn = async(req, res) => {
+
 		//check all required fields exist
 		const allFieldsExist = ['username','password'].every(k => (k in req.body));
+
 		if (allFieldsExist) {
+
 			try {
 				const [rows, _] = await connection.execute('SELECT * FROM user WHERE username=?',[req.body.username]);
-				if (!rows[0])
-				{return res.send({error: {message: 'Username not found.'}});}
+
+				if (!rows[0]) {
+					return res.send({error: {message: 'Username not found.'}});
+				}
 				const match = await bcrypt.compare(req.body.password, rows[0].password);
 				return match ? res.send(await jwt.signToken(rows[0])) : res.send({error: {message: 'Incorrect password'}});
 			} catch (error) {
@@ -63,7 +82,9 @@ module.exports = (connection) => {
 	* Token are signed with one hour expiration time at login time
 	*/
 	module.logOut = async(req, res) => {
+
 		if (req.user) {
+
 			try {
 				await blackListStorage.set(req.user.jti, req.user.iat, req.user.exp)
 					.then(value => res.send({message: 'Logged out successfully.'}));
@@ -81,8 +102,11 @@ module.exports = (connection) => {
 	* tokens are checked if blacklisted already
 	*/
 	module.authenticate = async(req, res, next) => {
+
 		const token = req.headers['x-access-token'];
+
 		if (token) {
+
 			try {
 				const user = await jwt.verifyToken(token);
 				if (await blackListStorage.get(user.jti)) {
@@ -103,8 +127,10 @@ module.exports = (connection) => {
 	* Every time admin routes are accessed a trip to database is done to check if the user have admin privileges
 	*/
 	module.authenticateAdmin = async(req, res, next) => {
+
 		const token = req.headers['x-access-token'];
 		if (token) {
+
 			try {
 				const user = await jwt.verifyToken(token);
 				if (await blackListStorage.get(user.jti)) {
@@ -129,7 +155,9 @@ module.exports = (connection) => {
 
 	/* Admin accounts can be registered using another admin accounts */
 	module.registerAdmin = async(req, res) => {
+
 		if (req.user.admin_privileges) {
+
 			//check all required fields exist
 			const allFieldsExist = ['fullname', 'email', 'username','password'].every(k => k in req.body);
 			if (allFieldsExist) {
@@ -152,26 +180,59 @@ module.exports = (connection) => {
 	};
 
 	module.updateUser = async(req, res) => {
-		//check all required fields exist
-		const allFieldsExist = ['fullname', 'email', 'username','password'].every(k => k in req.body);
 
-		if (allFieldsExist && req.user) {
+		/* check all fields provided if none are provide there is no update
+		* NOTE: username is not updated in this function, username is updated in different route with changeUsername function
+		*/
+		const providedFileds = ['fullname', 'email','password'].filter(k => req.body[k]);
+
+		if (providedFileds.length > 0 && req.user) {
 			try {
-				const hash = await bcrypt.hash(req.body.password, saltRounds);
-				const query = 'UPDATE user SET fullname=?, email=?, username=?, password=? WHERE user_id=?';
-				const queryParams = [req.body.fullname, req.body.email, req.body.username, hash, req.params.user_id];
-				const [rows, _] = await connection.execute(query,queryParams).catch(error => res.send(error));
+				let hash = null;
+				if (req.body.password) {
+					hash = await bcrypt.hash(req.body.password, parseInt(process.env.SALT_ROUNDS) || 10);
+				}
+				let query = 'UPDATE user SET';
+				providedFileds.forEach(field => {
+					query += ' ' + field + '=?,';
+				});
+				if (hash) {
+					query += ' password=?,';
+				}
+				query = query.slice(0, -1);
+				query += ' WHERE user_id=?';
+				const queryParams = providedFileds.map(field => req.body[field]);
+				queryParams.push(req.user.user_id);
+				await connection.execute(query,queryParams).catch(error => res.send(error));
 				res.send({message: 'User data updated'});
 			} catch (error) {
+				console.log(error);
 				res.status(401).json(error);
 			}
 		} else {
-			res.send({message: 'Require fields not provided.'});
+			res.send({message: 'No fields are provided for update.'});
+		}
+	};
+
+	module.changeUsername = async(req, res) => {
+
+		if (req.user) {
+
+			try {
+				await connection.execute('UPDATE user SET username=? WHERE user_id=?', [req.body.username, req.user.user_id]);
+				res.send({message: 'Username updated successfully.', username: req.body.username});
+			} catch (error) {
+				(error.errno === 1062) ? res.send({error: {message: 'Username not available.'}}) : res.status(401).json(error);
+			}
+		} else {
+			res.status(401).json('Unauterized.');
 		}
 	};
 
 	module.deleteUser = async(req, res) => {
+
 		if (req.user) {
+
 			try {
 				const [rows, _] = await connection.query('DELETE FROM user WHERE user_id=?', req.params.user_id);
 				if (rows.affectedRows === 1) {

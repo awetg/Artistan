@@ -1,11 +1,15 @@
 /* This is controller module for searching content
 * This module performs select operation to database on different tables
 */
+
 module.exports = (connection) => {
+
 	const module = {};
 
 	module.search = async(req, res) => {
+
 		if (req.query.keywordTitle) {
+
 			try {
 				const [r, _] = await connection.query('SELECT media.*, username, fullname FROM post INNER JOIN media ON media.media_id=post.media INNER JOIN user ON user.user_id=post.owner WHERE title=?', [req.query.keywordTitle]);
 				console.log(r);
@@ -16,6 +20,7 @@ module.exports = (connection) => {
 		}
 
 		if (req.query.keywordName) {
+
 			try {
 				const [r, _] = await connection.query('SELECT * FROM post WHERE title=?', [req.query.keywordName]);
 				console.log(r);
@@ -40,5 +45,6 @@ module.exports = (connection) => {
 			res.send(error);
 		}
 	};
+
 	return module;
 };

@@ -1,15 +1,23 @@
 /* This is controller module for post related data
 * This module performs CRUDE operation to database on different tables
 */
+
 module.exports = (connection) => {
+
 	const module = {};
+
 	module.createPost = async(req, res) => {
+
 		//check if media was uploaded to db successfully, comming from upload media middleware
 		if (!req.insertedFile.error) {
-			if (!req.user) {res.send({message: 'Unautherized authentication required.'});}
+
+			if (!req.user) {
+				res.send({message: 'Unautherized authentication required.'});
+			}
 			try {
 				/* Categories are provide as array since a post can belong in multiple categories */
 				const categories = JSON.parse(req.body.category);
+
 				if (!Array.isArray(categories)) {
 					return res.send({error: 'categories format is incorrect.It must be in array format.'});
 				}
@@ -34,7 +42,9 @@ module.exports = (connection) => {
 	};
 
 	module.like = async(req, res) => {
+
 		if (req.user) {
+
 			try {
 				const query = 'INSERT INTO likes_post (user_id, post_id) VALUES(?, ?)';
 				const [rows, _] = await connection.execute(query,[req.user.user_id, req.params.post_id]);
@@ -48,12 +58,12 @@ module.exports = (connection) => {
 	};
 
 	module.deleteLike = async(req, res) => {
+
 		if (req.user) {
+
 			try {
 				const [rows, _] = await connection.query('DELETE FROM likes_post WHERE post_id=? and user_id=?', [req.params.post_id, req.user.user_id]);
 				rows.affectedRows ? res.send({message: 'Posted unliked.'}) : res.send({message: 'Post does not exist or you do not have permission to do the operation.'});
-				// const [rows, _] = await connection.query('DELETE FROM likes_post WHERE post_id=?', [req.params.post_id]);
-				// rows.affectedRows ? res.send({message: 'Posted unliked.'}) : res.send({message: 'Post does not exist.'});
 			} catch (error) {
 				res.send(error);
 			}
@@ -63,6 +73,7 @@ module.exports = (connection) => {
 	};
 
 	module.getAllPosts = async(req, res) => {
+
 		try {
 			//get all posts
 			const query = `SELECT post.*, username, fullname, media.path, media.mimetype, media.time_created AS post_time, media.image_ratio, avatar.path AS avatar_path,
@@ -79,6 +90,7 @@ module.exports = (connection) => {
 	};
 
 	module.getPostById = async(req, res) => {
+
 		try {
 			const query = `SELECT post.*, username, fullname, media.path, media.mimetype, media.time_created AS post_time, avatar.path AS avatar_path,
 				(SELECT COUNT(1) FROM likes_post WHERE likes_post.post_id=post.post_id) AS likes,
@@ -94,6 +106,7 @@ module.exports = (connection) => {
 	};
 
 	module.getAllByUser = async(req, res) => {
+
 		try {
 			const query = `SELECT post.*, username, fullname, media.path, media.mimetype, media.time_created AS post_time, avatar.path AS avatar_path,
 				(SELECT COUNT(1) FROM likes_post WHERE likes_post.post_id=post.post_id) AS likes,
@@ -109,6 +122,7 @@ module.exports = (connection) => {
 	};
 
 	module.getAllByCategory = async(req, res) => {
+
 		try {
 			const [postIds, _] = await connection.execute('SELECT post_id FROM post_category WHERE category_id=?', [req.params.category_id]);
 			if (postIds.length > 0) {
@@ -128,6 +142,7 @@ module.exports = (connection) => {
 	};
 
 	module.delete = async(req, res) => {
+
 		if (req.user) {
 			try {
 				const query = req.user.admin_privileges ? 'DELETE FROM post WHERE post_id=?' : 'DELETE FROM post WHERE post_id=? AND owner=?';
@@ -143,6 +158,7 @@ module.exports = (connection) => {
 	};
 
 	module.getFlaggedPosts = async(req, res) => {
+
 		if (req.user.admin_privileges) {
 			try {
 				const query = `SELECT post.*, username, fullname, media.path, media.mimetype, media.time_created AS post_time, avatar.path AS avatar_path,
