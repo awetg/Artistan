@@ -27,7 +27,6 @@ module.exports = (connection) => {
 
 		try {
 			const [rows, _] = await connection.execute('select comment.*, avatar.path as avatar_path, user.fullname from comment left join avatar on avatar.user_id=comment.owner left join user on user.user_id=comment.owner	where comment.parent_post=?',[req.params.post_id]);
-			await connection.execute('UPDATE post SET views=views+1 WHERE post_id=?',[req.params.post_id]);
 			res.send(rows);
 		} catch (error) {
 			console.log(error);

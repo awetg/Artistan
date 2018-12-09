@@ -13,7 +13,7 @@ DB_PASSWORD=123456
 APP_PORT=3000
 ```
 
-2. The API uses [JSON Web Token](https://en.wikipedia.org/wiki/JSON_Web_Token) as API key for authentication. API keys are signed with one hour expiration time. Logged out user's API keys are stored in a blacklist until their expiration time and deleted when they are expired. Blacklisted keys are saved in memory by default, but for production high-performance memory caching system like [Redis](https://redis.io/) or Memchached should be used. Here you have the opition to save on memory or redis. If redis is used for caching, `CACHING_SERVER=memory` in `.env` file shoud be changed to `CACHING_SERVER=redis`. If redis is runnig in different port or host, you can change the configuration in `.env` file.
+2. The API uses [JSON Web Token](https://en.wikipedia.org/wiki/JSON_Web_Token) as API key for authentication. You need to set the signing key in `.env` file `JWT_SECRET_KEY=shhh`. API keys are signed with one hour expiration time. Logged out user's API keys are stored in a blacklist until their expiration time and deleted when they are expired. Blacklisted keys are saved in memory by default, but for production high-performance memory caching system like [Redis](https://redis.io/) or Memchached should be used. Here you have the opition to save on memory or redis. If redis is used for caching, `CACHING_SERVER=memory` in `.env` file shoud be changed to `CACHING_SERVER=redis`. If redis is runnig in different port or host, you can change the configuration in `.env` file.
 
 	For example:
 ```

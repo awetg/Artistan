@@ -10,7 +10,7 @@ const db = require('../database/db');
 router.get('/:post_id', db.Comment.getAllCommentsForPost);
 
 /*create a comment with authentication at POST: base_url/api/comment/:post_id  */
-router.post('/:post_id', db.Auth.authenticate, db.Comment.createComment);
+router.post('/:post_id', db.Auth.authenticate, upload.single(), db.Comment.createComment);
 
 /*update a comment with authentication at PATCH: base_url/api/comment/:comment_id  */
 router.patch('/:comment_id', db.Auth.authenticate, upload.single(), db.Comment.updateComment);
