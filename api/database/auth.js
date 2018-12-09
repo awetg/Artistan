@@ -4,7 +4,7 @@
 
 const bcrypt = require('bcrypt');
 
-//local modulse
+//local modules
 const jwt = require('../../modules/jwt');
 const blackList = require('../../modules/blacklist');
 
@@ -16,7 +16,15 @@ const blackList = require('../../modules/blacklist');
 * 	server: {host:'localhost', port:11211 	}
 * }
 */
-const blackListStorage = blackList({type: process.env.CACHING_SERVER || 'memory'});
+const opitions = {
+	type: process.env.CACHING_SERVER || 'memory',
+	server: {
+		port: process.env.REDIS_PORT || 11211,
+		host: process.env.REDIS_HOST || 'localhost'
+	}
+};
+
+const blackListStorage = blackList(opitions);
 
 module.exports = (connection) => {
 
