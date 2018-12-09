@@ -2,7 +2,7 @@
 
 import { API } from './utils/constants';
 import { makeRequest } from './utils/network';
-import { calculateGalleryCols, fetchAvatar, renderPostsFeed, checkUserLoggedIn } from './utils/shared-functions';
+import { calculateGalleryCols, fetchAvatar, renderPostsFeed, checkUserLoggedIn, normalizeFilePath } from './utils/shared-functions';
 
 document.addEventListener('DOMContentLoaded', () => {
 	checkUserLoggedIn(true);
@@ -42,7 +42,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 	fetchAvatar(userId)
 		.then(resData => {
-			const filePath = resData[0].path.replace(/\\/g, '/');
+			const filePath = normalizeFilePath(resData[0].path);
 			document.querySelector('#profile-page .my-info .avatar').style.backgroundImage = `url(${ filePath })`;
 		});
 

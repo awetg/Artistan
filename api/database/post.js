@@ -75,7 +75,7 @@ module.exports = (connection) => {
 	module.getAllPosts = async(req, res) => {
 
 		try {
-			const query = `SELECT post.*, username, fullname, media.path, media.mimetype, media.time_created AS post_time, avatar.path AS avata_path,
+			const query = `SELECT post.*, username, fullname, media.path, media.mimetype, media.time_created AS post_time, avatar.path AS avatar_path,
 				(SELECT COUNT(1) FROM likes_post WHERE likes_post.post_id=post.post_id) AS likes,
 				(SELECT COUNT(1) FROM comment WHERE parent_post=post.post_id) AS comments,
 				(SELECT GROUP_CONCAT(name) FROM post_category JOIN category ON post_category.category_id=category.category_id WHERE post_category.post_id=post.post_id) AS post_category
@@ -98,7 +98,7 @@ module.exports = (connection) => {
 				FROM post LEFT JOIN avatar ON post.owner=avatar.user_id INNER JOIN media ON media.media_id=post.media 
 				INNER JOIN user ON user.user_id=post.owner WHERE post.post_id=?`;
 			const [rows, _] = await connection.execute(query, [req.params.post_id]);
-			res.send(rows);
+			res.send(rows[0]);
 		} catch (error) {
 			res.status(401).json(error);
 		}
@@ -125,7 +125,7 @@ module.exports = (connection) => {
 		try {
 			const [postIds, _] = await connection.execute('SELECT post_id FROM post_category WHERE category_id=?', [req.params.category_id]);
 			if (postIds.length > 0) {
-				const query = `SELECT post.*, username, fullname, media.path, media.mimetype, media.time_created AS post_time, avatar.path AS avata_path,
+				const query = `SELECT post.*, username, fullname, media.path, media.mimetype, media.time_created AS post_time, avatar.path AS avatar_path,
 				(SELECT COUNT(1) FROM likes_post WHERE likes_post.post_id=post.post_id) AS likes
 				(SELECT COUNT(1) FROM comment WHERE parent_post=post.post_id) AS comments,
 				(SELECT GROUP_CONCAT(name) FROM post_category JOIN category ON post_category.category_id=category.category_id WHERE post_category.post_id=post.post_id) AS post_category
@@ -160,7 +160,7 @@ module.exports = (connection) => {
 
 		if (req.user.admin_privileges) {
 			try {
-				const query = `SELECT post.*, username, fullname, media.path, media.mimetype, media.time_created AS post_time, avatar.path AS avata_path,
+				const query = `SELECT post.*, username, fullname, media.path, media.mimetype, media.time_created AS post_time, avatar.path AS avatar_path,
 					(SELECT COUNT(1) FROM likes_post WHERE likes_post.post_id=post.post_id) AS likes,
 					(SELECT COUNT(1) FROM comment WHERE parent_post=post.post_id) AS comments,
 					(SELECT GROUP_CONCAT(name) FROM post_category JOIN category ON post_category.category_id=category.category_id WHERE post_category.post_id=post.post_id) AS post_category

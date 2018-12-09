@@ -14,22 +14,23 @@ module.exports = (connection) => {
 				const query = 'INSERT INTO comment (content, owner, parent_post) VALUES(?, ?, ?)';
 				const queryParams = [req.body.content, req.user.user_id, req.params.post_id];
 				const [rows, _] = await connection.execute(query, queryParams);
-				res.send({message: 'Comment created.', comment: req.body.content, comment_id: rows.insertId});
+				res.send({message: 'Comment added.', comment: req.body.content, comment_id: rows.insertId});
 			} catch (error) {
 				res.status(401).json(error);
 			}
 		} else {
-			res.status(401).json({message: 'Unautherziez. Only loggedin user can comment.'});
+			res.status(401).json({message: 'Unauthorized. Only logged in user can comment.'});
 		}
 	};
 
 	module.getAllCommentsForPost = async(req, res) => {
 
 		try {
-			const [rows, _] = connection.execute('SELECT * FROM comment WHERE parent_post=?',[req.params.post_id]).then(([rows, _]) => rows);
+			const [rows, _] = await connection.execute('select comment.*, avatar.path as avatar_path, user.fullname from comment left join avatar on avatar.user_id=comment.owner left join user on user.user_id=comment.owner	where comment.parent_post=?',[req.params.post_id]);
 			await connection.execute('UPDATE post SET views=views+1 WHERE post_id=?',[req.params.post_id]);
 			res.send(rows);
 		} catch (error) {
+			console.log(error);
 			res.status(401).json(error);
 		}
 	};
