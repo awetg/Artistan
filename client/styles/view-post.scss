@@ -7,6 +7,23 @@
 		background-color: #212121;
 		display: flex;
 		align-items: center;
+		position: relative;
+
+		.back-home {
+			position: absolute;
+			top: 16px;
+			left: 16px;
+			color: #fff;
+			display: flex;
+			align-items: center;
+
+			&:hover {
+				cursor: pointer;
+				span {
+					text-decoration: underline;
+				}
+			}
+		}
 
 		.image-wrapper {
 			margin: auto;
@@ -131,7 +148,8 @@
 			margin-top: 24px;
 
 			.comments-section {
-				width: 100%;
+				width: 50%;
+				margin: 0 auto;
 
 				& > h3 {
 					margin-top: 0;
@@ -140,6 +158,7 @@
 
 				.comment {
 					width: 100%;
+					position: relative;
 					& + .comment {
 						margin-top: 24px;
 					}
@@ -165,6 +184,30 @@
 						.text {
 							font-size: 14px;
 						}
+					}
+					.time {
+						position: absolute;
+						top: 50%;
+						transform: translateY(-50%);
+						right: 0;
+						font-size: 12px;
+					}
+				}
+
+				textarea.comment-input {
+					width: 70%;
+					margin: 0 auto 32px;
+					display: block;
+					padding: 8px;
+					outline: none;
+					border-radius: 4px;
+					font-family: 'Montserrat', sans-serif;
+					font-size: 16px;
+					background: #d8d8d8;
+					resize: vertical;
+					min-height: 50px;
+					&:hover, &:focus {
+						background: #fff;
 					}
 				}
 			}

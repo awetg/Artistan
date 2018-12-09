@@ -8,11 +8,11 @@ export const checkUserLoggedIn = (isPrivatePage) => {
 	if (userInfo && userInfo.user_id) {
 		makeRequest(API.users.checkAuth.url(userInfo.user_id), API.users.checkAuth.method)
 			.then(response => {
-				if (response.status === 403) {
+				if (response.error) {
 					localStorage.removeItem('artisan_user');
 					localStorage.removeItem('artisan_jwt');
 					window.location.href = '/login';
-				} else if (response[0].user_id && !isPrivatePage) {
+				} else if (response[0].user_id) {
 					const newElements = '<a class="" href="/upload">Share your art</a><a class="" href="/profile">Profile</a><a class="" href="/logout">Log out</a>';
 					const navLinks = document.querySelector('.nav-links');
 					const loginLink = document.querySelector('.login-link');
@@ -52,7 +52,7 @@ export const fetchAvatar = async(user_id) => {
 export const renderPostsFeed = (posts) => {
 	const template = posts.reduce((result, post) => {
 		return result + `<figure class="item" data-id="${ post.post_id }">
-		<img src="${ post.path.replace(/\\/g, '/') }" />
+		<img src="${ normalizeFilePath(post.path) }" />
 		<figcaption class="title">
 			<div>${ post.title }</div>
 			<div><small>by</small> <b>${ post.fullname }</b></div>
@@ -70,4 +70,12 @@ const registerPostClickEvent = () => {
 			window.location.href = `/post/${ itemId }`;
 		});
 	});
+};
+
+export const normalizeFilePath = (path) => {
+	let result = path.replace(/\\/g, '/');
+	if (path[0] !== '/') {
+		result = '/' + result;
+	}
+	return result;
 };

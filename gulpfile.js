@@ -31,7 +31,8 @@ gulp.task('nodemon', ['scripts'], (cb) => {
 		script: 'index.js',
 		ignore: [
 			'gulpfile.js',
-			'node_modules/'
+			'node_modules/',
+			'client/'
 		]
 	})
 		.on('start', () => {
@@ -79,5 +80,5 @@ gulp.task('sass', () =>
 gulp.task('default', ['scripts', 'sass', 'browser-sync'], () => {
 	gulp.watch('client/styles/*.scss', ['sass']);
 	gulp.watch(['client/**/*.html'], reload);
-	gulp.watch(['client/js/**/*.js'], ['scripts']);
+	gulp.watch(['client/js/**/*.js'], ['scripts', reload]);
 });

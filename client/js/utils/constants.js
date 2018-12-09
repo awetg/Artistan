@@ -84,6 +84,18 @@ export const API = {
 		getPostByUser: {
 			url: user_id => `${ BASE_API_URL }/post/${ user_id }/user`,
 			method: 'GET'
+		},
+		getPostById: {
+			url: post_id => `${ BASE_API_URL }/post/${ post_id }`,
+			method: 'GET'
+		},
+		getCommentsByPostId: {
+			url: post_id => `${ BASE_API_URL }/comment/${ post_id }`,
+			method: 'GET'
+		},
+		commentOnPost: {
+			url: post_id => `${ BASE_API_URL }/comment/${ post_id }`,
+			method: 'POST'
 		}
 	}
 };
