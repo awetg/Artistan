@@ -14,7 +14,7 @@ module.exports = (connection) => {
 		if (!req.insertedFile.error) {
 
 			if (!req.user) {
-				res.send({message: 'Unautherized authentication required.'});
+				res.send({message: 'Unauthorized authentication required.'});
 			}
 			try {
 				/* Categories are provide as array since a post can belong in multiple categories */
@@ -73,7 +73,7 @@ module.exports = (connection) => {
 				(error.errno === 1062) ? res.send({error: {message: 'Post alread liked.'}}) : res.status(401).json(error);
 			}
 		} else {
-			res.send({message: 'Unautherized.'});
+			res.send({message: 'Unauthorized.'});
 		}
 	};
 
@@ -106,7 +106,7 @@ module.exports = (connection) => {
 				res.send(error);
 			}
 		} else {
-			res.send({message: 'Unautherized'});
+			res.send({message: 'Unauthorized'});
 		}
 	};
 
@@ -123,7 +123,7 @@ module.exports = (connection) => {
 				(error.errno === 1062) ? res.send({error: {message: 'Post alread flagged.'}}) : res.status(401).json(error);
 			}
 		} else {
-			res.send({message: 'Unautherized.'});
+			res.send({message: 'Unauthorized.'});
 		}
 	};
 
@@ -139,7 +139,7 @@ module.exports = (connection) => {
 				res.send(error);
 			}
 		} else {
-			res.send({message: 'Unautherized'});
+			res.send({message: 'Unauthorized'});
 		}
 	};
 
@@ -173,8 +173,8 @@ module.exports = (connection) => {
 				const user = await jwt.verifyToken(token).catch(error => {});	//execution should continue since authentication not required here
 				if (user) {
 					userLikedOrFlaggedPost = `
-					IF((SELECT 1 FROM likes_post WHERE user_id=? AND post_id=?), 'TRUE', 'FALSE') as liked,
-					IF((SELECT 1 FROM flag_post WHERE user_id=? AND post_id=?), 'TRUE', 'FALSE') as flagged,`;
+					IF((SELECT 1 FROM likes_post WHERE user_id=? AND post_id=?), true, false) as liked,
+					IF((SELECT 1 FROM flag_post WHERE user_id=? AND post_id=?), true, false) as flagged,`;
 					queryParams.push(user.user_id, req.params.post_id, user.user_id, req.params.post_id);
 				}
 
@@ -248,7 +248,7 @@ module.exports = (connection) => {
 				res.status(401).json(error);
 			}
 		} else {
-			res.send({message: 'Unautherized authentication required.'});
+			res.send({message: 'Unauthorized authentication required.'});
 		}
 	};
 

@@ -85,6 +85,18 @@ export const API = {
 			url: post_id => `${ BASE_API_URL }/post/${ post_id }/like`,
 			method: 'POST'
 		},
+		unlikePost: {
+			url: post_id => `${ BASE_API_URL }/post/${ post_id }/like`,
+			method: 'DELETE'
+		},
+		flagPost: {
+			url: post_id => `${ BASE_API_URL }/post/${ post_id }/flag`,
+			method: 'POST'
+		},
+		unflagPost: {
+			url: post_id => `${ BASE_API_URL }/post/${ post_id }/flag`,
+			method: 'DELETE'
+		},
 		getPostByUser: {
 			url: user_id => `${ BASE_API_URL }/post/${ user_id }/user`,
 			method: 'GET'
