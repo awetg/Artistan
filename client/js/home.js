@@ -5,11 +5,12 @@ import { makeRequest } from './utils/network';
 import { checkUserLoggedIn, calculateGalleryCols, initApp, renderPostsFeed } from './utils/shared-functions';
 
 document.addEventListener('DOMContentLoaded', () => {
+	let posts;
 	const fetchPosts = () => {
 		makeRequest(API.post.getAllPosts.url, API.post.getAllPosts.method)
 			.then(resData => {
-				renderPostsFeed(resData);
-				calculateGalleryCols();
+				posts = resData;
+				renderPostsFeed(posts);
 			})
 			.catch((error) => {
 				console.log(error);
@@ -21,6 +22,6 @@ document.addEventListener('DOMContentLoaded', () => {
 	fetchPosts();
 
 	window.addEventListener('resize', () => {
-		calculateGalleryCols();
+		renderPostsFeed(posts);
 	});
 });

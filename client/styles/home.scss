@@ -1,6 +1,7 @@
 .gallery {
-  column-gap: 20px;
-  column-fill: balance;
+	width: 100%;
+  // column-gap: 20px;
+  // column-fill: balance;
   position: relative;
   > * {
     display: inline-block;
@@ -18,7 +19,7 @@
 	}
 	
 	figure.item {
-		position: relative;
+		position: absolute;
 		color: #fff;
 		background-color: rgba(#000, 0.8);
 		background-image: linear-gradient(rgba(#fff, 0.1), rgba(#000, 1));
@@ -32,7 +33,7 @@
 			height: 50%;
 			z-index: 1;
 			opacity: 0;
-			padding: 20px 30px;
+			padding: 20px;
 			box-sizing: border-box;
 			transition: all 0.2s linear;
 			display: flex;

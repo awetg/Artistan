@@ -1,5 +1,7 @@
 'use strict';
 
+import justifiedLayout from 'justified-layout';
+
 import { makeRequest } from './network';
 import { API } from './constants';
 
@@ -50,8 +52,14 @@ export const fetchAvatar = async(user_id) => {
 };
 
 export const renderPostsFeed = (posts) => {
-	const template = posts.reduce((result, post) => {
-		return result + `<figure class="item" data-id="${ post.post_id }">
+	const ratios = posts.map(post => parseFloat(post.image_ratio));
+	const layout = justifiedLayout(ratios, {
+		containerWidth: document.querySelector('.gallery').clientWidth,
+		boxSpacing: 10
+	});
+	const template = posts.reduce((result, post, index) => {
+		const box = layout.boxes[index];
+		return result + `<figure class="item" data-id="${ post.post_id }" style="top: ${ box.top }px; width: ${ box.width }px; height: ${ box.height }px; left: ${ box.left }px;">
 		<img src="${ normalizeFilePath(post.path) }" />
 		<figcaption class="title">
 			<div>${ post.title }</div>

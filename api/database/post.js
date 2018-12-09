@@ -65,7 +65,7 @@ module.exports = (connection) => {
 	module.getAllPosts = async(req, res) => {
 		try {
 			//get all posts
-			const query = `SELECT post.*, username, fullname, media.path, media.mimetype, media.time_created AS post_time, avatar.path AS avatar_path,
+			const query = `SELECT post.*, username, fullname, media.path, media.mimetype, media.time_created AS post_time, media.image_ratio, avatar.path AS avatar_path,
 				(SELECT COUNT(1) FROM likes_post WHERE likes_post.post_id=post.post_id) AS likes,
 				(SELECT COUNT(1) FROM comment WHERE parent_post=post.post_id) AS comments,
 				(SELECT GROUP_CONCAT(name) FROM post_category JOIN category ON post_category.category_id=category.category_id WHERE post_category.post_id=post.post_id) AS post_category
