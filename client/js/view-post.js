@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
 				document.querySelector('.light-box .image-wrapper img').setAttribute('src', normalizeFilePath(resData.path));
 				document.querySelector('.information .title').innerText = resData.title;
 				if (resData.avatar_path) {
-					document.querySelector('.information .user-details .avatar').style.backgroundImage = `url(${ resData.avatar_path })`;
+					document.querySelector('.information .user-details .avatar').style.backgroundImage = `url(${ normalizeFilePath(resData.avatar_path) })`;
 				}
 				document.querySelector('.information .user-details .name').innerText = resData.fullname;
 				document.querySelector('.post-details .stats .values td:nth-child(1)').innerText = moment(resData.post_time).fromNow();
@@ -40,7 +40,7 @@ document.addEventListener('DOMContentLoaded', () => {
 					}
 					content = resData.reduce((result, item) => {
 						return result + `<div class="comment">
-						<div class="avatar"></div>
+						<div class="avatar" ${ item.avatar_path ? 'style="background-image: url(' + normalizeFilePath(item.avatar_path) + ')"' : '' }></div>
 						<div class="right-side">
 							<div class="name"><a href="">${ item.fullname }</a></div>
 							<div class="text">${ item.content }</div>

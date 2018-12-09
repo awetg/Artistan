@@ -117,6 +117,10 @@
 					display: inline-block;
 					vertical-align: middle;
 					margin-right: 8px;
+					background-image: url('/img/avatar_placeholder.png');
+					background-size: cover;
+					background-repeat: no-repeat;
+					background-position: center;
 				}
 
 				.name {
@@ -154,7 +158,7 @@
 
 						&.values {
 							td {
-								font-size: 18px;
+								font-size: 16px;
 								padding-top: 18px;
 							}
 						}
@@ -169,7 +173,7 @@
 						font-family: 'Roboto';
 						font-size: 14px;
 						& + .tags-container {
-							margin-top: 16px;
+							margin-top: 10px;
 						}
 					}
 				}
@@ -202,6 +206,10 @@
 						display: inline-block;
 						vertical-align: top;
 						margin-right: 16px;
+						background-image: url('/img/avatar_placeholder.png');
+						background-size: cover;
+						background-repeat: no-repeat;
+						background-position: center;
 					}
 					.right-side {
 						display: inline-block;
@@ -227,7 +235,7 @@
 				}
 
 				textarea.comment-input {
-					width: 70%;
+					width: 60%;
 					margin: 0 auto 32px;
 					display: block;
 					padding: 8px;
@@ -268,6 +276,16 @@
 		.information {
 			.upper {
 				.user-details, .post-details {
+					width: 100%;
+					table.stats {
+						tr.values td {
+							font-size: 14px;
+						}
+					}
+				}
+			}
+			.bottom {
+				.comments-section {
 					width: 100%;
 				}
 			}
