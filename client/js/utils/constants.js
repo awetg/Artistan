@@ -11,6 +11,10 @@ export const API = {
 			url: BASE_API_URL + '/auth/login',
 			method: 'POST'
 		},
+		logout: {
+			url: BASE_API_URL + '/auth/logout',
+			method: 'POST'
+		},
 		checkAuth: {
 			url: user_id => BASE_API_URL + `/auth/${user_id}`,
 			method: 'GET'

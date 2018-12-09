@@ -36,7 +36,7 @@ module.exports = (connection) => {
 				(SELECT COUNT(1) FROM likes_post WHERE post_id IN (SELECT post_id FROM post WHERE owner=user.user_id)) AS likes
 				FROM user LEFT JOIN avatar ON user.user_id=avatar.user_id WHERE user.user_id=?`;
 			const [rows, _] = await connection.execute(query, [req.params.user_id]);
-			res.send(rows);
+			res.send(rows[0]);
 		} catch (error) {
 			res.status(401).json(error);
 		}

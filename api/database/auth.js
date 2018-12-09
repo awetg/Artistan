@@ -92,7 +92,7 @@ module.exports = (connection) => {
 				res.send(error);
 			}
 		} else {
-			res.status(401).json('Unauterized.');
+			res.status(401).json('Unauthorized.');
 		}
 	};
 
@@ -116,7 +116,7 @@ module.exports = (connection) => {
 					next();
 				}
 			} catch (error) {
-				(error.name === 'TokenExpiredError') ? res.send({error, detailts: 'Token expired. Please login again.'}) : res.status(401).json('Unauterized.');
+				(error.name === 'TokenExpiredError') ? res.send({error, detailts: 'Token expired. Please login again.'}) : res.status(401).json('Unauthorized.');
 			}
 		} else {
 			res.status(401).json('Unauthorized');
@@ -134,7 +134,7 @@ module.exports = (connection) => {
 			try {
 				const user = await jwt.verifyToken(token);
 				if (await blackListStorage.get(user.jti)) {
-					return res.status(401).json('Unauterized.');
+					return res.status(401).json('Unauthorized.');
 				} else {
 					const [userData, _] = await connection.query('SELECT * FROM user WHERE user_id=?', [user.user_id]);
 					if (userData[0] && userData[0].admin === 1) {
@@ -142,14 +142,14 @@ module.exports = (connection) => {
 						req.user = user;
 						return next();
 					} else {
-						return res.status(401).json('Unauterized');
+						return res.status(401).json('Unauthorized');
 					}
 				}
 			} catch (error) {
-				return (error.name === 'TokenExpiredError') ? res.send({error, detailts: 'Token expired. Please login again.'}) : res.status(401).json('Unauterized.');
+				return (error.name === 'TokenExpiredError') ? res.send({error, detailts: 'Token expired. Please login again.'}) : res.status(401).json('Unauthorized.');
 			}
 		} else {
-			return res.status(401).json('Unauterized.');
+			return res.status(401).json('Unauthorized.');
 		}
 	};
 
@@ -225,7 +225,7 @@ module.exports = (connection) => {
 				(error.errno === 1062) ? res.send({error: {message: 'Username not available.'}}) : res.status(401).json(error);
 			}
 		} else {
-			res.status(401).json('Unauterized.');
+			res.status(401).json('Unauthorized.');
 		}
 	};
 
