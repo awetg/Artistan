@@ -13,12 +13,15 @@ router.get('/', db.Auth.authenticateAdmin, db.Post.getFlaggedPosts);
 /* register admin account with admin authentication at POST: base_utl/api/admin/register*/
 router.post('/register', db.Auth.authenticateAdmin, upload.single(), db.Auth.registerAdmin);
 
-/* delete post with admin authenticaion at GET: base_url/api/admin/post/:post_id
+/* delete post with admin authenticaion at DELETE: base_url/api/admin/post/:post_id
 * when post is deleted it is cascaded to media table and other tables
 */
 router.delete('/post/:post_id', db.Auth.authenticateAdmin, db.Post.delete);
 
-/* delete comment with admin authenticaion at GET: base_url/api/admin/comment/comment_id */
+/* delete all flags of a post with admin authentication at DELETE: base_url/api/admin/post/unflag/:post_id */
+router.delete('/post/unflag/:post_id', db.Auth.authenticateAdmin, db.Post.deleteAllFlag);
+
+/* delete comment with admin authenticaion at DELETE: base_url/api/admin/comment/comment_id */
 router.delete('/comment/:comment_id', db.Auth.authenticateAdmin, db.Comment.deleteComment);
 
 module.exports = router;

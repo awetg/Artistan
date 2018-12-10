@@ -133,13 +133,26 @@ module.exports = (connection) => {
 
 			try {
 
-				const [rows, _] = await connection.query('DELETE FROM likes_post WHERE post_id=? and user_id=?', [req.params.post_id, req.user.user_id]);
+				const [rows, _] = await connection.query('DELETE FROM flag_post WHERE post_id=? and user_id=?', [req.params.post_id, req.user.user_id]);
 				rows.affectedRows ? res.send({message: 'Posted unflaged.'}) : res.send({message: 'Post does not exist or you do not have permission to do the operation.'});
 			} catch (error) {
 				res.send(error);
 			}
 		} else {
 			res.send({message: 'Unauthorized'});
+		}
+	};
+
+	/* This function is used to delete all flags of post by admin account for content moderation */
+	module.deleteAllFlag = async(req, res) => {
+		if (req.user.admin_privileges) {
+
+			try {
+				const [rows, _] = await connection.query('DELETE FROM flag_post WHERE post_id=?', [req.params.post_id]);
+				rows.affectedRows ? res.send({message: 'All post flags deleted.'}) : res.send({message: 'Post does not exist.'});
+			} catch (error) {
+				res.status(401).json(error);
+			}
 		}
 	};
 

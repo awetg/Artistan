@@ -122,6 +122,10 @@ export const API = {
 		deletePost: {
 			url: post_id => `${BASE_API_URL}/admin/post/${ post_id }`,
 			method: 'DELETE'
+		},
+		delteAllFags: {
+			url: post_id => `${BASE_API_URL}/admin/post/unflag/${post_id}`,
+			method: 'DELETE'
 		}
 	}
 };

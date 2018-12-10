@@ -1,6 +1,6 @@
 .container_flagged {
   width: 80%;
-  margin: 150px auto;
+  margin: 80px auto;
 }
 .gallery_flagged {
 	  display: flex;
@@ -26,6 +26,7 @@
 	  		height: 197px;
 	  		background: #ffffff;
 	  		text-align: center;
+	  		border-top: 1px solid #b9bfc9;
 
 	  		& .details_box {
 	  			display: inline-block;

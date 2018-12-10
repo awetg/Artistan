@@ -11,25 +11,29 @@ document.addEventListener('DOMContentLoaded', () => {
 
 	const deletePost = postId => {
 		makeRequest(API.admin.deletePost.url(postId), API.admin.deletePost.method)
-			.then(resData => {
-				console.log(resData);
-			});
+			.then(resData => console.log(resData))
+			.catch(error => console.log(error));
+	};
+
+	const delteAllFags = postId => {
+		makeRequest(API.admin.delteAllFags.url(postId), API.admin.delteAllFags.method)
+			.then(resData => console.log(resData))
+			.catch(error => console.log(error));
 	};
 
 	const registerListner = () => {
 		const x = document.querySelectorAll('.gallery_flagged .gallery_item');
-		console.log(x);
 		x.forEach(item => {
-			console.log('listenert for each');
 			item.addEventListener('click', evt => {
 				evt.stopPropagation();
 				const btnNmae = evt.target.innerText;
 				const postId = evt.target.getAttribute('data-id');
 				if (btnNmae === 'delete') {
-					deletePost(postId);
 					evt.target.closest('.gallery_item').remove();
+					deletePost(postId);
 				} else if (btnNmae === 'unflag') {
-					console.log('unflag');
+					evt.target.closest('.gallery_item').remove();
+					delteAllFags(postId);
 				}
 			});
 		});
@@ -67,12 +71,14 @@ document.addEventListener('DOMContentLoaded', () => {
 	const fetchPosts = () => {
 		makeRequest(API.admin.getFlaggedPosts.url, API.admin.getFlaggedPosts.method)
 			.then(posts => {
-				console.log(posts);
-				renderFlaggedPost(posts);
+				if (posts.length > 0) {
+					renderFlaggedPost(posts);
+				} else {
+					galleryFlagged.style.color = 'green';
+					galleryFlagged.innerText = 'There are no flagged post.';
+				}
 			})
-			.catch((error) => {
-				console.log(error);
-			});
+			.catch((error) => console.log(error));
 	};
 
 	initApp();
