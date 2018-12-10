@@ -98,5 +98,38 @@
 				}
 			}
 		}
+		@media screen and (max-width: 580px) {
+			padding: 16px 0;
+			form {
+				display: flex;
+				flex-direction: column;
+				justify-content: flex-start;
+				.upload, .info {
+					position: relative;
+					height: inherit;
+				}
+				.upload {
+					& + .info {
+						display: none;
+						left: 5%;
+						top: unset;
+						bottom: unset;
+						transform: none;
+						label, input {
+							font-size: 14px;
+						}
+					}
+					&.uploaded + .info {
+						display: block;
+						top: unset;
+						bottom: unset;
+						transform: none;
+					}
+				}
+				button {
+					font-size: 14px;
+				}
+			}
+		}
 	}
 }

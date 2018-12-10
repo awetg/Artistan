@@ -75,13 +75,19 @@ export const renderPostsFeed = (posts) => {
 	});
 	const template = posts.reduce((result, post, index) => {
 		const box = layout.boxes[index];
-		return result + `<figure class="item" data-id="${ post.post_id }" style="top: ${ box.top }px; width: ${ box.width }px; height: ${ box.height }px; left: ${ box.left }px;">
-		<img src="${ normalizeFilePath(post.path) }" />
-		<figcaption class="title">
-			<div>${ post.title }</div>
-			<div><small>by</small> <b>${ post.fullname }</b></div>
-		</figcaption>
-	</figure>`;
+		return result + `
+			<figure class="item" data-id="${ post.post_id }" style="top: ${ box.top }px; width: ${ box.width }px; height: ${ box.height }px; left: ${ box.left }px;">
+				<img src="${ normalizeFilePath(post.path) }" />
+				<div class="stats">
+					<span>${ post.views } </span> <i class="material-icons">visibility</i>
+					<span>${ post.likes } </span> <i class="material-icons">favorite</i>
+				</div>
+				<figcaption class="title">
+					<div>${ post.title }</div>
+					<div><small>by</small> <b>${ post.fullname }</b></div>
+				</figcaption>
+			</figure>
+		`;
 	}, '');
 	document.querySelector('.gallery').insertAdjacentHTML('beforeend', template);
 	registerPostClickEvent();

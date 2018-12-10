@@ -11,7 +11,8 @@ document.addEventListener('DOMContentLoaded', () => {
 	const fileInput = document.querySelector('#file-input');
 	const changeAvatarButton = document.querySelector('button.change-avatar');
 	const userId = JSON.parse(localStorage.getItem('artisan_user')).user_id;
-	const collectionID = '540518';
+	const unsplashCollectionID = '540518';
+	let myPosts;
 
 	const fetchMyInfo = () => {
 		makeRequest(API.users.getUserById.url(userId), API.users.getUserById.method)
@@ -30,7 +31,8 @@ document.addEventListener('DOMContentLoaded', () => {
 	const fetchMyPosts = () => {
 		makeRequest(API.post.getPostByUser.url(userId), API.post.getPostByUser.method)
 			.then(resData => {
-				renderPostsFeed(resData);
+				myPosts = resData;
+				renderPostsFeed(myPosts);
 				calculateGalleryCols();
 			})
 			.catch((error) => {
@@ -67,7 +69,7 @@ document.addEventListener('DOMContentLoaded', () => {
 		});
 
 	// get random photo as cover photo
-	fetch(`https://source.unsplash.com/collection/${collectionID}/1920x1080/`)
+	fetch(`https://source.unsplash.com/collection/${unsplashCollectionID}/1920x1080/`)
 		.then(response => {
 			document.querySelector('#profile-page .my-info .cover-photo').style.backgroundImage = `url(${ response.url })`;
 		});
@@ -81,4 +83,8 @@ document.addEventListener('DOMContentLoaded', () => {
 	});
 
 	fileInput.addEventListener('change', uploadAvatar);
+
+	window.addEventListener('resize', () => {
+		renderPostsFeed(myPosts);
+	});
 });

@@ -69,6 +69,16 @@
 				&:first-child {
 					margin-right: 32px;
 				}
+				&.like.liked {
+					i {
+						color: #d32f2f;
+					}
+				}
+				&.flag.flagged {
+					i {
+						color: #9c27b0;
+					}
+				}
 				&:hover {
 					cursor: pointer;
 					&.like {
@@ -289,6 +299,12 @@
 					width: 100%;
 				}
 			}
+		}
+	}
+
+	@media screen and (max-width: 580px) {
+		.light-box {
+			height: 50vh;
 		}
 	}
 }
