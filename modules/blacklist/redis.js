@@ -1,3 +1,5 @@
+'use strict';
+
 const redis = require('redis');
 
 module.exports = (opts) => {

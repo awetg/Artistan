@@ -1,6 +1,8 @@
 /* This routes handle sensitive account related data and authentication
 *All routes execpt creating account need authentication to access
 */
+'use strict';
+
 const router = require('express').Router();
 const upload = require('../../modules/multer');
 const db = require('../database/db');

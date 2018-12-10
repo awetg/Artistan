@@ -5,6 +5,7 @@
 * Since only post routes are used in the application media are not delted after post deletion (skipped to avoid latency)
 * but the deletion from disk is implemeted here for presentation and if media route is used file is also deleted from disk
 */
+'use strict';
 
 const fs = require('fs');
 const imageSize = require('image-size');

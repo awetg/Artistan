@@ -1,6 +1,7 @@
 /* This is controller module for authentication related operations
 * This module performs CRUD operation to database on user table only
 */
+'use strict';
 
 const bcrypt = require('bcrypt');
 

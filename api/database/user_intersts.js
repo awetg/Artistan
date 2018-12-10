@@ -1,6 +1,7 @@
 /* This is controller module for user interset data
 * This module performs CRUDE operation to database on user_intersets table only
 */
+'use strict';
 
 module.exports = (connection) => {
 

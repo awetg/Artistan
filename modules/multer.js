@@ -1,3 +1,5 @@
+'use strict';
+
 //using multer middleware for image upload
 const multer = require('multer');
 
