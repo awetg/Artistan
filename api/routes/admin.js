@@ -3,6 +3,8 @@
 * but admin accounts can be registered using another admin account
 * admin account can login using reqular login routes and access admin routes by manual writing the url
 */
+'use strict';
+
 const router = require('express').Router();
 const upload = require('../../modules/multer');
 const db = require('../database/db');

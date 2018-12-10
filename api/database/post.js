@@ -1,6 +1,7 @@
 /* This is controller module for post related data
 * This module performs CRUDE operation to database on different tables
 */
+'use strict';
 
 const jwt = require('../../modules/jwt');
 

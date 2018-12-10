@@ -2,6 +2,8 @@
 * All routes need authentication except getting comments for a post, e.g add, update and delete comment
 * This route is related to post route, might be moved to post route in the future
 */
+'use strict';
+
 const router = require('express').Router();
 const upload = require('../../modules/multer');
 const db = require('../database/db');

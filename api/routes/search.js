@@ -1,6 +1,8 @@
 /* This route handle search functionality for entire api
 * No authentication is needed to search content
 */
+'use strict';
+
 const router = require('express').Router();
 const db = require('../database/db');
 

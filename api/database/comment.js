@@ -1,6 +1,7 @@
 /* This is controller module for comment data
 * This module performs CRUDE operation to database on comment table only
 */
+'use strict';
 
 module.exports = (connection) => {
 

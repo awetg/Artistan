@@ -1,6 +1,7 @@
 /* This is controller module for followers/following data
 * This module performs CRUDE operation to database on follower table only
 */
+'use strict';
 
 module.exports = (connection) => {
 

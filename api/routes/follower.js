@@ -2,6 +2,7 @@
 * No authentication need to get users followers or users followed by a user
 * Authentication is needed to follow/unfollow user
 */
+'use strict';
 
 const router = require('express').Router();
 const db = require('../database/db');

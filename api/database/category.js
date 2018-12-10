@@ -1,6 +1,7 @@
 /* This is controller module for category data
 * This module performs CRUDE operation to database on category table only
 */
+'use strict';
 
 module.exports = (connection) => {
 

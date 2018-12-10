@@ -2,6 +2,7 @@
 * All routes don't need authentication execpt POST, PATCH AND DELETE request
 * Rotues such as folloer, user_interests are related with user profile but implemented separeately for development ease
 */
+'use strict';
 
 const router = require('express').Router();
 const upload = require('../../modules/multer');

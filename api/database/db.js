@@ -1,6 +1,7 @@
 /* This module act as a single entry to controller modules and
 * provide a connection pool as single variable to all modules making CRUD operation to database
 */
+'use strict';
 
 //using mysql2 used instead of mysql module
 const mysql = require('mysql2/promise');

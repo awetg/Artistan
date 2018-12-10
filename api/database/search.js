@@ -1,6 +1,7 @@
 /* This is controller module for searching content
 * This module performs select operation to database on different tables
 */
+'use strict';
 
 module.exports = (connection) => {
 

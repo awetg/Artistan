@@ -1,6 +1,7 @@
 /* This is controller module for user profile data
 * This module performs CRUDE operation to database on different tables to get user info or updated user info
 */
+'use strict';
 
 module.exports = (connection) => {
 

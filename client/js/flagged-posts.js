@@ -22,17 +22,17 @@ document.addEventListener('DOMContentLoaded', () => {
 	};
 
 	const registerListner = () => {
-		const x = document.querySelectorAll('.gallery_flagged .gallery_item');
-		x.forEach(item => {
-			item.addEventListener('click', evt => {
-				evt.stopPropagation();
-				const btnNmae = evt.target.innerText;
-				const postId = evt.target.getAttribute('data-id');
-				if (btnNmae === 'delete') {
-					evt.target.closest('.gallery_item').remove();
+		const galleryItems = document.querySelectorAll('.gallery_flagged .gallery_item');
+		galleryItems.forEach(item => {
+			item.addEventListener('click', event => {
+				event.stopPropagation();
+				const butttonName = event.target.innerText;
+				const postId = event.target.getAttribute('data-id');
+				if (butttonName === 'delete') {
+					event.target.closest('.gallery_item').remove();
 					deletePost(postId);
-				} else if (btnNmae === 'unflag') {
-					evt.target.closest('.gallery_item').remove();
+				} else if (butttonName === 'unflag') {
+					event.target.closest('.gallery_item').remove();
 					delteAllFags(postId);
 				}
 			});
@@ -64,7 +64,7 @@ document.addEventListener('DOMContentLoaded', () => {
         		</div>
         	</div>`;
 		});
-		galleryFlagged.innerHTML = template;
+		galleryFlagged.innerHTML = template.join('');
 		registerListner();
 	};
 
