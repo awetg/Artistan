@@ -101,5 +101,15 @@ export const API = {
 			url: post_id => `${ BASE_API_URL }/comment/${ post_id }`,
 			method: 'POST'
 		}
+	},
+	admin: {
+		getFlaggedPosts: {
+			url: BASE_API_URL + '/admin',
+			method: 'GET'
+		},
+		deletePost: {
+			url: post_id => `${BASE_API_URL}/admin/post/${ post_id }`,
+			method: 'DELETE'
+		}
 	}
 };

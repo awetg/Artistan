@@ -220,7 +220,7 @@ module.exports = (connection) => {
 			const [postIds, _] = await connection.execute('SELECT post_id FROM post_category WHERE category_id=?', [req.params.category_id]);
 
 			if (postIds.length > 0) {
-				const query = `SELECT post.*, username, fullname, media.path, media.mimetype, media.time_created AS post_time, avatar.path AS avatar_path,
+				const query = `SELECT post.*, username, fullname, media.path, media.mimetype, media.time_created AS post_time, media.image_ratio, avatar.path AS avatar_path,
 				(SELECT COUNT(1) FROM likes_post WHERE likes_post.post_id=post.post_id) AS likes
 				(SELECT COUNT(1) FROM comment WHERE parent_post=post.post_id) AS comments,
 				(SELECT GROUP_CONCAT(name) FROM post_category JOIN category ON post_category.category_id=category.category_id WHERE post_category.post_id=post.post_id) AS post_category
@@ -256,12 +256,13 @@ module.exports = (connection) => {
 
 		if (req.user.admin_privileges) {
 			try {
-				const query = `SELECT post.*, username, fullname, media.path, media.mimetype, media.time_created AS post_time, avatar.path AS avatar_path,
+				const query = `SELECT post.*, username, fullname, media.path, media.mimetype, media.time_created AS post_time,  media.image_ratio, avatar.path AS avatar_path,
 					(SELECT COUNT(1) FROM likes_post WHERE likes_post.post_id=post.post_id) AS likes,
 					(SELECT COUNT(1) FROM comment WHERE parent_post=post.post_id) AS comments,
+					(SELECT COUNT(1) FROM flag_post WHERE flag_post.post_id=post.post_id) AS flags,
 					(SELECT GROUP_CONCAT(name) FROM post_category JOIN category ON post_category.category_id=category.category_id WHERE post_category.post_id=post.post_id) AS post_category
 					FROM post INNER JOIN media ON media.media_id=post.media INNER JOIN user ON user.user_id=post.owner 
-					LEFT JOIN avatar ON user.user_id=avatar.user_id WHERE flag > 0 ORDER BY flag DESC`;
+					LEFT JOIN avatar ON user.user_id=avatar.user_id WHERE post_id IN (SELECT post_id FROM flag_post)`;
 				const [rows, _] = await connection.execute(query);
 				res.send(rows);
 			} catch (error) {

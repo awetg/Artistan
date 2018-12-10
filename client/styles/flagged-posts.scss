@@ -1,0 +1,81 @@
+.container_flagged {
+  width: 80%;
+  margin: 150px auto;
+}
+.gallery_flagged {
+	  display: flex;
+  	flex-wrap: wrap;
+
+  	& .gallery_item {
+  		height: 500px;
+  		flex-grow: 1;
+  		margin: 5px 5px 0 5px;
+  		position: relative;
+  		border: 1px solid #b9bfc9;
+
+  		& img {
+  			height: 300px;
+  			max-width: 100%;
+  			min-width: 100%;
+  			object-fit: cover;
+  			vertical-align: bottom;
+  		}
+
+	  	& .item_details {
+	  		max-width: 100%;
+	  		height: 197px;
+	  		background: #ffffff;
+	  		text-align: center;
+
+	  		& .details_box {
+	  			display: inline-block;
+	  			width:20%;
+	  			height: 50%;
+	  			margin-top: 15px;
+	  			border:1px solid rgba(0,0,0,0.20);
+	  		}
+
+	  		& .details_btn {
+	  			  display: inline-block;
+	  			  text-align: center;
+	  			  text-decoration: none;
+	  			  margin-top: 15px;
+	  			  border: solid 1px transparent;
+	  			  border-radius: 4px;
+	  			  padding: 0.5em 1em;
+	  			  color: #ffffff;
+
+	  			  &:focus, &:hover {
+	  			  	color: #000000;
+	  			  	border-color: currentColor;
+	  			  	background-color: white;
+	  			  }
+	  		}
+
+	  		& .details_keys {
+	  			font-family: 'Roboto';
+	  			font-weight: bold;
+	  			font-size: 14px;
+	  		}
+	  	}
+  	}
+
+  	&::after {
+  		content: '';
+  		flex-grow: 999999;
+  	}
+ }
+
+ .btn--danger {
+  background-color: #ff0000;
+}
+.btn--primary {
+  background-color: #1061EE;
+}
+
+ @media screen and (max-width: 767px) {
+
+  .gallery_flagged {
+    flex-direction: column;
+  }
+}

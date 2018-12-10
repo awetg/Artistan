@@ -28,6 +28,8 @@ export const checkUserLoggedIn = (isPrivatePage) => {
 						makeRequest(API.users.logout.url, API.users.logout.method, {})
 							.then(resData => {
 								if (resData && resData.message === 'Logged out successfully.') {
+									localStorage.removeItem('artisan_user');
+									localStorage.removeItem('artisan_jwt');
 									window.location.href = '/login';
 								}
 							});

@@ -59,6 +59,10 @@ app.get('/profile', (_, res) => {
 	res.sendFile('profile.html', clientRoot);
 });
 
+app.get('/flagged-posts', (_, res) => {
+	res.sendFile('flagged-posts.html', clientRoot);
+});
+
 //use this for any other undefined routes
 app.use((req, res, next) => {
 	const error = new Error('Not found');
