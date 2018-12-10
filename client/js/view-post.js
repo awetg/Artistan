@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
 				}
 				document.querySelector('.information .user-details .name').innerText = resData.fullname;
 				document.querySelector('.post-details .stats .values td:nth-child(1)').innerText = moment(resData.post_time).fromNow();
-				document.querySelector('.post-details .stats .values td:nth-child(2)').innerText = resData.views ? resData.views : 1;
+				document.querySelector('.post-details .stats .values td:nth-child(2)').innerText = resData.views;
 				document.querySelector('.post-details .stats .values td:nth-child(3)').innerText = resData.likes;
 				const categoriesHtml = resData.post_category.split(',').reduce((result, item) => {
 					return result + `<span class="tag">${ item }</span>`;
@@ -69,10 +69,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
 	const addComment = () => {
 		makeRequest(API.post.commentOnPost.url(postId), API.post.commentOnPost.method, { content: commentInput.value })
-			.then(resData => {
+			.then(async(resData) => {
 				if (resData && resData.comment_id) {
 					commentInput.value = '';
-					getComments();
+					await getComments();
 				}
 			});
 	};

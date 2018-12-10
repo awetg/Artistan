@@ -47,16 +47,24 @@ body {
 		}
 
 		@media screen and (max-width: 580px) {
-			img {
-				width: 80px;
-				transform: translateY(50%);
-    		display: inline-block;
+			height: 56px;
+			& + .app {
+				margin-top: 56px;
+			}
+			& > a {
+				height: 100%;
+				width: 104px;
+				display: flex;
+				align-items: center;
+				img {
+					width: 75px;
+				}
 			}
 
 			.nav-links {
 				a {
-					font-size: 14px;
-					margin-left: 16px;
+					font-size: 13px;
+					margin-left: 12px;
 				}
 			}
 		}
