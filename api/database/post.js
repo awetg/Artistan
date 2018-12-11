@@ -71,7 +71,7 @@ module.exports = (connection) => {
 				const [rows, _] = await connection.execute(query,[req.user.user_id, req.params.post_id]);
 				rows.affectedRows ? res.send({message: 'Posted liked'}) : res.send({message: 'Post does not exist.'});
 			} catch (error) {
-				(error.errno === 1062) ? res.send({error: {message: 'Post alread liked.'}}) : res.status(401).json(error);
+				(error.errno === 1062) ? res.send({error: {message: 'Post already liked.'}}) : res.status(401).json(error);
 			}
 		} else {
 			res.send({message: 'Unauthorized.'});

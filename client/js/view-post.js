@@ -83,14 +83,15 @@ document.addEventListener('DOMContentLoaded', () => {
 			makeRequest(API.post.likePost.url(postId), API.post.likePost.method)
 				.then(resData => {
 					if (!resData.message || resData.message !== 'Posted liked') {
-						likeButton.className = likeButton.classList.remove('liked');
+						likeButton.classList.remove('liked');
 					} else {
 						likeButton.setAttribute('title', 'You liked this post.');
+						postDetails.liked = 1;
 					}
 				})
 				.catch(error => {
 					console.log(error);
-					likeButton.className = likeButton.classList.remove('liked');
+					likeButton.classList.remove('liked');
 				});
 		} else { // user already liked this post, now he unlikes it
 			likeButton.className = likeButton.classList.remove('liked');
@@ -98,6 +99,8 @@ document.addEventListener('DOMContentLoaded', () => {
 				.then(resData => {
 					if (!resData.message || resData.message !== 'Posted unliked.') {
 						likeButton.classList.add('liked');
+					} else {
+						postDetails.liked = 0;
 					}
 				})
 				.catch(error => {
@@ -112,7 +115,7 @@ document.addEventListener('DOMContentLoaded', () => {
 			flagButton.classList.add('flagged');
 			makeRequest(API.post.flagPost.url(postId), API.post.flagPost.method)
 				.then(resData => {
-					if (!resData.message || resData.message !== 'Posted flagged') {
+					if (!resData.message || resData.message !== 'Posted flagged' !== resData.message !== 'Post alread flagged.') {
 						flagButton.className = flagButton.classList.remove('flagged');
 					} else {
 						flagButton.setAttribute('title', 'You already flagged this post.');
