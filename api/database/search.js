@@ -43,7 +43,10 @@ module.exports = (connection) => {
 			const queryParams = '%' + req.params.search_query + '%';
 			const posts = connection.execute(query, [queryParams]).then(([rows, fileds]) => rows);
 			const users = connection.execute('SELECT user_id, fullname, username, time_created FROM user WHERE username LIKE ? OR fullname LIKE ?', [queryParams, queryParams]).then(([rows, fileds]) => rows);
-			Promise.all([posts, users]).then((results) => res.send(results));
+			Promise.all([posts, users]).then((results) => res.send({
+				posts: results[0],
+				users: results[1]
+			}));
 		} catch (error) {
 			res.send(error);
 		}

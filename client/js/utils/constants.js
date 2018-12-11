@@ -127,5 +127,11 @@ export const API = {
 			url: post_id => `${BASE_API_URL}/admin/post/unflag/${post_id}`,
 			method: 'DELETE'
 		}
+	},
+	search: {
+		searchPosts: {
+			url: query => `${ BASE_API_URL }/search/v2/${ query }`,
+			method: 'GET'
+		}
 	}
 };
