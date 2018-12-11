@@ -23,7 +23,7 @@ module.exports = (connection) => {
 		if (req.query.keywordName) {
 
 			try {
-				const [r, _] = await connection.query('SELECT * FROM post WHERE title=?', [req.query.keywordName]);
+				const [r, _] = await connection.query('SELECT * FROM user WHERE username=?', [req.query.keywordName]);
 				console.log(r);
 				res.send(r);
 			} catch (error) {
