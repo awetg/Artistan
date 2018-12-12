@@ -22,8 +22,8 @@ REDIS_PORT=11211
 REDIS_HOST=localhost
 ```
 
-	To install Redis:
-	Download, extract and compile Redis, on windows it recommended to install on [WSL](https://en.wikipedia.org/wiki/Windows_Subsystem_for_Linux):
+To install Redis:Download, extract and compile Redis, on windows it recommended to install on [WSL](https://en.wikipedia.org/wiki/Windows_Subsystem_for_Linux):
+
 ```shelll
 $ wget http://download.redis.io/releases/redis-4.0.2.tar.gz
 $ tar xzf redis-4.0.2.tar.gz
@@ -34,7 +34,9 @@ $ sudo make install -j
 $ cd utils
 $ sudo ./install_server.sh
 ```
-	To start redis service:
+
+To start redis service:
+
 ```shelll
 $ sudo service redis_6379 start
 ```
